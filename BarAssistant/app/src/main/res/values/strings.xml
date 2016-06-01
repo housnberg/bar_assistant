@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Bar Assistant</string>
+    <string name="homeFragment">Home</string>
+    <string name="exercisesFragment">Exercises</string>
+    <string name="workoutFragment">Workout</string>
+    <string name="exerciseName">Name</string>
+    <string name="exerciseDescription">Description</string>
+    <string name="settings">Settings</string>
+</resources>
