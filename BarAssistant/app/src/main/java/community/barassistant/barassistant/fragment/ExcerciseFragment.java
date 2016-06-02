@@ -5,28 +5,22 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.fabtransitionactivity.SheetLayout;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 import community.barassistant.barassistant.AddExerciseActivity;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.adapter.ExercisesAdapter;
+import community.barassistant.barassistant.adapter.ItemClickSupport;
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.ExercisesDAO;
 
@@ -74,6 +68,12 @@ public class ExcerciseFragment extends MyFragment implements View.OnClickListene
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new ExercisesAdapter(getActivity(), exercises));
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Toast.makeText(getActivity(), position + "", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void shareFab(FloatingActionButton fab) {

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/shape_default">
+
+<RelativeLayout
     android:layout_height="76dp"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:elevation="4dp"
-    android:background="@drawable/shape_default">
+    android:background="?android:attr/selectableItemBackground">
 
     <com.github.siyamed.shapeimageview.CircularImageView
         android:id="@+id/exerciseTitleImageView"
@@ -12,26 +18,20 @@
         android:layout_height="60dp"
         android:layout_alignParentTop="true"
         android:layout_margin="8dp"
+        app:siBorderWidth="1dp"
+        app:siBorderColor="@color/colorDivider"
         android:src="@drawable/test"/>
-
-    <!--
-    <ImageView
-        android:id="@+id/exerciseTitleImageView"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentTop="true"/>
-        -->
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/exerciseNameTextView"
         android:layout_height="30dp"
         android:layout_width="match_parent"
         android:layout_weight="5"
-        android:textSize="16dp"
+        android:textSize="18dp"
         android:layout_toRightOf="@+id/exerciseTitleImageView"
         android:textStyle="bold"
         android:layout_alignParentTop="true"
-        android:paddingLeft="@dimen/marginInputField"
+        android:paddingLeft="8dp"
         android:gravity="left|bottom"
         />
 
@@ -45,8 +45,9 @@
         android:layout_weight="5"
         android:textSize="12dp"
         android:textColor="@color/colorSecondaryText"
-        android:paddingLeft="@dimen/marginInputField"
+        android:paddingLeft="8dp"
         android:gravity="left"
         />
 
 </RelativeLayout>
+</LinearLayout>
