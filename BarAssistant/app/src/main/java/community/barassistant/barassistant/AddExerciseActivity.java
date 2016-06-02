@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,6 +21,7 @@ import java.io.OutputStream;
 
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.ExercisesDAO;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by EL on 30.05.2016.
@@ -35,7 +36,7 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
 
     private Toolbar toolbar;
     private FloatingActionButton mSharedFab;
-    private FloatingActionButton mSecondaryFab;
+    //private FloatingActionButton mSecondaryFab;
     private ExercisesDAO datasource;
     private EditText exerciseName;
     private EditText exerciseDescription;
@@ -48,8 +49,8 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
 
         mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
         mSharedFab.setOnClickListener(this);
-        mSecondaryFab = (FloatingActionButton) findViewById(R.id.fabSecondary);
-        mSecondaryFab.setOnClickListener(this);
+        //mSecondaryFab = (FloatingActionButton) findViewById(R.id.fabSecondary);
+        //mSecondaryFab.setOnClickListener(this);
 
         datasource = new ExercisesDAO(this);
         datasource.open();
@@ -76,10 +77,6 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.fabMain) {
-            Exercise exercise = null;
-            exercise = datasource.createExercise(exerciseName.getText().toString(), exerciseDescription.getText().toString());
-            finish();
-        } else if (view.getId() == R.id.fabSecondary) {
             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
         }
@@ -130,6 +127,26 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_save, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.actionSave) {
+            if (exerciseName.getText().toString().length() < 3) {
+                Toast.makeText(this, R.string.toastInvalidName, Toast.LENGTH_LONG).show();
+            } else {
+                Exercise exercise = null;
+                exercise = datasource.createExercise(exerciseName.getText().toString(), exerciseDescription.getText().toString());
+                finish();
+            }
+        }
+        return true;
+    }
 
     /* Checks if external storage is available for read and write */
     public boolean isExternalStorageWritable() {

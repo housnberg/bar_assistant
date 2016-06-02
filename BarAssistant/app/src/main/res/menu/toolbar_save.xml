@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".AddExerciseActivity">
+    <item
+        android:id="@+id/actionSave"
+        android:icon="@mipmap/ic_done_white_24dp"
+        android:title="@string/actionSave"
+        app:showAsAction="ifRoom"/>
+
+    <!-- Settings, should always be in the overflow -->
+    <!--
+    <item android:id="@+id/action_settings"
+        android:title="@string/actionSettings"
+        app:showAsAction="never"/>
+        -->
+
+</menu>

@@ -27,7 +27,7 @@
         android:layout_height="30dp"
         android:layout_width="match_parent"
         android:layout_weight="5"
-        android:textSize="18dp"
+        android:textSize="16dp"
         android:layout_toRightOf="@+id/exerciseTitleImageView"
         android:textStyle="bold"
         android:layout_alignParentTop="true"

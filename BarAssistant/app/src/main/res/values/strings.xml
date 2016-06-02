@@ -9,4 +9,7 @@
     <string name="actionSettings">Settings</string>
     <string name="actionFilter">Filter</string>
     <string name="actionSort">Sort</string>
+    <string name="actionSave">Save</string>
+
+    <string name="toastInvalidName">This is not a valid name. Please use at least 3 characters.</string>
 </resources>

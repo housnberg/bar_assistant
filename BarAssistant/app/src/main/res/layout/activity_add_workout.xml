@@ -32,19 +32,19 @@
             android:id="@+id/exerciseName"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:textSize="16dp"
             android:layout_weight="1.5"
             android:padding="@dimen/marginInputField"
             android:gravity="left|center"
-            android:textSize="16dp"
             android:textColor="@color/colorPrimaryText"
             android:hint="@string/exerciseName"
             android:background="@drawable/shape_default"/>
 
         <EditText
+            android:textSize="16dp"
             android:id="@+id/exerciseDescription"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:textSize="16dp"
             android:layout_weight="1.5"
             android:padding="@dimen/marginInputField"
             android:textColor="@color/colorPrimaryText"
@@ -52,11 +52,22 @@
             android:hint="@string/exerciseDescription"
             android:background="@drawable/shape_default"/>
 
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="15"
+            android:progress="5"/>
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="15"
+            android:progress="5"/>
+
     </LinearLayout>
 
-        <!-- Your scrolling content -->
+    <!-- Your scrolling content -->
 
-    <!--
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabSecondary"
         android:layout_width="wrap_content"
@@ -71,7 +82,6 @@
         app:pressedTranslationZ="12dp"
         android:src="@mipmap/ic_add_a_photo_white_24dp"
         app:layout_behavior="community.barassistant.barassistant.behavior.FabScrollBehavior"/>
-    -->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabMain"
@@ -83,6 +93,6 @@
         android:tint="@android:color/white"
         app:backgroundTint="@color/colorPrimary"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@mipmap/ic_add_a_photo_white_24dp"/>
+        android:src="@mipmap/ic_done_white_24dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

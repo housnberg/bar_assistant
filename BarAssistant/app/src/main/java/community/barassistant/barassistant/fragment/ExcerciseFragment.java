@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,7 +28,7 @@ import community.barassistant.barassistant.model.ExercisesDAO;
 /**
  * Created by EL on 28.05.2016.
  */
-public class ExcerciseFragment extends MyFragment implements View.OnClickListener, SheetLayout.OnFabAnimationEndListener {
+public class ExcerciseFragment extends Fragment implements View.OnClickListener, SheetLayout.OnFabAnimationEndListener {
 
     private static final int REQUEST_CODE = 1;
 

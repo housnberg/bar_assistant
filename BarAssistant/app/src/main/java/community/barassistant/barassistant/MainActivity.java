@@ -79,12 +79,20 @@ public class MainActivity extends AppCompatActivity {
                         switch (viewPager.getCurrentItem()) {
                             case 0:
                                 exercisesFragment.shareFab(null); // Remove FAB from fragment
+                                workoutFragment.shareFab(null);
                                 homeFragment.shareFab(mSharedFab);
                                 break;
                             case 1:
+                                homeFragment.shareFab(null); // Remove FAB from fragment
+                                workoutFragment.shareFab(null);
+                                exercisesFragment.shareFab(mSharedFab);
+                                mSharedFab.show();
+                                break;
+                            case 2:
                             default:
                                 homeFragment.shareFab(null); // Remove FAB from fragment
-                                exercisesFragment.shareFab(mSharedFab); // Share FAB to new displayed fragment
+                                exercisesFragment.shareFab(null);
+                                workoutFragment.shareFab(mSharedFab); // Share FAB to new displayed fragment
                                 mSharedFab.show();
                                 break;
                         }
