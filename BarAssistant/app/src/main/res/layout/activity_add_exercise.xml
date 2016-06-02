@@ -35,21 +35,40 @@
             android:layout_weight="1.5"
             android:padding="@dimen/marginInputField"
             android:gravity="left|center"
-            android:hint="@string/exerciseName"/>
+            android:textColor="@color/colorPrimaryText"
+            android:hint="@string/exerciseName"
+            android:background="@drawable/shape_default"/>
+
         <EditText
             android:id="@+id/exerciseDescription"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.5"
             android:padding="@dimen/marginInputField"
+            android:textColor="@color/colorPrimaryText"
             android:gravity="left|center"
-            android:hint="@string/exerciseDescription"/>
+            android:hint="@string/exerciseDescription"
+            android:background="@drawable/shape_default"/>
 
     </LinearLayout>
 
         <!-- Your scrolling content -->
 
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabSecondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="83dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="@dimen/fab_margin"
+        app:elevation="6dp"
+        app:rippleColor="@color/grey_A300"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/grey_A700"
+        app:pressedTranslationZ="12dp"
+        android:src="@mipmap/ic_add_a_photo_white_24dp"
+        app:layout_behavior="community.barassistant.barassistant.behavior.FabScrollBehavior"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabMain"

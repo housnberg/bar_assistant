@@ -13,10 +13,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 
-import com.github.fabtransitionactivity.SheetLayout;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import community.barassistant.barassistant.fragment.ExcerciseFragment;
+import community.barassistant.barassistant.fragment.HomeFragment;
+import community.barassistant.barassistant.fragment.WorkoutFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,9 +75,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageScrollStateChanged(int state) {
                 switch (state) {
-                    case ViewPager.SCROLL_STATE_DRAGGING:
-                        mSharedFab.hide(); // Hide animation
-                        break;
                     case ViewPager.SCROLL_STATE_IDLE:
                         switch (viewPager.getCurrentItem()) {
                             case 0:

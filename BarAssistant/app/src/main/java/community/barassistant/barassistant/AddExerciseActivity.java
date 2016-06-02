@@ -1,33 +1,163 @@
 package community.barassistant.barassistant;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+
+import community.barassistant.barassistant.model.Exercise;
+import community.barassistant.barassistant.model.ExercisesDAO;
 
 /**
  * Created by EL on 30.05.2016.
  */
-public class AddExerciseActivity extends AppCompatActivity {
+public class AddExerciseActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public final static String APP_PATH_SD_CARD = "/DesiredSubfolderName/";
+    public final static String APP_THUMBNAIL_PATH_SD_CARD = "thumbnails";
+
+    private static final int CAMERA_REQUEST = 1888;
     private final static String ACTIVITY_NAME = "Add Exercise";
 
     private Toolbar toolbar;
+    private FloatingActionButton mSharedFab;
+    private FloatingActionButton mSecondaryFab;
+    private ExercisesDAO datasource;
+    private EditText exerciseName;
+    private EditText exerciseDescription;
+    private Bitmap photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_exercise);
 
+        mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
+        mSharedFab.setOnClickListener(this);
+        mSecondaryFab = (FloatingActionButton) findViewById(R.id.fabSecondary);
+        mSecondaryFab.setOnClickListener(this);
+
+        datasource = new ExercisesDAO(this);
+        datasource.open();
+
+        exerciseName = (EditText) findViewById(R.id.exerciseName);
+        exerciseDescription = (EditText) findViewById(R.id.exerciseDescription);
+
+        initToolbar();
+    }
+
+    private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_close_white_24dp);
         toolbar.setTitle(AddExerciseActivity.ACTIVITY_NAME);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         setSupportActionBar(toolbar);
+    }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.fabMain) {
+            Exercise exercise = null;
+            exercise = datasource.createExercise(exerciseName.getText().toString(), exerciseDescription.getText().toString());
+            finish();
+        } else if (view.getId() == R.id.fabSecondary) {
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        datasource.close();
+        super.onPause();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            photo = (Bitmap) data.getExtras().get("data");
+            //saveImageToExternalStorage(photo);
+        }
+    }
+
+    //WANJA; USE THIS FOR YOUR CLASS
+    public void saveImageToExternalStorage(Bitmap bm) {
+
+        OutputStream fOut = null;
+        String strDirectory = getAlbumStorageDir("bar_assistant").toString();
+
+        File f = new File(strDirectory, "bar_assistant_test.jpg");
+        try {
+            fOut = new FileOutputStream(f);
+
+            /**Compress image**/
+            bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
+            fOut.flush();
+            fOut.close();
+
+            /**Update image to gallery**/
+            MediaStore.Images.Media.insertImage(getContentResolver(), f.getAbsolutePath(), f.getName(), f.getName());
+            Toast.makeText(getApplicationContext(), "Image saved...", Toast.LENGTH_SHORT).show();
+            System.out.println("image saved to: " + strDirectory);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    public File getAlbumStorageDir(String albumName) {
+        // Get the directory for the user's public pictures directory.
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), albumName);
+        System.out.println(file.getAbsolutePath());
+        if (!file.mkdirs()) {
+            //Log.e(LOG_TAG, "Directory not created");
+        }
+        return file;
     }
 
 }

@@ -1,4 +1,4 @@
-package community.barassistant.barassistant;
+package community.barassistant.barassistant.fragment;
 
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.sql.SQLOutput;
+
+import community.barassistant.barassistant.R;
 
 /**
  * Created by EL on 28.05.2016.

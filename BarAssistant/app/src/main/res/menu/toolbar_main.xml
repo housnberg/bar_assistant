@@ -3,9 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
+    <item
+        android:id="@+id/actionSort"
+        android:icon="@mipmap/ic_sort_white_24dp"
+        android:title="@string/actionSort"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/actionFilter"
+        android:icon="@mipmap/ic_filter_list_white_24dp"
+        android:title="@string/actionFilter"
+        app:showAsAction="ifRoom"/>
+
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/action_settings"
-        android:title="@string/settings"
+        android:title="@string/actionSettings"
         app:showAsAction="never"/>
 
 </menu>
