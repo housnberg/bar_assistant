@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment {
         }
         else {
             mSharedFab = fab;
-            mSharedFab.setVisibility(View.INVISIBLE);
+            mSharedFab.hide();
         }
     }
 }
