@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/actionSort"
+        android:icon="@mipmap/ic_sort_white_24dp"
+        android:title="@string/actionSort"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/actionFilter"
+        android:icon="@mipmap/ic_filter_list_white_24dp"
+        android:title="@string/actionFilter"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/actionSave"
+        android:icon="@mipmap/ic_done_white_24dp"
+        android:title="@string/actionSave"
+        app:showAsAction="always"/>
+
+</menu>

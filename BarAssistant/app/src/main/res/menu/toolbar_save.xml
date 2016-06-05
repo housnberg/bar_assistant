@@ -6,7 +6,7 @@
         android:id="@+id/actionSave"
         android:icon="@mipmap/ic_done_white_24dp"
         android:title="@string/actionSave"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
     <!-- Settings, should always be in the overflow -->
     <!--

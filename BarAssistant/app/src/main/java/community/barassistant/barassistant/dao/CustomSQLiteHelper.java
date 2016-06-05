@@ -69,9 +69,9 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(CustomSQLiteHelper.CREATE_TABLE_EXERCISE);
-        //database.execSQL(CustomSQLiteHelper.CREATE_TABLE_WORKOUT);
-        //database.execSQL(CustomSQLiteHelper.CREATE_TABLE_WORKOUT_EXERCISE);
-        //database.execSQL(CustomSQLiteHelper.ENABLE_FOREIGN_KEY_SUPPORT);
+        database.execSQL(CustomSQLiteHelper.CREATE_TABLE_WORKOUT);
+        database.execSQL(CustomSQLiteHelper.CREATE_TABLE_WORKOUT_EXERCISE);
+        database.execSQL(CustomSQLiteHelper.ENABLE_FOREIGN_KEY_SUPPORT);
     }
 
     @Override
