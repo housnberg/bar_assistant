@@ -35,7 +35,7 @@ public class AddExerciseToWorkoutActivity extends AppCompatActivity {
 
         exerciseName = (EditText) findViewById(R.id.name);
         exerciseDescription = (EditText) findViewById(R.id.description);
-
+//
         initToolbar();
     }
 

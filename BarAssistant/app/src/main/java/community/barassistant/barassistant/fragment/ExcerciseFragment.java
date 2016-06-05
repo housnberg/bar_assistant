@@ -90,7 +90,6 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
             mSheetLayout.setFab(mSharedFab);
             mSheetLayout.setFabAnimationEndListener(this);
             fab.setImageResource(R.mipmap.ic_add_white_24dp);
-            mSharedFab.show();
         }
     }
 
