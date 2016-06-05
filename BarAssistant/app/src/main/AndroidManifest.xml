@@ -31,6 +31,8 @@
             android:label="@string/addExercisesToWorkoutActivity">
 
         </activity>
+        <service android:name=".services.ImageService"
+            android:exported="false"/>
     </application>
 
 </manifest>

@@ -51,6 +51,12 @@
             android:hint="@string/description"
             android:background="@drawable/shape_default"/>
 
+        <ImageView
+            android:layout_width="298dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_weight="5.26" />
+
     </LinearLayout>
 
         <!-- Your scrolling content -->
