@@ -19,23 +19,24 @@ import java.util.List;
 
 import community.barassistant.barassistant.AddExerciseActivity;
 import community.barassistant.barassistant.R;
-import community.barassistant.barassistant.adapter.ExercisesAdapter;
+import community.barassistant.barassistant.adapter.ExerciseAdapter;
 import community.barassistant.barassistant.adapter.ItemClickSupport;
 import community.barassistant.barassistant.model.Exercise;
-import community.barassistant.barassistant.model.ExercisesDAO;
+import community.barassistant.barassistant.dao.ExercisesDAO;
 
 /**
- * Created by EL on 28.05.2016.
+ * @author Eugen Ljavin
  */
 public class ExcerciseFragment extends Fragment implements View.OnClickListener, SheetLayout.OnFabAnimationEndListener {
 
     private static final int REQUEST_CODE = 1;
 
+    private ExercisesDAO datasource;
+
     private FloatingActionButton mSharedFab;
     private FloatingActionButton fabSecondary;
     private SheetLayout mSheetLayout;
     private RecyclerView recyclerView;
-    private ExercisesDAO datasource;
     private MenuItem sortItem;
     private MenuItem filterItem;
     private List<Exercise> exercises;
@@ -48,7 +49,7 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main_exercise, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         datasource = new ExercisesDAO(getActivity());
         setHasOptionsMenu(true);
@@ -67,7 +68,7 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new ExercisesAdapter(getActivity(), exercises));
+        recyclerView.setAdapter(new ExerciseAdapter(getActivity(), exercises));
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {

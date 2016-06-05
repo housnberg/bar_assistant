@@ -20,10 +20,10 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 import community.barassistant.barassistant.model.Exercise;
-import community.barassistant.barassistant.model.ExercisesDAO;
+import community.barassistant.barassistant.dao.ExercisesDAO;
 
 /**
- * Created by EL on 30.05.2016.
+ * @author Eugen Ljavin
  */
 public class AddExerciseActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,8 +53,8 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         datasource = new ExercisesDAO(this);
         datasource.open();
 
-        exerciseName = (EditText) findViewById(R.id.exerciseName);
-        exerciseDescription = (EditText) findViewById(R.id.exerciseDescription);
+        exerciseName = (EditText) findViewById(R.id.name);
+        exerciseDescription = (EditText) findViewById(R.id.description);
 
         initToolbar();
     }

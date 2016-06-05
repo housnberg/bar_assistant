@@ -1,6 +1,5 @@
 package community.barassistant.barassistant;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -12,20 +11,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import community.barassistant.barassistant.dao.WorkoutDAO;
 import community.barassistant.barassistant.fragment.AddExercisesToWorkoutFragment;
 import community.barassistant.barassistant.fragment.AddPropertiesToWorkoutFragment;
-import community.barassistant.barassistant.fragment.ExcerciseFragment;
-import community.barassistant.barassistant.fragment.HomeFragment;
-import community.barassistant.barassistant.fragment.WorkoutFragment;
-import community.barassistant.barassistant.model.Exercise;
-import community.barassistant.barassistant.model.ExercisesDAO;
+import community.barassistant.barassistant.model.Workout;
 
 /**
- * Created by EL on 02.06.2016.
+ * @author Eugen Ljavin
  */
 public class AddWorkoutActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,21 +31,14 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
     int nStart = 5;
     int nEnd = 250;
 
-
-
-    private static final int CAMERA_REQUEST = 1888;
+    private WorkoutDAO datasource;
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Fragment addExercisesToWorkoutFragment;
     private Fragment addPropertiesToWorkoutFragment;
-
     private FloatingActionButton mSharedFab;
-    private ExercisesDAO datasource;
-    private EditText exerciseName;
-    private EditText exerciseDescription;
-    private Bitmap photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +47,9 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
 
         mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
         mSharedFab.setVisibility(View.INVISIBLE);
+
+        datasource = new WorkoutDAO(this);
+        datasource.open();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -113,18 +104,39 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //TODO: CHECK IF THE VIEWS ARE SET
+        String workoutName = ((AddPropertiesToWorkoutFragment) addPropertiesToWorkoutFragment).getWorkoutName().getText().toString();
+        String workoutDescription = ((AddPropertiesToWorkoutFragment) addPropertiesToWorkoutFragment).getWorkoutDescription().getText().toString();
+        int workoutRounds = ((AddPropertiesToWorkoutFragment) addPropertiesToWorkoutFragment).getRoundsWheeler().getSelectedPosition() + 1;
+        int workoutPauseExercises = ((AddPropertiesToWorkoutFragment) addPropertiesToWorkoutFragment).getPauseExercisesWheeler().getSelectedPosition() + 1;
+        int workoutPauseRounds = ((AddPropertiesToWorkoutFragment) addPropertiesToWorkoutFragment).getPauseRoundsWheeler().getSelectedPosition() + 1;
+
         if (item.getItemId() == R.id.actionSave) {
-            if (exerciseName.getText().toString().length() < 3) {
+            if (workoutName.length() < 3) {
                 Toast.makeText(this, R.string.toastInvalidName, Toast.LENGTH_LONG).show();
             } else {
-                Exercise exercise = null;
-                exercise = datasource.createExercise(exerciseName.getText().toString(), exerciseDescription.getText().toString());
+                Workout workout = null;
+                workout = datasource.createExercise(workoutName, workoutDescription, workoutRounds, workoutPauseExercises, workoutPauseRounds);
+                System.out.println("Workout with the id " + workout.getId() + " set.");
                 finish();
             }
         }
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        datasource.close();
+        super.onPause();
     }
 
     @Override

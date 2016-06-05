@@ -13,29 +13,29 @@ import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.model.Exercise;
 
 /**
- * Created by EL on 02.06.2016.
+ * @author Eugen Ljavin
  */
-public class ExercisesAdapter extends RecyclerView.Adapter<ExercisesAdapter.ExercisesHolder> {
+public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ExerciseHolder> {
 
     private List<Exercise> exercises;
     private Activity context;
 
-    public ExercisesAdapter(Activity context, List<Exercise> exercises) {
+    public ExerciseAdapter(Activity context, List<Exercise> exercises) {
         this.exercises = exercises;
         this.context = context;
     }
 
     @Override
-    public ExercisesHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item, viewGroup, false);
-        return new ExercisesHolder(itemView);
+    public ExerciseHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.exercise_list_item, viewGroup, false);
+        return new ExerciseHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(ExercisesHolder viewHolder, int position) {
+    public void onBindViewHolder(ExerciseHolder viewHolder, int position) {
         Exercise exercise = exercises.get(position);
-        viewHolder.exerciseNameTextView.setText(exercise.getExerciseName());
-        viewHolder.exerciseDescriptionTextView.setText(exercise.getExerciseDescription());
+        viewHolder.exerciseNameTextView.setText(exercise.getName());
+        viewHolder.exerciseDescriptionTextView.setText(exercise.getDescription());
         viewHolder.itemView.setTag(exercise);
     }
 
@@ -44,12 +44,12 @@ public class ExercisesAdapter extends RecyclerView.Adapter<ExercisesAdapter.Exer
         return exercises.size();
     }
 
-    public class ExercisesHolder extends RecyclerView.ViewHolder {
+    public class ExerciseHolder extends RecyclerView.ViewHolder {
 
         public TextView exerciseNameTextView;
         public TextView exerciseDescriptionTextView;
 
-        public ExercisesHolder(View itemView) {
+        public ExerciseHolder(View itemView) {
             super(itemView);
             exerciseNameTextView = (TextView) itemView.findViewById(R.id.exerciseNameTextView);
             exerciseDescriptionTextView = (TextView) itemView.findViewById(R.id.exerciseDescriptionTextView);

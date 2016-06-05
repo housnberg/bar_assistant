@@ -8,7 +8,11 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * Created by EL on 29.05.2016.
+ * @author Raj Amal W
+ * @author Eugen Ljavin
+ *
+ * Adapted this class from <br/>
+ * https://www.learn2crack.com/2015/10/android-floating-action-button-animations.html
  */
 public class FabScrollBehavior extends FloatingActionButton.Behavior {
 

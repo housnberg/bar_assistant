@@ -6,7 +6,10 @@ import android.view.View;
 import community.barassistant.barassistant.R;
 
 /**
- * This class is adapted from
+ * @author Hugo Visser
+ * @author Eugen Ljavin
+ *
+ * Adapted this class from <br/>
  * http://www.littlerobots.nl/blog/Handle-Android-RecyclerView-Clicks/
  */
 public class ItemClickSupport {

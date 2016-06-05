@@ -1,28 +1,39 @@
 package community.barassistant.barassistant.model;
 
 /**
- * Created by EL on 01.06.2016.
+ * @author Eugen Ljavin
  */
 public class Exercise {
 
     private long id;
-    private String exerciseName;
-    private String exerciseDescription;
+    private String name;
+    private String description;
 
-    public String getExerciseDescription() {
-        return exerciseDescription;
+    public Exercise() {
+
     }
 
-    public void setExerciseDescription(String exerciseDescription) {
-        this.exerciseDescription = exerciseDescription;
+    public Exercise(long id, String name, String description) {
+        this();
+        setId(id);
+        setName(name);
+        setDescription(description);
     }
 
-    public String getExerciseName() {
-        return exerciseName;
+    public String getDescription() {
+        return description;
     }
 
-    public void setExerciseName(String exerciseName) {
-        this.exerciseName = exerciseName;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getId() {
@@ -35,7 +46,7 @@ public class Exercise {
 
     @Override
     public String toString() {
-        return exerciseName;
+        return name;
     }
 
     @Override
@@ -49,6 +60,5 @@ public class Exercise {
 
         return equals;
     }
-
 
 }

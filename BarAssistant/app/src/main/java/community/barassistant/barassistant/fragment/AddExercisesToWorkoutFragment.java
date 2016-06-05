@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import community.barassistant.barassistant.R;
 
 /**
- * Created by EL on 04.06.2016.
+ * @author Eugen Ljavin
  */
 public class AddExercisesToWorkoutFragment extends Fragment {
 

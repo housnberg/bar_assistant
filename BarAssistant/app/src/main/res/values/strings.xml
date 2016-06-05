@@ -10,8 +10,8 @@
     <string name="addExercisesToWorkoutFragment">Exercises</string>
     <string name="addPropertiesToWorkoutFragment">Properties</string>
 
-    <string name="exerciseName">Name</string>
-    <string name="exerciseDescription">Description (optional)</string>
+    <string name="name">Name</string>
+    <string name="description">Description (optional)</string>
 
     <string name="actionSettings">Settings</string>
     <string name="actionFilter">Filter</string>

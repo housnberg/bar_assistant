@@ -6,24 +6,46 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * Created by EL on 01.06.2016.
+ * @author Eugen Ljavin
  */
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
-    public static final String TABLE_EXERCISES = "exercises";
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_EXERCISE_NAME = "exercise_name";
-    public static final String COLUMN_EXERCISE_DESCRIPTION = "exercise_description";
+    public static final String TABLE_EXERCISE = "exercise";
+    public static final String COLUMN_EXERCISE_ID = "_id";
+    public static final String COLUMN_EXERCISE_NAME = "name";
+    public static final String COLUMN_EXERCISE_DESCRIPTION = "description";
 
-    private static final String DATABASE_NAME = "commments.db";
+    public static final String TABLE_WORKOUT = "workout";
+    public static final String COLUMN_WORKOUT_ID = "_id";
+    public static final String COLUMN_WORKOUT_NAME = "name";
+    public static final String COLUMN_WORKOUT_DESCRIPTION = "description";
+    public static final String COLUMN_WORKOUT_ROUNDS = "rounds";
+    public static final String COLUMN_WORKOUT_PAUSE_EXERCISES = "pause_exercises";
+    public static final String COLUMN_WORKOUT_PAUSE_ROUNDS = "pause_rounds";
+
+    private static final String DATABASE_NAME = "barassistant.db";
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "create table "
-            + MySQLiteHelper.TABLE_EXERCISES + "(" + COLUMN_ID
-            + " integer primary key autoincrement, " + MySQLiteHelper.COLUMN_EXERCISE_NAME
-            + " text not null, " + MySQLiteHelper.COLUMN_EXERCISE_DESCRIPTION
-            + " text not null);";
+    //TODO: Make a generic SQL Statement Generator
+    private static final String DATABASE_CREATE_EXERCISE = "create table "
+            + MySQLiteHelper.TABLE_EXERCISE
+            + "("
+            + MySQLiteHelper.COLUMN_EXERCISE_ID + " integer primary key autoincrement, "
+            + MySQLiteHelper.COLUMN_EXERCISE_NAME + " text not null, "
+            + MySQLiteHelper.COLUMN_EXERCISE_DESCRIPTION + " text not null "
+            + ");";
+
+    private static final String DATABASE_CREATE_WORKOUT = "create table "
+            + MySQLiteHelper.TABLE_WORKOUT
+            + "("
+            + MySQLiteHelper.COLUMN_WORKOUT_ID + " integer primary key autoincrement, "
+            + MySQLiteHelper.COLUMN_WORKOUT_NAME + " text not null, "
+            + MySQLiteHelper.COLUMN_WORKOUT_DESCRIPTION + " text not null, "
+            + MySQLiteHelper.COLUMN_WORKOUT_ROUNDS + " integer not null, "
+            + MySQLiteHelper.COLUMN_WORKOUT_PAUSE_EXERCISES + " integer not null, "
+            + MySQLiteHelper.COLUMN_WORKOUT_PAUSE_ROUNDS + " integer not null "
+            + ");";
 
 
     public MySQLiteHelper(Context context) {
@@ -32,7 +54,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL(DATABASE_CREATE);
+        database.execSQL(MySQLiteHelper.DATABASE_CREATE_EXERCISE);
+        database.execSQL(MySQLiteHelper.DATABASE_CREATE_WORKOUT);
     }
 
     @Override
@@ -40,7 +63,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         Log.w(MySQLiteHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + MySQLiteHelper.TABLE_EXERCISES);
+        db.execSQL("DROP TABLE IF EXISTS " + MySQLiteHelper.TABLE_EXERCISE);
+        db.execSQL("DROP TABLE IF EXISTS " + MySQLiteHelper.TABLE_WORKOUT);
         onCreate(db);
     }
 }

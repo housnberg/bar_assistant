@@ -19,26 +19,28 @@ import java.util.List;
 
 import community.barassistant.barassistant.AddWorkoutActivity;
 import community.barassistant.barassistant.R;
-import community.barassistant.barassistant.adapter.ExercisesAdapter;
 import community.barassistant.barassistant.adapter.ItemClickSupport;
-import community.barassistant.barassistant.model.Exercise;
-import community.barassistant.barassistant.model.ExercisesDAO;
+import community.barassistant.barassistant.adapter.WorkoutAdapter;
+import community.barassistant.barassistant.dao.WorkoutDAO;
+import community.barassistant.barassistant.model.Workout;
 
 /**
- * Created by EL on 29.05.2016.
+ * @author Eugen Ljavin
  */
 public class WorkoutFragment extends Fragment implements View.OnClickListener, SheetLayout.OnFabAnimationEndListener {
 
     private static final int REQUEST_CODE = 1;
 
+    private WorkoutDAO datasource;
+
     private FloatingActionButton mSharedFab;
     private FloatingActionButton fabSecondary;
     private SheetLayout mSheetLayout;
     private RecyclerView recyclerView;
-    private ExercisesDAO datasource;
     private MenuItem sortItem;
     private MenuItem filterItem;
-    private List<Exercise> exercises;
+
+    private List<Workout> workouts;
     private boolean isFabOpen = true;
 
     public WorkoutFragment() {
@@ -48,12 +50,12 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main_exercise, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        datasource = new ExercisesDAO(getActivity());
+        datasource = new WorkoutDAO(getActivity());
         setHasOptionsMenu(true);
         datasource.open();
-        exercises = datasource.getAllExercises();
+        workouts = datasource.getAllWorkouts();
         setupRecyclerView();
         return rootView;
     }
@@ -67,7 +69,7 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new ExercisesAdapter(getActivity(), exercises));
+        recyclerView.setAdapter(new WorkoutAdapter(getActivity(), workouts));
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
@@ -114,9 +116,9 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
 
-            Exercise exercise = datasource.getLastAddedExercise();
-            if (!exercises.contains(exercise)) {
-                exercises.add(exercise);
+            Workout workout = datasource.getLastAddedWorkout();
+            if (!workouts.contains(workout)) {
+                workouts.add(workout);
                 recyclerView.getAdapter().notifyDataSetChanged();
             }
 
