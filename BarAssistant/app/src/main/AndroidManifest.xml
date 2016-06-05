@@ -19,10 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddExerciseActivity">
+        <activity android:name=".AddExerciseActivity"
+            android:label="@string/addExerciseActivity">
 
         </activity>
-        <activity android:name=".AddWorkoutActivity">
+        <activity android:name=".AddWorkoutActivity"
+            android:label="@string/addWorkoutActivity">
 
         </activity>
     </application>

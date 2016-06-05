@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.sql.SQLOutput;
-
 import community.barassistant.barassistant.R;
 
 /**
@@ -28,7 +26,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View drawer = inflater.inflate(R.layout.fragment_one, container, false);
+        View drawer = inflater.inflate(R.layout.fragment_main_exercise, container, false);
         RecyclerView recyclerView = (RecyclerView) drawer.findViewById(R.id.recyclerView);
         setupRecyclerView(recyclerView);
         return drawer;

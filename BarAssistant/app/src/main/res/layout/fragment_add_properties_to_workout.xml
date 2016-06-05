@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditText
+        android:id="@+id/exerciseName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:padding="@dimen/marginInputField"
+        android:gravity="left|center"
+        android:textColor="@color/colorPrimaryText"
+        android:hint="@string/exerciseName"
+        android:background="@drawable/shape_default"/>
+
+    <EditText
+        android:textSize="16dp"
+        android:id="@+id/exerciseDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/marginInputField"
+        android:textColor="@color/colorPrimaryText"
+        android:gravity="left|center"
+        android:hint="@string/exerciseDescription"
+        android:background="@drawable/shape_default"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_default">
+
+        <com.lantouzi.wheelview.WheelView
+            android:id="@+id/roundsWheeler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:lwvHighlightColor="@color/colorPrimary"
+            app:lwvMarkColor="@color/colorDivider"
+            app:lwvIntervalFactor="1.5"
+            app:lwvMarkRatio="0.2" />
+
+        <TextView
+            android:id="@+id/roundsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/marginInputField"
+            android:layout_below="@id/roundsWheeler"
+            android:text="Rounds"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_default">
+
+        <com.lantouzi.wheelview.WheelView
+            android:id="@+id/pauseExercisesWheeler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:lwvHighlightColor="@color/colorPrimary"
+            app:lwvMarkColor="@color/colorDivider"
+            app:lwvIntervalFactor="1.5"
+            app:lwvMarkRatio="0.2"
+            app:lwvAdditionalCenterMark="s"/>
+
+        <TextView
+            android:id="@+id/pauseExercisesTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_below="@id/pauseExercisesWheeler"
+            android:layout_marginBottom="@dimen/marginInputField"
+            android:gravity="center"
+            android:text="Pause between Exercises"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.lantouzi.wheelview.WheelView
+            android:id="@+id/pauseRoundsWheeler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:lwvHighlightColor="@color/colorPrimary"
+            app:lwvMarkColor="@color/colorDivider"
+            app:lwvIntervalFactor="1.5"
+            app:lwvMarkRatio="0.2"
+            app:lwvAdditionalCenterMark="s"/>
+
+        <TextView
+            android:id="@+id/pauseRoundsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/marginInputField"
+            android:gravity="center"
+            android:textSize="16dp"
+            android:layout_below="@id/pauseRoundsWheeler"
+            android:text="Pause between Rounds"/>
+
+    </RelativeLayout>
+
+
+
+
+
+    <!--
+    <TextView  android:id="@+id/txt_help_gest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red_A800"
+        android:layout_weight="1.25"
+        android:text="TEST"/>
+        -->
+
+    <!--
+    <include layout="@layout/number_spinner"></include>
+
+    <NumberPicker android:id="@+id/np"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    -->
+
+</LinearLayout>
+
+    <!-- Your scrolling content -->
+
+<!--
+<android.support.design.widget.FloatingActionButton
+android:id="@+id/fabMain"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_gravity="end|bottom"
+app:elevation="6dp"
+app:rippleColor="@color/colorPrimaryLight"
+android:tint="@android:color/white"
+app:backgroundTint="@color/colorPrimary"
+android:layout_margin="@dimen/fab_margin"
+android:src="@mipmap/ic_add_white_24dp"/>
+-->

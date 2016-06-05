@@ -21,7 +21,6 @@ import java.io.OutputStream;
 
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.ExercisesDAO;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by EL on 30.05.2016.
@@ -32,7 +31,6 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     public final static String APP_THUMBNAIL_PATH_SD_CARD = "thumbnails";
 
     private static final int CAMERA_REQUEST = 1888;
-    private final static String ACTIVITY_NAME = "Add Exercise";
 
     private Toolbar toolbar;
     private FloatingActionButton mSharedFab;
@@ -64,7 +62,6 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_close_white_24dp);
-        toolbar.setTitle(AddExerciseActivity.ACTIVITY_NAME);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

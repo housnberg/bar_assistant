@@ -18,7 +18,7 @@
         android:layout_height="60dp"
         android:layout_alignParentTop="true"
         android:layout_margin="8dp"
-        app:siBorderWidth="1dp"
+        app:siBorderWidth="0.25dp"
         app:siBorderColor="@color/colorDivider"
         android:src="@drawable/test"/>
 

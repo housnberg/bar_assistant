@@ -1,6 +1,5 @@
 package community.barassistant.barassistant.fragment;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -49,7 +48,7 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_one, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main_exercise, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         datasource = new ExercisesDAO(getActivity());
         setHasOptionsMenu(true);

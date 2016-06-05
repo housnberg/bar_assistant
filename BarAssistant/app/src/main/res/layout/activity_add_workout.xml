@@ -15,84 +15,27 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            android:elevation="4dp"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+
+        </android.support.v7.widget.Toolbar>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/colorPrimaryLight"
+            app:tabIndicatorHeight="3dp"/>
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:weightSum="10"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/exerciseName"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:textSize="16dp"
-            android:layout_weight="1.5"
-            android:padding="@dimen/marginInputField"
-            android:gravity="left|center"
-            android:textColor="@color/colorPrimaryText"
-            android:hint="@string/exerciseName"
-            android:background="@drawable/shape_default"/>
-
-        <EditText
-            android:textSize="16dp"
-            android:id="@+id/exerciseDescription"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.5"
-            android:padding="@dimen/marginInputField"
-            android:textColor="@color/colorPrimaryText"
-            android:gravity="left|center"
-            android:hint="@string/exerciseDescription"
-            android:background="@drawable/shape_default"/>
-
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="15"
-            android:progress="5"/>
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="15"
-            android:progress="5"/>
-
-    </LinearLayout>
-
-    <!-- Your scrolling content -->
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabSecondary"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="83dp"
-        android:layout_gravity="bottom|end"
-        android:layout_marginRight="@dimen/fab_margin"
-        app:elevation="6dp"
-        app:rippleColor="@color/grey_A300"
-        android:tint="@android:color/white"
-        app:backgroundTint="@color/grey_A700"
-        app:pressedTranslationZ="12dp"
-        android:src="@mipmap/ic_add_a_photo_white_24dp"
-        app:layout_behavior="community.barassistant.barassistant.behavior.FabScrollBehavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabMain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        app:elevation="6dp"
-        app:rippleColor="@color/colorPrimaryLight"
-        android:tint="@android:color/white"
-        app:backgroundTint="@color/colorPrimary"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@mipmap/ic_done_white_24dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

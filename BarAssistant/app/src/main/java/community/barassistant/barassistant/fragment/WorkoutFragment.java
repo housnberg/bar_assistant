@@ -17,7 +17,6 @@ import com.github.fabtransitionactivity.SheetLayout;
 
 import java.util.List;
 
-import community.barassistant.barassistant.AddExerciseActivity;
 import community.barassistant.barassistant.AddWorkoutActivity;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.adapter.ExercisesAdapter;
@@ -49,7 +48,7 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_one, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main_exercise, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         datasource = new ExercisesDAO(getActivity());
         setHasOptionsMenu(true);
