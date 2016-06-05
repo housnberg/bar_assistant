@@ -2,6 +2,7 @@ package community.barassistant.barassistant.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -25,9 +26,9 @@ public class AddPropertiesToWorkoutFragment extends Fragment {
     private WheelView roundsWheeler;
     private WheelView pauseExercisesWheeler;
     private WheelView pauseRoundsWheeler;
-
     private EditText workoutName;
     private EditText workoutDescription;
+    private FloatingActionButton mSharedFab;
 
     private List<String> possibleRounds;
     private List<String> possiblePauseExercises;
@@ -73,6 +74,18 @@ public class AddPropertiesToWorkoutFragment extends Fragment {
         return true;
     }
 
+    public void shareFab(FloatingActionButton fab) {
+        if (fab == null) { // When the FAB is shared to another Fragment
+            if (mSharedFab != null) {
+                mSharedFab.setOnClickListener(null);
+            }
+            mSharedFab = null;
+        }
+        else {
+            mSharedFab = fab;
+            mSharedFab.hide();
+        }
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {

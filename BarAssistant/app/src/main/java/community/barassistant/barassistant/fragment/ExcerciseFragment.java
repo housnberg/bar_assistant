@@ -49,7 +49,7 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main_recycler_view, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         datasource = new ExercisesDAO(getActivity());
         setHasOptionsMenu(true);
@@ -90,6 +90,7 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
             mSheetLayout.setFab(mSharedFab);
             mSheetLayout.setFabAnimationEndListener(this);
             fab.setImageResource(R.mipmap.ic_add_white_24dp);
+            mSharedFab.show();
         }
     }
 
@@ -128,7 +129,6 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
                 exercises.add(exercise);
                 recyclerView.getAdapter().notifyDataSetChanged();
             }
-
             mSheetLayout.contractFab();
         }
     }

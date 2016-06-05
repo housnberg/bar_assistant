@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import community.barassistant.barassistant.MySQLiteHelper;
 import community.barassistant.barassistant.model.Workout;
 
 /**
@@ -18,18 +17,18 @@ import community.barassistant.barassistant.model.Workout;
 public class WorkoutDAO {
 
     private SQLiteDatabase database;
-    private MySQLiteHelper dbHelper;
+    private CustomSQLiteHelper dbHelper;
     private String[] allColumns = {
-            MySQLiteHelper.COLUMN_WORKOUT_ID,
-            MySQLiteHelper.COLUMN_WORKOUT_NAME,
-            MySQLiteHelper.COLUMN_WORKOUT_DESCRIPTION,
-            MySQLiteHelper.COLUMN_WORKOUT_ROUNDS,
-            MySQLiteHelper.COLUMN_WORKOUT_PAUSE_EXERCISES,
-            MySQLiteHelper.COLUMN_WORKOUT_PAUSE_ROUNDS
+            CustomSQLiteHelper.COLUMN_WORKOUT_ID,
+            CustomSQLiteHelper.COLUMN_WORKOUT_NAME,
+            CustomSQLiteHelper.COLUMN_WORKOUT_DESCRIPTION,
+            CustomSQLiteHelper.COLUMN_WORKOUT_ROUNDS,
+            CustomSQLiteHelper.COLUMN_WORKOUT_PAUSE_EXERCISES,
+            CustomSQLiteHelper.COLUMN_WORKOUT_PAUSE_ROUNDS
     };
 
     public WorkoutDAO(Context context) {
-        dbHelper = new MySQLiteHelper(context);
+        dbHelper = new CustomSQLiteHelper(context);
     }
 
     public void open() throws SQLException {
@@ -42,13 +41,13 @@ public class WorkoutDAO {
 
     public Workout createExercise(String exerciseName, String exerciseDescription, int rounds, int pauseExercises, int pauseRounds) {
         ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_WORKOUT_NAME, exerciseName);
-        values.put(MySQLiteHelper.COLUMN_WORKOUT_DESCRIPTION, exerciseDescription);
-        values.put(MySQLiteHelper.COLUMN_WORKOUT_ROUNDS, rounds);
-        values.put(MySQLiteHelper.COLUMN_WORKOUT_PAUSE_EXERCISES, pauseExercises);
-        values.put(MySQLiteHelper.COLUMN_WORKOUT_PAUSE_ROUNDS, pauseRounds);
-        long insertId = database.insert(MySQLiteHelper.TABLE_WORKOUT, null, values);
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_WORKOUT, allColumns, MySQLiteHelper.COLUMN_WORKOUT_ID + " = " + insertId, null, null, null, null);
+        values.put(CustomSQLiteHelper.COLUMN_WORKOUT_NAME, exerciseName);
+        values.put(CustomSQLiteHelper.COLUMN_WORKOUT_DESCRIPTION, exerciseDescription);
+        values.put(CustomSQLiteHelper.COLUMN_WORKOUT_ROUNDS, rounds);
+        values.put(CustomSQLiteHelper.COLUMN_WORKOUT_PAUSE_EXERCISES, pauseExercises);
+        values.put(CustomSQLiteHelper.COLUMN_WORKOUT_PAUSE_ROUNDS, pauseRounds);
+        long insertId = database.insert(CustomSQLiteHelper.TABLE_WORKOUT, null, values);
+        Cursor cursor = database.query(CustomSQLiteHelper.TABLE_WORKOUT, allColumns, CustomSQLiteHelper.COLUMN_WORKOUT_ID + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
         Workout newWorkout = cursorToWorkout(cursor);
         cursor.close();
@@ -57,13 +56,13 @@ public class WorkoutDAO {
 
     public void deleteWorkout(Workout workout) {
         long id = workout.getId();
-        database.delete(MySQLiteHelper.TABLE_WORKOUT, MySQLiteHelper.COLUMN_WORKOUT_ID + " = " + id, null);
+        database.delete(CustomSQLiteHelper.TABLE_WORKOUT, CustomSQLiteHelper.COLUMN_WORKOUT_ID + " = " + id, null);
     }
 
     public List<Workout> getAllWorkouts() {
         List<Workout> workouts = new ArrayList<Workout>();
 
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_WORKOUT,
+        Cursor cursor = database.query(CustomSQLiteHelper.TABLE_WORKOUT,
                 allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();

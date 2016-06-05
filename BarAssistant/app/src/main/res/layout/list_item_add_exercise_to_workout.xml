@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/shape_default">
+
+    <RelativeLayout
+        android:layout_height="76dp"
+        android:layout_width="match_parent"
+        android:elevation="4dp"
+        android:background="?android:attr/selectableItemBackground">
+
+        <com.github.siyamed.shapeimageview.CircularImageView
+            android:id="@+id/exerciseTitleImageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentTop="true"
+            android:layout_margin="8dp"
+            app:siBorderWidth="0.25dp"
+            app:siBorderColor="@color/colorDivider"
+            android:src="@drawable/test"/>
+
+        <LinearLayout
+            android:id="@+id/wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@+id/exerciseTitleImageView"
+            android:weightSum="10"
+            android:orientation="horizontal">
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/exerciseNameTextView"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="7.5"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="8dp"
+                android:gravity="left|bottom" />
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_height="30dp"
+                android:layout_width="0dp"
+                android:layout_weight="2.5"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:text="@string/repetitions"
+                android:paddingLeft="8dp"
+                android:gravity="left|bottom" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_toRightOf="@+id/exerciseTitleImageView"
+            android:weightSum="10"
+            android:orientation="horizontal"
+            android:layout_below="@+id/wrapper">
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/exerciseDescriptionTextView"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="7.5"
+                android:textSize="12dp"
+                android:textColor="@color/colorSecondaryText"
+                android:paddingLeft="8dp"
+                android:gravity="left" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.5"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>

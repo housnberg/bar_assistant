@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import community.barassistant.barassistant.behavior.Fx;
 import community.barassistant.barassistant.dao.WorkoutDAO;
 import community.barassistant.barassistant.fragment.AddExercisesToWorkoutFragment;
 import community.barassistant.barassistant.fragment.AddPropertiesToWorkoutFragment;
@@ -36,8 +37,8 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private Fragment addExercisesToWorkoutFragment;
-    private Fragment addPropertiesToWorkoutFragment;
+    private AddExercisesToWorkoutFragment addExercisesToWorkoutFragment;
+    private AddPropertiesToWorkoutFragment addPropertiesToWorkoutFragment;
     private FloatingActionButton mSharedFab;
 
     @Override
@@ -76,11 +77,12 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         addPropertiesToWorkoutFragment = new AddPropertiesToWorkoutFragment();
         addExercisesToWorkoutFragment = new AddExercisesToWorkoutFragment();
-        pagerAdapter.addFragment(addPropertiesToWorkoutFragment, getResources().getString(R.string.addPropertiesToWorkoutFragment));
         pagerAdapter.addFragment(addExercisesToWorkoutFragment, getResources().getString(R.string.addExercisesToWorkoutFragment));
+        pagerAdapter.addFragment(addPropertiesToWorkoutFragment, getResources().getString(R.string.addPropertiesToWorkoutFragment));
 
         viewPager.setAdapter(pagerAdapter);
 
+        addExercisesToWorkoutFragment.shareFab(mSharedFab); // To init the FAB
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -92,7 +94,21 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                switch (state) {
+                    case ViewPager.SCROLL_STATE_IDLE:
+                        switch (viewPager.getCurrentItem()) {
+                            case 0:
+                                addPropertiesToWorkoutFragment.shareFab(null); // Remove FAB from fragment
+                                addExercisesToWorkoutFragment.shareFab(mSharedFab);
+                                break;
+                            case 1:
+                                addExercisesToWorkoutFragment.shareFab(null); // Remove FAB from fragment
+                                addPropertiesToWorkoutFragment.shareFab(mSharedFab);
+                                break;
+                        }
+                        //mSharedFab.show(); // Show animation
+                        break;
+                }
             }
         });
     }
@@ -108,11 +124,11 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //TODO: CHECK IF THE VIEWS ARE SET
-        String workoutName = ((AddPropertiesToWorkoutFragment) addPropertiesToWorkoutFragment).getWorkoutName().getText().toString();
-        String workoutDescription = ((AddPropertiesToWorkoutFragment) addPropertiesToWorkoutFragment).getWorkoutDescription().getText().toString();
-        int workoutRounds = ((AddPropertiesToWorkoutFragment) addPropertiesToWorkoutFragment).getRoundsWheeler().getSelectedPosition() + 1;
-        int workoutPauseExercises = ((AddPropertiesToWorkoutFragment) addPropertiesToWorkoutFragment).getPauseExercisesWheeler().getSelectedPosition() + 1;
-        int workoutPauseRounds = ((AddPropertiesToWorkoutFragment) addPropertiesToWorkoutFragment).getPauseRoundsWheeler().getSelectedPosition() + 1;
+        String workoutName = addPropertiesToWorkoutFragment.getWorkoutName().getText().toString();
+        String workoutDescription = addPropertiesToWorkoutFragment.getWorkoutDescription().getText().toString();
+        int workoutRounds = addPropertiesToWorkoutFragment.getRoundsWheeler().getSelectedPosition() + 1;
+        int workoutPauseExercises = addPropertiesToWorkoutFragment.getPauseExercisesWheeler().getSelectedPosition() + 1;
+        int workoutPauseRounds = addPropertiesToWorkoutFragment.getPauseRoundsWheeler().getSelectedPosition() + 1;
 
         if (item.getItemId() == R.id.actionSave) {
             if (workoutName.length() < 3) {

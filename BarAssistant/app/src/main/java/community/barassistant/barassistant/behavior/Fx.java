@@ -1,9 +1,11 @@
-package community.barassistant.barassistant;
+package community.barassistant.barassistant.behavior;
 
 import android.content.Context;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+
+import community.barassistant.barassistant.R;
 
 /**
  * Created by EL on 04.06.2016.

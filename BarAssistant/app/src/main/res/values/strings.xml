@@ -3,6 +3,7 @@
 
     <string name="addExerciseActivity">Add Exercise</string>
     <string name="addWorkoutActivity">Add Workout</string>
+    <string name="addExercisesToWorkoutActivity">Select Exercises</string>
     
     <string name="homeFragment">Home</string>
     <string name="exercisesFragment">Exercises</string>
@@ -12,6 +13,7 @@
 
     <string name="name">Name</string>
     <string name="description">Description (optional)</string>
+    <string name="repetitions">Reps</string>
 
     <string name="actionSettings">Settings</string>
     <string name="actionFilter">Filter</string>

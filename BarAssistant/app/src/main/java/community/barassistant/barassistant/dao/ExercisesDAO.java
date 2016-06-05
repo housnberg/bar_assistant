@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import community.barassistant.barassistant.MySQLiteHelper;
 import community.barassistant.barassistant.model.Exercise;
 
 /**
@@ -18,15 +17,15 @@ import community.barassistant.barassistant.model.Exercise;
 public class ExercisesDAO {
 
     private SQLiteDatabase database;
-    private MySQLiteHelper dbHelper;
+    private CustomSQLiteHelper dbHelper;
     private String[] allColumns = {
-            MySQLiteHelper.COLUMN_EXERCISE_ID,
-            MySQLiteHelper.COLUMN_EXERCISE_NAME,
-            MySQLiteHelper.COLUMN_EXERCISE_DESCRIPTION
+            CustomSQLiteHelper.COLUMN_EXERCISE_ID,
+            CustomSQLiteHelper.COLUMN_EXERCISE_NAME,
+            CustomSQLiteHelper.COLUMN_EXERCISE_DESCRIPTION
     };
 
     public ExercisesDAO(Context context) {
-        dbHelper = new MySQLiteHelper(context);
+        dbHelper = new CustomSQLiteHelper(context);
     }
 
     public void open() throws SQLException {
@@ -39,10 +38,10 @@ public class ExercisesDAO {
 
     public Exercise createExercise(String name, String description) {
         ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_EXERCISE_NAME, name);
-        values.put(MySQLiteHelper.COLUMN_EXERCISE_DESCRIPTION, description);
-        long insertId = database.insert(MySQLiteHelper.TABLE_EXERCISE, null, values);
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_EXERCISE, allColumns, MySQLiteHelper.COLUMN_EXERCISE_ID + " = " + insertId, null, null, null, null);
+        values.put(CustomSQLiteHelper.COLUMN_EXERCISE_NAME, name);
+        values.put(CustomSQLiteHelper.COLUMN_EXERCISE_DESCRIPTION, description);
+        long insertId = database.insert(CustomSQLiteHelper.TABLE_EXERCISE, null, values);
+        Cursor cursor = database.query(CustomSQLiteHelper.TABLE_EXERCISE, allColumns, CustomSQLiteHelper.COLUMN_EXERCISE_ID + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
         Exercise newExercise = cursorToExercise(cursor);
         cursor.close();
@@ -51,13 +50,13 @@ public class ExercisesDAO {
 
     public void deleteExercise(Exercise exercise) {
         long id = exercise.getId();
-        database.delete(MySQLiteHelper.TABLE_EXERCISE, MySQLiteHelper.COLUMN_EXERCISE_ID + " = " + id, null);
+        database.delete(CustomSQLiteHelper.TABLE_EXERCISE, CustomSQLiteHelper.COLUMN_EXERCISE_ID + " = " + id, null);
     }
 
     public List<Exercise> getAllExercises() {
         List<Exercise> exercises = new ArrayList<Exercise>();
 
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_EXERCISE,
+        Cursor cursor = database.query(CustomSQLiteHelper.TABLE_EXERCISE,
                 allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();

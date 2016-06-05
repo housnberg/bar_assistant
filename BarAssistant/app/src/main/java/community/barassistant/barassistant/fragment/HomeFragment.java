@@ -26,7 +26,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View drawer = inflater.inflate(R.layout.fragment_main, container, false);
+        View drawer = inflater.inflate(R.layout.fragment_main_recycler_view, container, false);
         RecyclerView recyclerView = (RecyclerView) drawer.findViewById(R.id.recyclerView);
         setupRecyclerView(recyclerView);
         return drawer;
@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
-                View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.exercise_list_item, viewGroup, false);
+                View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_exercise, viewGroup, false);
                 return new TextHolder(itemView);
             }
 

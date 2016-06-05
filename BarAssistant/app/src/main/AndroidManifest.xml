@@ -27,6 +27,10 @@
             android:label="@string/addWorkoutActivity">
 
         </activity>
+        <activity android:name=".AddExerciseToWorkoutActivity"
+            android:label="@string/addExercisesToWorkoutActivity">
+
+        </activity>
     </application>
 
 </manifest>
