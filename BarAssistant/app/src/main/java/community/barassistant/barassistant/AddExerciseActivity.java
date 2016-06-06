@@ -23,6 +23,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.dao.ExercisesDAO;
@@ -30,6 +32,7 @@ import community.barassistant.barassistant.services.ImageService;
 
 /**
  * @author Eugen Ljavin
+ * @author Johann Andrejtschik
  */
 public class AddExerciseActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,7 +49,10 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     private EditText exerciseDescription;
     private Bitmap photo;
     private ImageService imageService;
+
     private boolean bound = false;
+
+    private List<String> imageUrls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +61,8 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
 
         mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
         mSharedFab.setOnClickListener(this);
-        //mSecondaryFab = (FloatingActionButton) findViewById(R.id.fabSecondary);
-        //mSecondaryFab.setOnClickListener(this);
+
+        imageUrls = new ArrayList<String>();
 
         datasource = new ExercisesDAO(this);
         datasource.open();
@@ -65,14 +71,6 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         exerciseDescription = (EditText) findViewById(R.id.description);
 
         initToolbar();
-    }
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-        // Bind ImageService
-        Intent intent = new Intent(this, ImageService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
 
     private void initToolbar() {
@@ -108,47 +106,13 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    protected void onStop(){
-        super.onStop();
-        //Unbind Service. Service gets destroyed when not bound by any activity.
-        if(bound){
-            unbindService(connection);
-            bound = false;
-        }
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             photo = (Bitmap) data.getExtras().get("data");
-            /* ImageView iv = (ImageView) findViewById(R.id.imageView);
-            iv.setImageBitmap(imageService.loadImageFromStorage(imageService.saveImageToStorage(photo))); */
+            ImageView iv = (ImageView) findViewById(R.id.imageView);
+            imageUrls.add(imageService.saveImageToStorage(photo));
+            iv.setImageBitmap(imageService.loadImageFromStorage(imageUrls.get(imageUrls.size() - 1)));
         }
-    }
-
-    //WANJA; USE THIS FOR YOUR CLASS
-    public void saveImageToExternalStorage(Bitmap bm) {
-
-        OutputStream fOut = null;
-        String strDirectory = getAlbumStorageDir("bar_assistant").toString();
-
-        File f = new File(strDirectory, "bar_assistant_test.jpg");
-        try {
-            fOut = new FileOutputStream(f);
-
-            /**Compress image**/
-            bm.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
-            fOut.flush();
-            fOut.close();
-
-            /**Update image to gallery**/
-            MediaStore.Images.Media.insertImage(getContentResolver(), f.getAbsolutePath(), f.getName(), f.getName());
-            Toast.makeText(getApplicationContext(), "Image saved...", Toast.LENGTH_SHORT).show();
-            System.out.println("image saved to: " + strDirectory);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
@@ -166,39 +130,32 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
             } else {
                 Exercise exercise = null;
                 exercise = datasource.createExercise(exerciseName.getText().toString(), exerciseDescription.getText().toString());
+                for (String path : imageUrls) {
+                    datasource.createImagePath(path, exercise.getId());
+                }
                 finish();
             }
         }
         return true;
     }
 
-    /* Checks if external storage is available for read and write */
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        // Bind ImageService
+        Intent intent = new Intent(this, ImageService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
 
-    /* Checks if external storage is available to at least read */
-    public boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
+    @Override
+    protected void onStop(){
+        super.onStop();
+        //Unbind Service. Service gets destroyed when not bound by any activity.
+        if(bound){
+            unbindService(connection);
+            bound = false;
         }
-        return false;
-    }
-
-    public File getAlbumStorageDir(String albumName) {
-        // Get the directory for the user's public pictures directory.
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), albumName);
-        System.out.println(file.getAbsolutePath());
-        if (!file.mkdirs()) {
-            //Log.e(LOG_TAG, "Directory not created");
-        }
-        return file;
     }
 
     // Get reference to the ImageService

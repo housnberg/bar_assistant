@@ -28,6 +28,10 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_WORKOUT_EXERCISE_EXERCISE_ID = "id_exercise";
     public static final String COLUMN_WORKOUT_EXERCISE_REPETITIONS = "repetitions";
 
+    public static final String TABLE_IMAGE_PATH = "image_path";
+    public static final String COLUMN_IMAGE_PATH_ID = "_path";
+    public static final String COLUMN_IMAGE_PATH_EXERCISE_ID = "id_exercise";
+
     private static final String DATABASE_NAME = "barassistant.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -55,11 +59,19 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_WORKOUT_EXERCISE = "create table "
             + CustomSQLiteHelper.TABLE_WORKOUT_EXERCISE
             + "("
-            + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID + " integer not null references " + CustomSQLiteHelper.CREATE_TABLE_EXERCISE + "(" + CustomSQLiteHelper.COLUMN_EXERCISE_ID + ") on delete cascade on update cascade, "
-            + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID + " integer not null references " + CustomSQLiteHelper.CREATE_TABLE_WORKOUT + "(" + CustomSQLiteHelper.COLUMN_WORKOUT_ID + ") on delete cascade on update cascade, "
+            + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID + " integer not null references " + CustomSQLiteHelper.TABLE_EXERCISE + "(" + CustomSQLiteHelper.COLUMN_EXERCISE_ID + ") on delete cascade on update cascade, "
+            + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID + " integer not null references " + CustomSQLiteHelper.TABLE_WORKOUT + "(" + CustomSQLiteHelper.COLUMN_WORKOUT_ID + ") on delete cascade on update cascade, "
             + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_REPETITIONS + " integer not null, "
             + "primary key (" + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID + "," + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID + ")"
             + ");";
+
+    private static final String CREATE_TABLE_IMAGE_PATH = "create table "
+            + CustomSQLiteHelper.TABLE_IMAGE_PATH
+            + "("
+            + CustomSQLiteHelper.COLUMN_IMAGE_PATH_ID + " text primary key, "
+            + CustomSQLiteHelper.COLUMN_IMAGE_PATH_EXERCISE_ID + " integer not null references " + CustomSQLiteHelper.TABLE_EXERCISE + "(" + CustomSQLiteHelper.COLUMN_EXERCISE_ID + ") on delete cascade on update cascade "
+            + ");";
+
     private static final String ENABLE_FOREIGN_KEY_SUPPORT = "PRAGMA foreign_keys = ON;";
 
     public CustomSQLiteHelper(Context context) {
@@ -68,10 +80,11 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
+        database.execSQL(CustomSQLiteHelper.ENABLE_FOREIGN_KEY_SUPPORT);
         database.execSQL(CustomSQLiteHelper.CREATE_TABLE_EXERCISE);
         database.execSQL(CustomSQLiteHelper.CREATE_TABLE_WORKOUT);
         database.execSQL(CustomSQLiteHelper.CREATE_TABLE_WORKOUT_EXERCISE);
-        database.execSQL(CustomSQLiteHelper.ENABLE_FOREIGN_KEY_SUPPORT);
+        database.execSQL(CustomSQLiteHelper.CREATE_TABLE_IMAGE_PATH);
     }
 
     @Override
@@ -82,6 +95,7 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + CustomSQLiteHelper.TABLE_EXERCISE);
         db.execSQL("DROP TABLE IF EXISTS " + CustomSQLiteHelper.TABLE_WORKOUT);
         db.execSQL("DROP TABLE IF EXISTS " + CustomSQLiteHelper.TABLE_WORKOUT_EXERCISE);
+        db.execSQL("DROP TABLE IF EXISTS " + CustomSQLiteHelper.TABLE_IMAGE_PATH);
         onCreate(db);
     }
 }

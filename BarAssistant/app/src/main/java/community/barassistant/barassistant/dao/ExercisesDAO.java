@@ -24,6 +24,11 @@ public class ExercisesDAO {
             CustomSQLiteHelper.COLUMN_EXERCISE_DESCRIPTION
     };
 
+    private static final String SELECT_IMAGE_PATH_BY_EXERCISE_ID =
+            "SELECT ip." + CustomSQLiteHelper.COLUMN_IMAGE_PATH_ID + " FROM " + CustomSQLiteHelper.TABLE_IMAGE_PATH + " ip"
+                    + " WHERE ip." + CustomSQLiteHelper.COLUMN_IMAGE_PATH_EXERCISE_ID + " = ?;";
+
+
     public ExercisesDAO(Context context) {
         dbHelper = new CustomSQLiteHelper(context);
     }
@@ -46,6 +51,22 @@ public class ExercisesDAO {
         Exercise newExercise = cursorToExercise(cursor);
         cursor.close();
         return newExercise;
+    }
+
+    public String createImagePath(String imagePath, long exerciseId) {
+        ContentValues values = new ContentValues();
+        values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_ID, imagePath);
+        values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_EXERCISE_ID, exerciseId);
+        long insertId = database.insert(CustomSQLiteHelper.TABLE_IMAGE_PATH, null, values);
+        return imagePath;
+    }
+
+    public String getImagePathByExerciseId(long exerciseId) {
+        Cursor cursor = database.rawQuery(ExercisesDAO.SELECT_IMAGE_PATH_BY_EXERCISE_ID, new String[] {String.valueOf(exerciseId)});
+        cursor.moveToFirst();
+        String imagePath = cursor.getString(0);
+        cursor.close();
+        return imagePath;
     }
 
     public void deleteExercise(Exercise exercise) {
