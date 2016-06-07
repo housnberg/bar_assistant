@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ import java.util.List;
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.dao.ExercisesDAO;
 import community.barassistant.barassistant.services.ImageService;
+import community.barassistant.barassistant.services.TimerService;
 
 /**
  * @author Eugen Ljavin
@@ -49,8 +51,10 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     private EditText exerciseDescription;
     private Bitmap photo;
     private ImageService imageService;
+    private TimerService timerService;
 
     private boolean bound = false;
+    private boolean boundtimer = false;
 
     private List<String> imageUrls;
 
@@ -61,7 +65,6 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
 
         mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
         mSharedFab.setOnClickListener(this);
-
         imageUrls = new ArrayList<String>();
 
         datasource = new ExercisesDAO(this);
@@ -90,6 +93,7 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         if (view.getId() == R.id.fabMain) {
             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            timerService.countdownTimer(30000);
         }
     }
 
@@ -135,6 +139,9 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         // Bind ImageService
         Intent intent = new Intent(this, ImageService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
+
+        Intent intentTimer = new Intent(this, TimerService.class);
+        bindService(intentTimer, connectionTimer, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -144,6 +151,10 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         if(bound){
             unbindService(connection);
             bound = false;
+        }
+        if (boundtimer) {
+            unbindService(connectionTimer);
+            boundtimer = false;
         }
     }
 
@@ -156,9 +167,25 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
             bound = true;
         }
 
+
+
         @Override
         public void onServiceDisconnected(ComponentName name) {
             bound = false;
+        }
+    };
+
+    // Get reference to the ImageService
+    private ServiceConnection connectionTimer = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            TimerService.LocalBinder timebinder = (TimerService.LocalBinder) service;
+            timerService = timebinder.getService();
+            boundtimer = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            boundtimer = false;
         }
     };
 
