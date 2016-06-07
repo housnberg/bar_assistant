@@ -11,6 +11,9 @@ import android.support.annotation.Nullable;
  * Created by thomasrasp on 07.06.16.
  */
 public class TimerService extends Service {
+
+    private long startTime = 0;
+
     private final IBinder BINDER = new LocalBinder();
     public class LocalBinder extends Binder {
         public TimerService getService() {
@@ -28,7 +31,6 @@ public class TimerService extends Service {
         new CountDownTimer(time,1000){
 
             public void onTick(long millisUntilFinished){
-                // Ausgabe auf Display
                 System.out.println(millisUntilFinished /1000);
             }
             public void onFinish(){
@@ -38,4 +40,13 @@ public class TimerService extends Service {
         }.start();
 
     }
+
+    public void timer(){
+        // Timer code here
+    }
+
+    public void mainTimer(){
+
+    }
+
 }
