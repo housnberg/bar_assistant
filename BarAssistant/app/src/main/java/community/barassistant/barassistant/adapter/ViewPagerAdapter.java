@@ -1,4 +1,4 @@
-package community.barassistant.barassistant;
+package community.barassistant.barassistant.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

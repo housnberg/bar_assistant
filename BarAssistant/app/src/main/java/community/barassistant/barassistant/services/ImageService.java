@@ -20,7 +20,7 @@ import java.util.Random;
  * Created by ivan on 03.06.2016.
  */
 public class ImageService extends Service {
-    private final IBinder binder = new LocalBinder();
+    private final IBinder BINDER = new LocalBinder();
 
     public class LocalBinder extends Binder{
         public ImageService getService() {
@@ -31,7 +31,7 @@ public class ImageService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return binder;
+        return BINDER;
     }
 
     public String saveImageToStorage(Bitmap bm){

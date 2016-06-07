@@ -106,16 +106,6 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            photo = (Bitmap) data.getExtras().get("data");
-            ImageView iv = (ImageView) findViewById(R.id.imageView);
-            imageUrls.add(imageService.saveImageToStorage(photo));
-            iv.setImageBitmap(imageService.loadImageFromStorage(imageUrls.get(imageUrls.size() - 1)));
-        }
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_save, menu);
@@ -125,11 +115,11 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.actionSave) {
-            if (exerciseName.getText().toString().length() < 3) {
+            if (exerciseName.getText().toString().trim().length() < 3) {
                 Toast.makeText(this, R.string.toastInvalidName, Toast.LENGTH_LONG).show();
             } else {
                 Exercise exercise = null;
-                exercise = datasource.createExercise(exerciseName.getText().toString(), exerciseDescription.getText().toString());
+                exercise = datasource.createExercise(exerciseName.getText().toString().trim(), exerciseDescription.getText().toString().trim());
                 for (String path : imageUrls) {
                     datasource.createImagePath(path, exercise.getId());
                 }
@@ -138,7 +128,6 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         }
         return true;
     }
-
 
     @Override
     protected void onStart(){
@@ -173,4 +162,13 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         }
     };
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            photo = (Bitmap) data.getExtras().get("data");
+            ImageView iv = (ImageView) findViewById(R.id.imageView);
+            imageUrls.add(imageService.saveImageToStorage(photo));
+            iv.setImageBitmap(imageService.loadImageFromStorage(imageUrls.get(imageUrls.size() - 1)));
+        }
+    }
 }

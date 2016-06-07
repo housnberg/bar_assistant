@@ -5,9 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import community.barassistant.barassistant.model.Exercise;
 
@@ -27,6 +29,11 @@ public class ExercisesDAO {
     private static final String SELECT_IMAGE_PATH_BY_EXERCISE_ID =
             "SELECT ip." + CustomSQLiteHelper.COLUMN_IMAGE_PATH_ID + " FROM " + CustomSQLiteHelper.TABLE_IMAGE_PATH + " ip"
                     + " WHERE ip." + CustomSQLiteHelper.COLUMN_IMAGE_PATH_EXERCISE_ID + " = ?;";
+
+
+    private static final String SELECT_EXERCISE_BY_ID =
+            "SELECT e." + CustomSQLiteHelper.COLUMN_EXERCISE_ID + " FROM " + CustomSQLiteHelper.TABLE_EXERCISE + " e"
+                    + " WHERE e." + CustomSQLiteHelper.COLUMN_EXERCISE_ID + " = ?;";
 
 
     public ExercisesDAO(Context context) {
@@ -62,10 +69,15 @@ public class ExercisesDAO {
     }
 
     public String getImagePathByExerciseId(long exerciseId) {
-        Cursor cursor = database.rawQuery(ExercisesDAO.SELECT_IMAGE_PATH_BY_EXERCISE_ID, new String[] {String.valueOf(exerciseId)});
-        cursor.moveToFirst();
-        String imagePath = cursor.getString(0);
-        cursor.close();
+        String imagePath = null;
+        try {
+            Cursor cursor = database.rawQuery(ExercisesDAO.SELECT_IMAGE_PATH_BY_EXERCISE_ID, new String[] {String.valueOf(exerciseId)});
+            cursor.moveToFirst();
+            imagePath = cursor.getString(0);
+            cursor.close();
+        } catch (Exception e) {
+
+        }
         return imagePath;
     }
 
@@ -94,6 +106,19 @@ public class ExercisesDAO {
     //TODO: Rewrite this as database statement to improve performance
     public Exercise getLastAddedExercise() {
         return getAllExercises().get(getAllExercises().size() - 1);
+    }
+
+    public Exercise getExerciseById(long exerciseId) {
+        Exercise exercise = null;
+        try {
+            Cursor cursor = database.rawQuery(ExercisesDAO.SELECT_EXERCISE_BY_ID, new String[] {String.valueOf(exerciseId)});
+            cursor.moveToFirst();
+            exercise = cursorToExercise(cursor);
+            cursor.close();
+        } catch (Exception e) {
+
+        }
+        return exercise;
     }
 
     private Exercise cursorToExercise(Cursor cursor) {

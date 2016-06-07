@@ -1,6 +1,7 @@
 package community.barassistant.barassistant.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.fabtransitionactivity.SheetLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import community.barassistant.barassistant.AddExerciseToWorkoutActivity;
 import community.barassistant.barassistant.R;
@@ -25,6 +29,8 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
 
     private FloatingActionButton mSharedFab;
     private SheetLayout mSheetLayout;
+
+    private List<Exercise> selectedExercises;
 
     public AddExercisesToWorkoutFragment() {
         // Required empty public constructor
@@ -69,23 +75,26 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE) {
-
-            /*
-            Exercise exercise = datasource.getLastAddedExercise();
-            if (!exercises.contains(exercise)) {
-                exercises.add(exercise);
-                recyclerView.getAdapter().notifyDataSetChanged();
-            }*/
-            mSheetLayout.contractFab();
-        }
-    }
-
-    @Override
     public void onFabAnimationEnd() {
         Intent intent = new Intent(getActivity(), AddExerciseToWorkoutActivity.class);
         startActivityForResult(intent,REQUEST_CODE);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
+
+            selectedExercises = (ArrayList<Exercise>) data.getExtras().get("data");
+
+
+//            Exercise exercise = datasource.getLastAddedExercise();
+//            if (!exercises.contains(exercise)) {
+//                exercises.add(exercise);
+//                recyclerView.getAdapter().notifyDataSetChanged();
+//            }
+            mSheetLayout.contractFab();
+        }
+    }
+
 }

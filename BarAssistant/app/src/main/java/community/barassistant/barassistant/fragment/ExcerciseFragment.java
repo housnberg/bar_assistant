@@ -1,6 +1,10 @@
 package community.barassistant.barassistant.fragment;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
@@ -18,11 +22,13 @@ import com.github.fabtransitionactivity.SheetLayout;
 import java.util.List;
 
 import community.barassistant.barassistant.AddExerciseActivity;
+import community.barassistant.barassistant.MainActivity;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.adapter.ExerciseAdapter;
 import community.barassistant.barassistant.adapter.ItemClickSupport;
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.dao.ExercisesDAO;
+import community.barassistant.barassistant.services.ImageService;
 
 /**
  * @author Eugen Ljavin
@@ -31,15 +37,16 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
 
     private static final int REQUEST_CODE = 1;
 
-    private ExercisesDAO datasource;
-
     private FloatingActionButton mSharedFab;
     private FloatingActionButton fabSecondary;
     private SheetLayout mSheetLayout;
     private RecyclerView recyclerView;
     private MenuItem sortItem;
     private MenuItem filterItem;
+
+    private ExercisesDAO datasource;
     private List<Exercise> exercises;
+
     private boolean isFabOpen = true;
 
     public ExcerciseFragment() {
@@ -51,12 +58,19 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main_recycler_view, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+
         datasource = new ExercisesDAO(getActivity());
-        setHasOptionsMenu(true);
         datasource.open();
         exercises = datasource.getAllExercises();
-        setupRecyclerView();
+
+        setHasOptionsMenu(true);
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setupRecyclerView();
     }
 
     @Override
@@ -68,7 +82,7 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new ExerciseAdapter(getActivity(), exercises));
+        recyclerView.setAdapter(new ExerciseAdapter(getActivity(), exercises, datasource));
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
@@ -95,15 +109,7 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onClick(View view) {
-//        if (isFabOpen) {
-//            mSharedFab.startAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.rotate_forward));
             mSheetLayout.expandFab();
-//            fabSecondary.show();
-//        } else {
-//            mSharedFab.startAnimation(AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.rotate_backward));
-//            fabSecondary.hide();
-//        }
-//        isFabOpen = !isFabOpen;
     }
 
     @Override
@@ -115,7 +121,6 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSharedFab = null; // To avoid keeping/leaking the reference of the FAB
     }
 
     @Override
