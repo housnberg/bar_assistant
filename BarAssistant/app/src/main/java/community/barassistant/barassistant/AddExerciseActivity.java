@@ -2,6 +2,7 @@ package community.barassistant.barassistant;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
@@ -48,7 +49,6 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     private EditText exerciseName;
     private EditText exerciseDescription;
     private Bitmap photo;
-    private ImageService imageService;
 
     private boolean bound = false;
 
@@ -130,45 +130,13 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    protected void onStart(){
-        super.onStart();
-        // Bind ImageService
-        Intent intent = new Intent(this, ImageService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onStop(){
-        super.onStop();
-        //Unbind Service. Service gets destroyed when not bound by any activity.
-        if(bound){
-            unbindService(connection);
-            bound = false;
-        }
-    }
-
-    // Get reference to the ImageService
-    private ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            ImageService.LocalBinder binder = (ImageService.LocalBinder) service;
-            imageService = binder.getService();
-            bound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            bound = false;
-        }
-    };
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            ImageLoaderSingleton instance = ImageLoaderSingleton.getInstance();
             photo = (Bitmap) data.getExtras().get("data");
             ImageView iv = (ImageView) findViewById(R.id.imageView);
-            imageUrls.add(imageService.saveImageToStorage(photo));
-            iv.setImageBitmap(imageService.loadImageFromStorage(imageUrls.get(imageUrls.size() - 1)));
+            imageUrls.add(instance.saveImageToStorage(photo, new ContextWrapper(getApplicationContext())));
+            iv.setImageBitmap(instance.loadImageFromStorage(imageUrls.get(imageUrls.size() - 1)));
         }
     }
 }

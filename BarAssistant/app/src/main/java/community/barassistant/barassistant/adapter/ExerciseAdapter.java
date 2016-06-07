@@ -11,11 +11,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import community.barassistant.barassistant.ImageLoaderSingleton;
 import community.barassistant.barassistant.MainActivity;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.dao.ExercisesDAO;
 import community.barassistant.barassistant.model.Exercise;
-import community.barassistant.barassistant.services.ImageService;
 
 /**
  * @author Eugen Ljavin
@@ -40,15 +40,14 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
 
     @Override
     public void onBindViewHolder(ExerciseHolder viewHolder, int position) {
+        ImageLoaderSingleton instance = ImageLoaderSingleton.getInstance();
         Exercise exercise = exercises.get(position);
         viewHolder.exerciseNameTextView.setText(exercise.getName());
         viewHolder.exerciseDescriptionTextView.setText(exercise.getDescription());
         Bitmap image = null;
-        if (((MainActivity) context).getImageService() != null) {
-            image = ((MainActivity) context).getImageService().loadImageFromStorage(datasource.getImagePathByExerciseId(exercise.getId()));
-        }
+        image = instance.loadImageFromStorage(datasource.getImagePathByExerciseId(exercise.getId()));
         if (image != null) {
-            viewHolder.exerciseTitleImageView.setImageBitmap(((MainActivity) context).getImageService().loadImageFromStorage(datasource.getImagePathByExerciseId(exercise.getId())));
+            viewHolder.exerciseTitleImageView.setImageBitmap(image);
         }
         viewHolder.itemView.setTag(exercise);
     }

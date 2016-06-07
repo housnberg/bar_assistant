@@ -19,10 +19,9 @@ import community.barassistant.barassistant.adapter.ViewPagerAdapter;
 import community.barassistant.barassistant.fragment.ExcerciseFragment;
 import community.barassistant.barassistant.fragment.HomeFragment;
 import community.barassistant.barassistant.fragment.WorkoutFragment;
-import community.barassistant.barassistant.services.ImageService;
 
 /**
- * @author Eugen Ljain
+ * @author Eugen Ljavin
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -34,23 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private WorkoutFragment workoutFragment;
     private FloatingActionButton mSharedFab;
 
-    private ImageService imageService;
     private boolean bound = false;
-
-    // Get reference to the ImageService
-    private ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            ImageService.LocalBinder binder = (ImageService.LocalBinder) service;
-            imageService = binder.getService();
-            bound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            bound = false;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,35 +116,6 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_main, menu);
         return true;
-    }
-
-//    @Override
-//    protected void onStart(){
-//        super.onStart();
-//        // Bind ImageService
-//        Intent intent = new Intent(this, ImageService.class);
-//        bindService(intent, connection, Context.BIND_AUTO_CREATE);
-//    }
-
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        //Unbind Service. Service gets destroyed when not bound by any activity.
-        if(bound){
-            unbindService(connection);
-            bound = false;
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Intent intent = new Intent(this, ImageService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
-    }
-
-    public ImageService getImageService() {
-        return imageService;
     }
 
 }
