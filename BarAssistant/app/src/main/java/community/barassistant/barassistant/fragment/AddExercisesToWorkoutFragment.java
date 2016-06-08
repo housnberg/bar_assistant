@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.github.fabtransitionactivity.SheetLayout;
 
@@ -18,6 +19,7 @@ import java.util.List;
 
 import community.barassistant.barassistant.AddExerciseToWorkoutActivity;
 import community.barassistant.barassistant.R;
+import community.barassistant.barassistant.dao.ExercisesDAO;
 import community.barassistant.barassistant.model.Exercise;
 
 /**
@@ -30,7 +32,9 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
     private FloatingActionButton mSharedFab;
     private SheetLayout mSheetLayout;
 
-    private List<Exercise> selectedExercises;
+    private ExercisesDAO datasource;
+
+    private List<Long> selectedExercises;
 
     public AddExercisesToWorkoutFragment() {
         // Required empty public constructor
@@ -85,16 +89,21 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
 
-            selectedExercises = (ArrayList<Exercise>) data.getExtras().get("data");
+            selectedExercises = toList((Long[]) data.getExtras().get("data"));
 
+            for (long selectedExercise : selectedExercises) {
+                Toast.makeText(getActivity(), "" + selectedExercise, Toast.LENGTH_LONG).show();
+            }
 
-//            Exercise exercise = datasource.getLastAddedExercise();
-//            if (!exercises.contains(exercise)) {
-//                exercises.add(exercise);
-//                recyclerView.getAdapter().notifyDataSetChanged();
-//            }
             mSheetLayout.contractFab();
         }
     }
 
+    private List<Long> toList(Long[] values) {
+        ArrayList<Long> wrappedValues = new ArrayList<Long>();
+        for(Long value : values) {
+            wrappedValues.add(value);
+        }
+        return wrappedValues;
+    }
 }

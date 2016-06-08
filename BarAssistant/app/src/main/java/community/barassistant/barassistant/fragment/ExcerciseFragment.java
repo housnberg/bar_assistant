@@ -82,7 +82,7 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new ExerciseAdapter(getActivity(), exercises, datasource));
+        recyclerView.setAdapter(new ExerciseAdapter(getActivity(), exercises));
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {

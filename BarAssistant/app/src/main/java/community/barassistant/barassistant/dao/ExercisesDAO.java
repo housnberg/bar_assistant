@@ -48,7 +48,7 @@ public class ExercisesDAO {
         dbHelper.close();
     }
 
-    public Exercise createExercise(String name, String description) {
+    public Exercise createExercise(String name, String description, List<String> imagePaths) {
         ContentValues values = new ContentValues();
         values.put(CustomSQLiteHelper.COLUMN_EXERCISE_NAME, name);
         values.put(CustomSQLiteHelper.COLUMN_EXERCISE_DESCRIPTION, description);
@@ -56,6 +56,10 @@ public class ExercisesDAO {
         Cursor cursor = database.query(CustomSQLiteHelper.TABLE_EXERCISE, allColumns, CustomSQLiteHelper.COLUMN_EXERCISE_ID + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
         Exercise newExercise = cursorToExercise(cursor);
+        newExercise.setImagePaths(imagePaths);
+        for (String imagePath : imagePaths) {
+            createImagePath(imagePath, newExercise.getId());
+        }
         cursor.close();
         return newExercise;
     }
@@ -88,6 +92,7 @@ public class ExercisesDAO {
 
     public List<Exercise> getAllExercises() {
         List<Exercise> exercises = new ArrayList<Exercise>();
+        List<String> imagePaths = new ArrayList<String>();
 
         Cursor cursor = database.query(CustomSQLiteHelper.TABLE_EXERCISE,
                 allColumns, null, null, null, null, null);
@@ -95,6 +100,8 @@ public class ExercisesDAO {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Exercise exercise = cursorToExercise(cursor);
+            String imagePath = getImagePathByExerciseId(exercise.getId());
+            exercise.addImagePath(imagePath);
             exercises.add(exercise);
             cursor.moveToNext();
         }

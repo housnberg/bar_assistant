@@ -42,7 +42,7 @@ public class AddExerciseToWorkoutActivity extends AppCompatActivity {
 
     private ExercisesDAO datasource;
     private List<Exercise> exercises;
-    private List<Exercise> selectedExercises;
+    private List<Long> selectedExercises;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class AddExerciseToWorkoutActivity extends AppCompatActivity {
 
         exerciseSelectionListView = (ListView) findViewById(R.id.exerciseSelectionListView);
 
-        selectedExercises = new ArrayList<Exercise>();
+        selectedExercises = new ArrayList<Long>();
 
         datasource = new ExercisesDAO(this);
         datasource.open();
@@ -91,10 +91,9 @@ public class AddExerciseToWorkoutActivity extends AppCompatActivity {
 
             for (int i = 0; i < selectedExercisesAmount; i++) {
                 if (sparseBooleanArray.get(i)) {
-                    selectedExercises.add((Exercise) exerciseSelectionListView.getItemAtPosition(i));
+                    selectedExercises.add(((Exercise) exerciseSelectionListView.getItemAtPosition(i)).getId());
                 }
             }
-
             finish();
         }
         return true;
@@ -103,6 +102,9 @@ public class AddExerciseToWorkoutActivity extends AppCompatActivity {
     @Override
     public void finish() {
         Intent intent = new Intent();
+        intent.putExtra("data", selectedExercises.toArray(new Long[selectedExercises.size()]));
+        setResult(RESULT_OK, intent);
+        super.finish();
         //intent.putParcelableArrayListExtra("data", selectedExercises);
     }
 

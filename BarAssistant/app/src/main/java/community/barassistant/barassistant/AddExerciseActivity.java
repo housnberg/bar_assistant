@@ -1,15 +1,9 @@
 package community.barassistant.barassistant;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.IBinder;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,15 +15,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.dao.ExercisesDAO;
-import community.barassistant.barassistant.services.ImageService;
 
 /**
  * @author Eugen Ljavin
@@ -52,7 +42,7 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
 
     private boolean bound = false;
 
-    private List<String> imageUrls;
+    private List<String> imagePaths;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +52,7 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
         mSharedFab.setOnClickListener(this);
 
-        imageUrls = new ArrayList<String>();
+        imagePaths = new ArrayList<String>();
 
         datasource = new ExercisesDAO(this);
         datasource.open();
@@ -119,10 +109,7 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
                 Toast.makeText(this, R.string.toastInvalidName, Toast.LENGTH_LONG).show();
             } else {
                 Exercise exercise = null;
-                exercise = datasource.createExercise(exerciseName.getText().toString().trim(), exerciseDescription.getText().toString().trim());
-                for (String path : imageUrls) {
-                    datasource.createImagePath(path, exercise.getId());
-                }
+                exercise = datasource.createExercise(exerciseName.getText().toString().trim(), exerciseDescription.getText().toString().trim(), imagePaths);
                 finish();
             }
         }
@@ -135,8 +122,8 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
             ImageLoaderSingleton instance = ImageLoaderSingleton.getInstance();
             photo = (Bitmap) data.getExtras().get("data");
             ImageView iv = (ImageView) findViewById(R.id.imageView);
-            imageUrls.add(instance.saveImageToStorage(photo, new ContextWrapper(getApplicationContext())));
-            iv.setImageBitmap(instance.loadImageFromStorage(imageUrls.get(imageUrls.size() - 1)));
+            imagePaths.add(instance.saveImageToStorage(photo, new ContextWrapper(getApplicationContext())));
+            iv.setImageBitmap(instance.loadImageFromStorage(imagePaths.get(imagePaths.size() - 1)));
         }
     }
 }

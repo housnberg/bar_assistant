@@ -24,12 +24,10 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
 
     private List<Exercise> exercises;
     private Activity context;
-    private ExercisesDAO datasource;
 
-    public ExerciseAdapter(Activity context, List<Exercise> exercises, ExercisesDAO datasource) {
+    public ExerciseAdapter(Activity context, List<Exercise> exercises) {
         this.exercises = exercises;
         this.context = context;
-        this.datasource = datasource;
     }
 
     @Override
@@ -45,7 +43,8 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.Exerci
         viewHolder.exerciseNameTextView.setText(exercise.getName());
         viewHolder.exerciseDescriptionTextView.setText(exercise.getDescription());
         Bitmap image = null;
-        image = instance.loadImageFromStorage(datasource.getImagePathByExerciseId(exercise.getId()));
+        //Only show the first saved image as title image
+        image = instance.loadImageFromStorage(exercise.getImagePaths().get(0));
         if (image != null) {
             viewHolder.exerciseTitleImageView.setImageBitmap(image);
         }

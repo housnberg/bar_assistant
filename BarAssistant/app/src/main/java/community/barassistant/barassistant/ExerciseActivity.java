@@ -1,4 +1,4 @@
 package community.barassistant.barassistant;
 
-public class ExerciseActivity {
+public class ExerciseActivity  {
 }
