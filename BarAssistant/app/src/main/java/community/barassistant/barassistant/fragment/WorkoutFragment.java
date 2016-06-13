@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.github.fabtransitionactivity.SheetLayout;
 
@@ -21,8 +20,10 @@ import community.barassistant.barassistant.AddWorkoutActivity;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.adapter.ItemClickSupport;
 import community.barassistant.barassistant.adapter.WorkoutAdapter;
+import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.dao.WorkoutDAO;
 import community.barassistant.barassistant.model.Workout;
+import community.barassistant.barassistant.WorkoutActivity;
 
 /**
  * @author Eugen Ljavin
@@ -31,7 +32,7 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
 
     private static final int REQUEST_CODE = 1;
 
-    private WorkoutDAO datasource;
+    private DataAccessObject datasource;
 
     private FloatingActionButton mSharedFab;
     private FloatingActionButton fabSecondary;
@@ -52,7 +53,7 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main_recycler_view, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        datasource = new WorkoutDAO(getActivity());
+        datasource = new DataAccessObject(getActivity());
         setHasOptionsMenu(true);
         datasource.open();
         workouts = datasource.getAllWorkouts();
@@ -73,7 +74,9 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Toast.makeText(getActivity(), position + "", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), WorkoutActivity.class);
+                intent.putExtra("data", workouts.get(position));
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
     }

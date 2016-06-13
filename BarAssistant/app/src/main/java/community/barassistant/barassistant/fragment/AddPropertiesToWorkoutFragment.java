@@ -65,7 +65,7 @@ public class AddPropertiesToWorkoutFragment extends Fragment {
                 Toast.makeText(this, R.string.toastInvalidName, Toast.LENGTH_LONG).show();
             } else {
                 Exercise exercise = null;
-                exercise = datasource.createExercise(exerciseName.getText().toString(), exerciseDescription.getText().toString());
+                exercise = datasource.createWorkout(exerciseName.getText().toString(), exerciseDescription.getText().toString());
                 finish();
             }
         }

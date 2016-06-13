@@ -6,20 +6,22 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import community.barassistant.barassistant.adapter.ImageAdapter;
+import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
-import community.barassistant.barassistant.dao.ExercisesDAO;
 
 /**
  * @author Eugen Ljavin
@@ -27,22 +29,22 @@ import community.barassistant.barassistant.dao.ExercisesDAO;
  */
 public class AddExerciseActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public final static String APP_PATH_SD_CARD = "/DesiredSubfolderName/";
-    public final static String APP_THUMBNAIL_PATH_SD_CARD = "thumbnails";
-
     private static final int CAMERA_REQUEST = 1888;
 
     private Toolbar toolbar;
     private FloatingActionButton mSharedFab;
     //private FloatingActionButton mSecondaryFab;
-    private ExercisesDAO datasource;
+    private DataAccessObject datasource;
     private EditText exerciseName;
     private EditText exerciseDescription;
+    private RecyclerView recyclerView;
+
     private Bitmap photo;
 
     private boolean bound = false;
 
     private List<String> imagePaths;
+    private List<Object> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +53,18 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
 
         mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
         mSharedFab.setOnClickListener(this);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         imagePaths = new ArrayList<String>();
+        items = new ArrayList<Object>();
 
-        datasource = new ExercisesDAO(this);
+        datasource = new DataAccessObject(this);
         datasource.open();
 
         exerciseName = (EditText) findViewById(R.id.name);
         exerciseDescription = (EditText) findViewById(R.id.description);
 
+        setupRecyclerView(recyclerView);
         initToolbar();
     }
 
@@ -73,6 +78,11 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
             }
         });
         setSupportActionBar(toolbar);
+    }
+
+    private void setupRecyclerView(final RecyclerView recyclerView) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new ImageAdapter(this, items, R.layout.list_item_image));
     }
 
     @Override
@@ -121,9 +131,9 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             ImageLoaderSingleton instance = ImageLoaderSingleton.getInstance();
             photo = (Bitmap) data.getExtras().get("data");
-            ImageView iv = (ImageView) findViewById(R.id.imageView);
             imagePaths.add(instance.saveImageToStorage(photo, new ContextWrapper(getApplicationContext())));
-            iv.setImageBitmap(instance.loadImageFromStorage(imagePaths.get(imagePaths.size() - 1)));
+            items.add(photo);
+            recyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 }

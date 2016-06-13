@@ -7,32 +7,46 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:padding="@dimen/marginInputField"
-        android:gravity="left|center"
-        android:textColor="@color/colorPrimaryText"
-        android:hint="@string/name"
-        android:background="@drawable/shape_default"/>
 
-    <EditText
-        android:textSize="16dp"
-        android:id="@+id/description"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/marginInputField"
-        android:textColor="@color/colorPrimaryText"
-        android:gravity="left|center"
-        android:hint="@string/description"
-        android:background="@drawable/shape_default"/>
+        android:orientation="vertical"
+        android:background="@color/backgroundListItem"
+        android:layout_marginBottom="@dimen/margin_card"
+        android:elevation="@dimen/elevation_card">
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:padding="@dimen/marginInputField"
+            android:gravity="left|center"
+            android:textColor="@color/colorPrimaryText"
+            android:hint="@string/name"
+            android:background="@drawable/shape_default"/>
+
+        <EditText
+            android:textSize="16dp"
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/marginInputField"
+            android:textColor="@color/colorPrimaryText"
+            android:gravity="left|center"
+            android:hint="@string/description"
+            android:background="@drawable/shape_default"/>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_default">
+        android:background="@color/backgroundListItem"
+        android:elevation="@dimen/elevation_card"
+        android:layout_marginTop="@dimen/margin_card"
+        android:layout_marginBottom="@dimen/margin_card">
 
         <com.lantouzi.wheelview.WheelView
             android:id="@+id/roundsWheeler"
@@ -58,7 +72,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_default">
+        android:background="@color/backgroundListItem"
+        android:elevation="@dimen/elevation_card"
+        android:layout_marginTop="@dimen/margin_card"
+        android:layout_marginBottom="@dimen/margin_card">
 
         <com.lantouzi.wheelview.WheelView
             android:id="@+id/pauseExercisesWheeler"
@@ -84,7 +101,11 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundListItem"
+        android:layout_marginTop="@dimen/margin_card"
+        android:layout_marginBottom="@dimen/margin_card"
+        android:elevation="@dimen/elevation_card">
 
         <com.lantouzi.wheelview.WheelView
             android:id="@+id/pauseRoundsWheeler"

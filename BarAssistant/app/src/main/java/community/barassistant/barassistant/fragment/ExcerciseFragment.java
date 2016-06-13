@@ -1,10 +1,6 @@
 package community.barassistant.barassistant.fragment;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
@@ -15,20 +11,18 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.github.fabtransitionactivity.SheetLayout;
 
 import java.util.List;
 
 import community.barassistant.barassistant.AddExerciseActivity;
-import community.barassistant.barassistant.MainActivity;
+import community.barassistant.barassistant.ExerciseActivity;
 import community.barassistant.barassistant.R;
-import community.barassistant.barassistant.adapter.ExerciseAdapter;
+import community.barassistant.barassistant.adapter.ExerciseOverviewAdapter;
 import community.barassistant.barassistant.adapter.ItemClickSupport;
+import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
-import community.barassistant.barassistant.dao.ExercisesDAO;
-import community.barassistant.barassistant.services.ImageService;
 
 /**
  * @author Eugen Ljavin
@@ -44,7 +38,7 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
     private MenuItem sortItem;
     private MenuItem filterItem;
 
-    private ExercisesDAO datasource;
+    private DataAccessObject datasource;
     private List<Exercise> exercises;
 
     private boolean isFabOpen = true;
@@ -59,18 +53,13 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
         View rootView = inflater.inflate(R.layout.fragment_main_recycler_view, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
 
-        datasource = new ExercisesDAO(getActivity());
+        datasource = new DataAccessObject(getActivity());
         datasource.open();
         exercises = datasource.getAllExercises();
 
         setHasOptionsMenu(true);
-        return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         setupRecyclerView();
+        return rootView;
     }
 
     @Override
@@ -82,11 +71,13 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new ExerciseAdapter(getActivity(), exercises));
+        recyclerView.setAdapter(new ExerciseOverviewAdapter(getActivity(), exercises));
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Toast.makeText(getActivity(), position + "", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), ExerciseActivity.class);
+                intent.putExtra("data", exercises.get(position));
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
     }

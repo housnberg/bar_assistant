@@ -11,8 +11,10 @@
 
     <color name="colorPrimaryText">#333333</color>
     <color name="colorSecondaryText">#727272</color>
-    <color name="colorDivider">#B6B6B6</color>
+    <color name="colorDivider">@color/windowBackground</color>
 
+    <color name="windowBackground">#EBEDF0</color>
+    <color name="backgroundListItem">#FFFFFF</color>
     <!--
     <color name="colorPrimary">#2DBE60</color>
     <color name="colorPrimaryDark">#005E37</color>

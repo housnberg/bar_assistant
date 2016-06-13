@@ -25,8 +25,30 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
         android:background="@android:color/transparent"
         android:layout_margin="0dp"
         android:choiceMode="multipleChoice"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        app:elevation="6dp"
+        app:rippleColor="@color/colorPrimaryLight"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/colorPrimary"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@mipmap/ic_add_white_24dp" />
+
+    <com.github.fabtransitionactivity.SheetLayout
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        app:ft_container_gravity="center"
+        app:ft_color="@color/colorPrimary"/>
 
 </android.support.design.widget.CoordinatorLayout>

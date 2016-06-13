@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author Eugen Ljavin
  */
-public class Exercise {
+public class Exercise implements Parcelable {
 
     private long id;
     private String name;
@@ -25,6 +25,14 @@ public class Exercise {
         setId(id);
         setName(name);
         setDescription(description);
+    }
+
+    private Exercise(Parcel in){
+        this();
+        setId(in.readLong());
+        setName(in.readString());
+        setDescription(in.readString());
+        setImagePaths(in.createStringArrayList());
     }
 
     public String getDescription() {
@@ -84,4 +92,32 @@ public class Exercise {
 
         return equals;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeStringList(imagePaths);
+    }
+
+    public static final Parcelable.Creator<Exercise> CREATOR =
+        new Parcelable.Creator<Exercise>(){
+
+            @Override
+            public Exercise createFromParcel(Parcel source) {
+                return new Exercise(source);
+            }
+
+            @Override
+            public Exercise[] newArray(int size) {
+                return new Exercise[size];
+            }
+        };
+
 }

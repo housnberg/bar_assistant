@@ -1,12 +1,12 @@
 package community.barassistant.barassistant.fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +19,9 @@ import java.util.List;
 
 import community.barassistant.barassistant.AddExerciseToWorkoutActivity;
 import community.barassistant.barassistant.R;
-import community.barassistant.barassistant.dao.ExercisesDAO;
+import community.barassistant.barassistant.adapter.ExerciseOverviewAdapter;
+import community.barassistant.barassistant.adapter.ItemClickSupport;
+import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
 
 /**
@@ -31,10 +33,12 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
 
     private FloatingActionButton mSharedFab;
     private SheetLayout mSheetLayout;
+    private RecyclerView recyclerView;
 
-    private ExercisesDAO datasource;
+    private DataAccessObject datasource;
 
-    private List<Long> selectedExercises;
+    private List<Exercise> exercises;
+
 
     public AddExercisesToWorkoutFragment() {
         // Required empty public constructor
@@ -44,8 +48,32 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main_recycler_view, container, false);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+
+        datasource = new DataAccessObject(getActivity());
+        datasource.open();
+
+        if (getActivity().getIntent().getExtras() != null) {
+            //TODO: LOAD SELECTED EXERCISESY WORKOUT ID
+            //exercises = datasource.getExerciseById();
+        } else {
+            exercises = new ArrayList<Exercise>();
+        }
+
         setHasOptionsMenu(true);
+        setupRecyclerView(recyclerView);
         return rootView;
+    }
+
+    private void setupRecyclerView(final RecyclerView recyclerView) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(new ExerciseOverviewAdapter(getActivity(), exercises));
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Toast.makeText(getActivity(), position + "", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -89,21 +117,19 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
 
-            selectedExercises = toList((Long[]) data.getExtras().get("data"));
-
-            for (long selectedExercise : selectedExercises) {
-                Toast.makeText(getActivity(), "" + selectedExercise, Toast.LENGTH_LONG).show();
+            List<Exercise> selectedExercises = data.getParcelableArrayListExtra("data");
+            for (Exercise selectedExercise : selectedExercises) {
+                if (!exercises.contains(selectedExercise)) {
+                    exercises.add(selectedExercise);
+                }
             }
-
+            recyclerView.getAdapter().notifyDataSetChanged();
             mSheetLayout.contractFab();
         }
     }
 
-    private List<Long> toList(Long[] values) {
-        ArrayList<Long> wrappedValues = new ArrayList<Long>();
-        for(Long value : values) {
-            wrappedValues.add(value);
-        }
-        return wrappedValues;
+    public List<Exercise> getSelectedExercises() {
+        return exercises;
     }
+
 }

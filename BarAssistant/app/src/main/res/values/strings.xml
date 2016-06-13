@@ -4,6 +4,7 @@
     <string name="addExerciseActivity">Add Exercise</string>
     <string name="addWorkoutActivity">Add Workout</string>
     <string name="addExercisesToWorkoutActivity">Select Exercises</string>
+    <string name="workoutActivity">Workout</string>
     
     <string name="homeFragment">Home</string>
     <string name="exercisesFragment">Exercises</string>
@@ -20,5 +21,6 @@
     <string name="actionSort">Sort</string>
     <string name="actionSave">Save</string>
 
-    <string name="toastInvalidName">This is not a valid name. Please use at least 3 characters.</string>
+    <string name="toastInvalidName">This is not a valid name. Please use at least three characters.</string>
+    <string name="toastNoExercisesSelected">There are no exercises selected. Please select at least one exercise.</string>
 </resources>

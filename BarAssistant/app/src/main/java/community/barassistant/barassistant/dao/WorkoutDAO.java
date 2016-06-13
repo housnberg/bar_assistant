@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.Workout;
 
 /**
@@ -27,6 +28,10 @@ public class WorkoutDAO {
             CustomSQLiteHelper.COLUMN_WORKOUT_PAUSE_ROUNDS
     };
 
+    private static final String SELECT_WORKOUT_BY_ID =
+            "SELECT w." + CustomSQLiteHelper.COLUMN_WORKOUT_ID + " FROM " + CustomSQLiteHelper.TABLE_WORKOUT + " w"
+                    + " WHERE w." + CustomSQLiteHelper.COLUMN_WORKOUT_ID + " = ?;";
+
     public WorkoutDAO(Context context) {
         dbHelper = new CustomSQLiteHelper(context);
     }
@@ -39,7 +44,7 @@ public class WorkoutDAO {
         dbHelper.close();
     }
 
-    public Workout createExercise(String exerciseName, String exerciseDescription, int rounds, int pauseExercises, int pauseRounds) {
+    public Workout createWorkout(String exerciseName, String exerciseDescription, List<Exercise> exercises, List<Integer> repetitions, int rounds, int pauseExercises, int pauseRounds) {
         ContentValues values = new ContentValues();
         values.put(CustomSQLiteHelper.COLUMN_WORKOUT_NAME, exerciseName);
         values.put(CustomSQLiteHelper.COLUMN_WORKOUT_DESCRIPTION, exerciseDescription);
@@ -74,6 +79,19 @@ public class WorkoutDAO {
         // make sure to close the cursor
         cursor.close();
         return workouts;
+    }
+
+    public Workout getWorkoutById(long workoutId) {
+        Workout workout = null;
+        try {
+            Cursor cursorWorkout = database.rawQuery(WorkoutDAO.SELECT_WORKOUT_BY_ID, new String[] {String.valueOf(workoutId)});
+            cursorWorkout.moveToFirst();
+            workout = cursorToWorkout(cursorWorkout);
+            cursorWorkout.close();
+        } catch (Exception e) {
+
+        }
+        return workout;
     }
 
     //TODO: Rewrite this as database statement to improve performance

@@ -23,6 +23,8 @@ import community.barassistant.barassistant.fragment.WorkoutFragment;
 /**
  * @author Eugen Ljavin
  */
+
+//TODO: IMPLEMENT MANAGER BEAN TO PREVENT QUERY DATABASE ALL THE TIME
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;

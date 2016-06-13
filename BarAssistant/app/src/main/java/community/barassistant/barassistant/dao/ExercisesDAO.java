@@ -72,17 +72,20 @@ public class ExercisesDAO {
         return imagePath;
     }
 
-    public String getImagePathByExerciseId(long exerciseId) {
-        String imagePath = null;
+    public List<String> getImagePathByExerciseId(long exerciseId) {
+        List<String> imagePaths = new ArrayList<String>();
         try {
             Cursor cursor = database.rawQuery(ExercisesDAO.SELECT_IMAGE_PATH_BY_EXERCISE_ID, new String[] {String.valueOf(exerciseId)});
             cursor.moveToFirst();
-            imagePath = cursor.getString(0);
+            while (!cursor.isAfterLast()) {
+                imagePaths.add(cursor.getString(0));
+                cursor.moveToNext();
+            }
             cursor.close();
         } catch (Exception e) {
 
         }
-        return imagePath;
+        return imagePaths;
     }
 
     public void deleteExercise(Exercise exercise) {
@@ -100,8 +103,11 @@ public class ExercisesDAO {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Exercise exercise = cursorToExercise(cursor);
-            String imagePath = getImagePathByExerciseId(exercise.getId());
-            exercise.addImagePath(imagePath);
+            imagePaths = getImagePathByExerciseId(exercise.getId()); {
+                for (String imagePath : imagePaths) {
+                    exercise.addImagePath(imagePath);
+                }
+            }
             exercises.add(exercise);
             cursor.moveToNext();
         }
@@ -117,11 +123,14 @@ public class ExercisesDAO {
 
     public Exercise getExerciseById(long exerciseId) {
         Exercise exercise = null;
+        List<String> imagePaths;
         try {
-            Cursor cursor = database.rawQuery(ExercisesDAO.SELECT_EXERCISE_BY_ID, new String[] {String.valueOf(exerciseId)});
-            cursor.moveToFirst();
-            exercise = cursorToExercise(cursor);
-            cursor.close();
+            Cursor cursorExercise = database.rawQuery(ExercisesDAO.SELECT_EXERCISE_BY_ID, new String[] {String.valueOf(exerciseId)});
+            cursorExercise.moveToFirst();
+            imagePaths = getImagePathByExerciseId(exerciseId);
+            exercise.setImagePaths(imagePaths);
+            exercise = cursorToExercise(cursorExercise);
+            cursorExercise.close();
         } catch (Exception e) {
 
         }

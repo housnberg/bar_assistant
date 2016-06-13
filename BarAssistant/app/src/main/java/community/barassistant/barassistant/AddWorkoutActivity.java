@@ -13,11 +13,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import community.barassistant.barassistant.adapter.ViewPagerAdapter;
 import community.barassistant.barassistant.behavior.Fx;
+import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.dao.WorkoutDAO;
+import community.barassistant.barassistant.dao.WorkoutExerciseDAO;
 import community.barassistant.barassistant.fragment.AddExercisesToWorkoutFragment;
 import community.barassistant.barassistant.fragment.AddPropertiesToWorkoutFragment;
+import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.Workout;
 
 /**
@@ -32,7 +38,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
     int nStart = 5;
     int nEnd = 250;
 
-    private WorkoutDAO datasource;
+    private DataAccessObject datasource;
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -49,7 +55,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
         mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
         mSharedFab.setVisibility(View.INVISIBLE);
 
-        datasource = new WorkoutDAO(this);
+        datasource = new DataAccessObject(this);
         datasource.open();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -75,14 +81,14 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
 
     private void setupViewPager(final ViewPager viewPager) {
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        addPropertiesToWorkoutFragment = new AddPropertiesToWorkoutFragment();
         addExercisesToWorkoutFragment = new AddExercisesToWorkoutFragment();
-        pagerAdapter.addFragment(addExercisesToWorkoutFragment, getResources().getString(R.string.addExercisesToWorkoutFragment));
+        addPropertiesToWorkoutFragment = new AddPropertiesToWorkoutFragment();
         pagerAdapter.addFragment(addPropertiesToWorkoutFragment, getResources().getString(R.string.addPropertiesToWorkoutFragment));
+        pagerAdapter.addFragment(addExercisesToWorkoutFragment, getResources().getString(R.string.addExercisesToWorkoutFragment));
 
         viewPager.setAdapter(pagerAdapter);
 
-        addExercisesToWorkoutFragment.shareFab(mSharedFab); // To init the FAB
+        addPropertiesToWorkoutFragment.shareFab(mSharedFab); // To init the FAB
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -98,12 +104,12 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
                     case ViewPager.SCROLL_STATE_IDLE:
                         switch (viewPager.getCurrentItem()) {
                             case 0:
-                                addPropertiesToWorkoutFragment.shareFab(null); // Remove FAB from fragment
-                                addExercisesToWorkoutFragment.shareFab(mSharedFab);
-                                break;
-                            case 1:
                                 addExercisesToWorkoutFragment.shareFab(null); // Remove FAB from fragment
                                 addPropertiesToWorkoutFragment.shareFab(mSharedFab);
+                                break;
+                            case 1:
+                                addPropertiesToWorkoutFragment.shareFab(null); // Remove FAB from fragment
+                                addExercisesToWorkoutFragment.shareFab(mSharedFab);
                                 break;
                         }
                         //mSharedFab.show(); // Show animation
@@ -129,14 +135,19 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
         int workoutRounds = addPropertiesToWorkoutFragment.getRoundsWheeler().getSelectedPosition() + 1;
         int workoutPauseExercises = addPropertiesToWorkoutFragment.getPauseExercisesWheeler().getSelectedPosition() + 1;
         int workoutPauseRounds = addPropertiesToWorkoutFragment.getPauseRoundsWheeler().getSelectedPosition() + 1;
+        List<Exercise> exercises = addExercisesToWorkoutFragment.getSelectedExercises();
 
         if (item.getItemId() == R.id.actionSave) {
             if (workoutName.length() < 3) {
                 Toast.makeText(this, R.string.toastInvalidName, Toast.LENGTH_LONG).show();
+            } else if (exercises == null || exercises.isEmpty()) {
+                Toast.makeText(this, R.string.toastNoExercisesSelected, Toast.LENGTH_LONG).show();
             } else {
                 Workout workout = null;
-                workout = datasource.createExercise(workoutName, workoutDescription, workoutRounds, workoutPauseExercises, workoutPauseRounds);
-                System.out.println("Workout with the id " + workout.getId() + " set.");
+                workout = datasource.createWorkout(workoutName, workoutDescription, null, null, workoutRounds, workoutPauseExercises, workoutPauseRounds);
+                for (Exercise exercise : exercises) {
+                    datasource.createWorkoutExercise(workout.getId(), exercise.getId(), 10);
+                }
                 finish();
             }
         }
