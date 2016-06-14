@@ -23,4 +23,6 @@
 
     <string name="toastInvalidName">This is not a valid name. Please use at least three characters.</string>
     <string name="toastNoExercisesSelected">There are no exercises selected. Please select at least one exercise.</string>
+
+    <string name="finishExercise">DONE!</string>
 </resources>
