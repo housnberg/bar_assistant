@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Collections;
 import java.util.List;
 
 import community.barassistant.barassistant.ImageLoaderSingleton;
@@ -51,6 +52,25 @@ public class ExerciseOverviewAdapter extends RecyclerView.Adapter<ExerciseHolder
     @Override
     public int getItemCount() {
         return exercises.size();
+    }
+
+    public void onItemDismiss(int position) {
+        exercises.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(exercises, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(exercises, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
     }
 
 }

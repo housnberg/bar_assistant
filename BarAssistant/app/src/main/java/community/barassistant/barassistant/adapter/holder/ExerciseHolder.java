@@ -15,12 +15,14 @@ public class ExerciseHolder extends RecyclerView.ViewHolder {
     private TextView exerciseNameTextView;
     private TextView exerciseDescriptionTextView;
     private ImageView exerciseTitleImageView;
+    private TextView repsTextView;
 
     public ExerciseHolder(View itemView) {
         super(itemView);
         exerciseNameTextView = (TextView) itemView.findViewById(R.id.exerciseNameTextView);
         exerciseDescriptionTextView = (TextView) itemView.findViewById(R.id.exerciseDescriptionTextView);
         exerciseTitleImageView = (ImageView) itemView.findViewById(R.id.exerciseTitleImageView);
+        repsTextView = (TextView) itemView.findViewById(R.id.repsTextView);
     }
 
     public ImageView getExerciseTitleImageView() {
@@ -33,5 +35,9 @@ public class ExerciseHolder extends RecyclerView.ViewHolder {
 
     public TextView getExerciseNameTextView() {
         return exerciseNameTextView;
+    }
+
+    public TextView getRepsTextView() {
+        return repsTextView;
     }
 }

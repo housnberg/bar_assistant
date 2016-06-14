@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Eugen Ljavin
@@ -19,9 +21,11 @@ public class Workout implements Parcelable {
     private int pauseRounds;
 
     private List<Exercise> exercises;
+    private Map<Long, Integer> repetitionsPerExercise;
 
     public Workout() {
         exercises = new ArrayList<Exercise>();
+        repetitionsPerExercise = new HashMap<Long, Integer>();
     }
 
     public Workout(long id, String name, String description, int rounds, int pauseExercises, int pauseRounds) {
@@ -100,6 +104,18 @@ public class Workout implements Parcelable {
         this.exercises = exercises;
     }
 
+    public Map<Long, Integer> getRepetitionsPerExercise() {
+        return repetitionsPerExercise;
+    }
+
+    public void setRepetitionsPerExercise(Map<Long, Integer> repetitionsPerExercise) {
+        this.repetitionsPerExercise = repetitionsPerExercise;
+    }
+
+    public int getRepetitionByExerciseId(long exerciseId) {
+        return repetitionsPerExercise.get(exerciseId);
+    }
+
     public boolean addExercise(Exercise exercise) {
         boolean isExerciseAdded = false;
         if (exercise != null) {
@@ -107,6 +123,10 @@ public class Workout implements Parcelable {
             isExerciseAdded = true;
         }
         return isExerciseAdded;
+    }
+
+    public void addRepetitionForExercise(long exerciseId, int repetitions) {
+        repetitionsPerExercise.put(exerciseId, repetitions);
     }
 
     @Override

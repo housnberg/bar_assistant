@@ -58,7 +58,7 @@ public class DataAccessObject {
                     + " WHERE we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID + " = ?;";
 
     private static final String SELECT_REPETITION_BY_PK =
-            "SELECT we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_REPETITIONS + " FROM " + CustomSQLiteHelper.TABLE_WORKOUT_EXERCISE + " w "
+            "SELECT we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_REPETITIONS + " FROM " + CustomSQLiteHelper.TABLE_WORKOUT_EXERCISE + " we "
                     + " WHERE we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID + " = ? "
                     + " AND we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID + " = ?;";
 
@@ -208,6 +208,7 @@ public class DataAccessObject {
 
     public int getRepetitions(long workoutId, long exerciseId) {
         Cursor cursor = database.rawQuery(DataAccessObject.SELECT_REPETITION_BY_PK, new String[] {String.valueOf(workoutId), String.valueOf(exerciseId)});
+        cursor.moveToFirst();
         int repetitions = cursor.getInt(0);
         cursor.close();
 

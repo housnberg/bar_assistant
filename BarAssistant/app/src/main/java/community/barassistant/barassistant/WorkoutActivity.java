@@ -18,10 +18,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import community.barassistant.barassistant.adapter.ComplexExerciseWorkoutPropertyAdapter;
 import community.barassistant.barassistant.dao.DataAccessObject;
+import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.Workout;
 
 /**
@@ -33,6 +36,7 @@ public class WorkoutActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ShareActionProvider shareActionProvider;
     private Intent shareIntent;
+    private RelativeLayout wrapper;
 
     private TextView description;
     private TextView rounds;
@@ -42,6 +46,7 @@ public class WorkoutActivity extends AppCompatActivity {
     private DataAccessObject datasource;
     private Workout workout;
     private List<Object> items;
+    private Map<Long, Integer> repetitionsPerExercise;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,15 @@ public class WorkoutActivity extends AppCompatActivity {
         items = new ArrayList<Object>();
         //items.add(workout);
         items.addAll(datasource.getExercisesByWorkoutId(workout.getId()));
+
+        repetitionsPerExercise = new HashMap<Long, Integer>();
+
+        for (Object exercise : items) {
+            repetitionsPerExercise.put(((Exercise) exercise).getId(), datasource.getRepetitions(workout.getId(), ((Exercise) exercise).getId()));
+        }
+        workout.setRepetitionsPerExercise(repetitionsPerExercise);
+
+
 
         shareIntent = new Intent(android.content.Intent.ACTION_SEND);
         shareIntent.setType("*/*");
@@ -100,13 +114,13 @@ public class WorkoutActivity extends AppCompatActivity {
 
     private void setupRecyclerView(final RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new ComplexExerciseWorkoutPropertyAdapter(this, items));
+        recyclerView.setAdapter(new ComplexExerciseWorkoutPropertyAdapter(this, items, workout));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_save, menu);
+        inflater.inflate(R.menu.toolar_share, menu);
         MenuItem item = menu.findItem(R.id.actionShare);
 
         // Fetch and store ShareActionProvider

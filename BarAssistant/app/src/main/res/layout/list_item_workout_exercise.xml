@@ -25,6 +25,37 @@
             app:siBorderWidth="0.25dp" />
         -->
 
+        <RelativeLayout
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="8dp"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/repsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="2dp"
+                android:textSize="26dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:gravity="center|bottom"
+                android:padding="0dp"/>
+
+            <TextView
+                android:layout_below="@+id/repsTextView"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:text="Reps"
+                android:textColor="@color/colorAccent"
+                android:gravity="top|center"
+                android:textStyle="bold"/>
+
+        </RelativeLayout>
+
         <ImageView
             android:id="@+id/exerciseTitleImageView"
             android:layout_width="68dp"

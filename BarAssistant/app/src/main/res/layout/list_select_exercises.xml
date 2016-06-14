@@ -30,8 +30,8 @@
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:gravity="center_vertical"
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-        android:checkMarkTint="@color/colorPrimary"
-        android:backgroundTint="@color/colorPrimaryDark"
+        android:checkMarkTint="@color/colorAccent"
+        android:backgroundTint="@color/colorAccent"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"
         android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 

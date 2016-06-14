@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,9 @@ import java.util.List;
 
 import community.barassistant.barassistant.AddExerciseToWorkoutActivity;
 import community.barassistant.barassistant.R;
+import community.barassistant.barassistant.adapter.ComplexExerciseWorkoutPropertyAdapter;
 import community.barassistant.barassistant.adapter.ExerciseOverviewAdapter;
+import community.barassistant.barassistant.adapter.ExerciseTouchHelper;
 import community.barassistant.barassistant.adapter.ItemClickSupport;
 import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
@@ -74,6 +77,9 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
                 Toast.makeText(getActivity(), position + "", Toast.LENGTH_LONG).show();
             }
         });
+        ItemTouchHelper.Callback callback = new ExerciseTouchHelper((ExerciseOverviewAdapter) recyclerView.getAdapter());
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(recyclerView);
     }
 
     @Override

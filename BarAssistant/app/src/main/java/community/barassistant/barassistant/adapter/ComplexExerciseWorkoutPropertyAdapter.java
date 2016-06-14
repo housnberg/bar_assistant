@@ -26,12 +26,14 @@ public class ComplexExerciseWorkoutPropertyAdapter extends RecyclerView.Adapter<
     private static final int WORKOUT = 1;
 
     private List<Object> items;
+    private Workout workout;
     private Activity context;
 
-    public ComplexExerciseWorkoutPropertyAdapter(Activity context, List<Object> items) {
+    public ComplexExerciseWorkoutPropertyAdapter(Activity context, List<Object> items, Workout workout) {
         super();
         this.items = items;
         this.context = context;
+        this.workout = workout;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class ComplexExerciseWorkoutPropertyAdapter extends RecyclerView.Adapter<
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
         if (EXERCISE == viewType) {
-            View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_exercise, viewGroup, false);
+            View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_workout_exercise, viewGroup, false);
             viewHolder = new ExerciseHolder(itemView);
         } else if (WORKOUT == viewType) {
             View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_workout_property, viewGroup, false);
@@ -62,6 +64,7 @@ public class ComplexExerciseWorkoutPropertyAdapter extends RecyclerView.Adapter<
             Exercise exercise = (Exercise) items.get(position);
             exerciseHolder.getExerciseNameTextView().setText(exercise.getName());
             exerciseHolder.getExerciseDescriptionTextView().setText(exercise.getDescription());
+            exerciseHolder.getRepsTextView().setText(String.valueOf(workout.getRepetitionByExerciseId(exercise.getId())));
             Bitmap image = null;
             //Only show the first saved image as title image
             if (exercise.getImagePaths() != null) {

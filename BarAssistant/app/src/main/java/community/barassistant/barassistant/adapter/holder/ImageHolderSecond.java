@@ -19,6 +19,7 @@ public class ImageHolderSecond extends RecyclerView.ViewHolder {
     public ImageHolderSecond(View itemView) {
         super(itemView);
         image = (ImageView) itemView.findViewById(R.id.image);
+
         order = (TextView) itemView.findViewById(R.id.order);
         description = (TextView) itemView.findViewById(R.id.description);
     }

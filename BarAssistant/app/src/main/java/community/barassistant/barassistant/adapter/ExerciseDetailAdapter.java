@@ -40,6 +40,7 @@ public class ExerciseDetailAdapter extends RecyclerView.Adapter<ExerciseDetailAd
     public void onBindViewHolder(ExerciseImageHolder viewHolder, int position) {
         Bitmap image = images.get(position);
         viewHolder.image.setImageBitmap(image);
+        viewHolder.image.getLayoutParams().height = viewHolder.image.getMeasuredWidth();
         viewHolder.order.setText(String.valueOf(position + 1));
     }
 
