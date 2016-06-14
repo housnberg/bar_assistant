@@ -2,6 +2,7 @@ package community.barassistant.barassistant.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -41,7 +42,6 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
     private DataAccessObject datasource;
 
     private List<Exercise> exercises;
-
 
     public AddExercisesToWorkoutFragment() {
         // Required empty public constructor
@@ -108,7 +108,8 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(getActivity(), AddExerciseToWorkoutActivity.class);
-        startActivityForResult(intent,REQUEST_CODE);
+        intent.putParcelableArrayListExtra("data", (ArrayList<Exercise>) exercises);
+        startActivityForResult(intent, REQUEST_CODE);
         //mSheetLayout.expandFab();
     }
 

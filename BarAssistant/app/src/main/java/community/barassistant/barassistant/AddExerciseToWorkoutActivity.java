@@ -2,6 +2,7 @@ package community.barassistant.barassistant;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -33,8 +34,8 @@ public class AddExerciseToWorkoutActivity extends AppCompatActivity implements V
 
     private DataAccessObject datasource;
     private List<Exercise> exercises;
-    private ArrayList<Exercise> selectableExercises;
-    ArrayAdapter<Exercise> adapter;
+    private List<Exercise> selectableExercises;
+    private ArrayAdapter<Exercise> adapter;
 
 
     @Override
@@ -97,9 +98,8 @@ public class AddExerciseToWorkoutActivity extends AppCompatActivity implements V
 
     @Override
     public void finish() {
-        //TODO: INCLUDE A LIST OF WORKOUTS INSTEAF OF ONLY THE IDS
         Intent intent = new Intent();
-        intent.putParcelableArrayListExtra("data", selectableExercises);
+        intent.putParcelableArrayListExtra("data", (ArrayList<Exercise>) selectableExercises);
         setResult(RESULT_OK, intent);
         super.finish();
     }

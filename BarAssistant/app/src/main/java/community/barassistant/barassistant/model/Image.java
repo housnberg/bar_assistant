@@ -19,12 +19,16 @@ public class Image implements Parcelable {
 
     }
 
-    public Image(Exercise exercise, String imagePath, int order, String description) {
+    public Image(String imagePath, int order, String description) {
         this();
-        this.exercise = exercise;
         this.imagePath = imagePath;
         this.order = order;
         this.description = description;
+    }
+
+    public Image(Exercise exercise, String imagePath, int order, String description) {
+        this(imagePath, order, description);
+        this.exercise = exercise;
     }
 
     private Image(Parcel in){

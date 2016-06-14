@@ -145,8 +145,9 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
             } else {
                 Workout workout = null;
                 workout = datasource.createWorkout(workoutName, workoutDescription, null, null, workoutRounds, workoutPauseExercises, workoutPauseRounds);
-                for (Exercise exercise : exercises) {
-                    datasource.createWorkoutExercise(workout.getId(), exercise.getId(), 10);
+                for (int order = 0; order < exercises.size(); order ++) {
+                    Exercise exercise = exercises.get(order);
+                    datasource.createWorkoutExercise(workout.getId(), exercise.getId(), 10, order);
                 }
                 finish();
             }

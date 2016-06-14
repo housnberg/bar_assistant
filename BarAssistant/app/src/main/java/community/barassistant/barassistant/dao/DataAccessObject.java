@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import community.barassistant.barassistant.model.Exercise;
+import community.barassistant.barassistant.model.Image;
 import community.barassistant.barassistant.model.Workout;
 
 /**
@@ -50,7 +51,8 @@ public class DataAccessObject {
     private static final String SELECT_EXERCISE_BY_WORKOUT_ID =
             "SELECT * FROM " + CustomSQLiteHelper.TABLE_EXERCISE + " e "
                     + " LEFT JOIN " + CustomSQLiteHelper.TABLE_WORKOUT_EXERCISE + " we ON we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID + " = e." + CustomSQLiteHelper.COLUMN_EXERCISE_ID
-                    + " WHERE we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID + " = ?;";
+                    + " WHERE we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID + " = ?"
+                    + " ORDER BY we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_ORDER + ";";
 
     private static final String SELECT_WORKOUT_BY_EXERCISE_ID =
             "SELECT * FROM " + CustomSQLiteHelper.TABLE_WORKOUT + " w "
@@ -171,11 +173,12 @@ public class DataAccessObject {
         return new Exercise(cursor.getLong(0), cursor.getString(1), cursor.getString(2));
     }
 
-    public long createWorkoutExercise(long workoutId, long exerciseId, int repetitions) {
+    public long createWorkoutExercise(long workoutId, long exerciseId, int repetitions, int order) {
         ContentValues values = new ContentValues();
         values.put(CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID, workoutId);
         values.put(CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID, exerciseId);
         values.put(CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_REPETITIONS, repetitions);
+        values.put(CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_ORDER, order);
         return database.insert(CustomSQLiteHelper.TABLE_WORKOUT_EXERCISE, null, values);
     }
 
@@ -272,6 +275,10 @@ public class DataAccessObject {
 
     private Workout cursorToWorkout(Cursor cursor) {
         return new Workout(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5));
+    }
+
+    private Image cursorToImage(Cursor cursor) {
+        return new Image(cursor.getString(0), cursor.getInt(1), cursor.getString(2));
     }
 
 }
