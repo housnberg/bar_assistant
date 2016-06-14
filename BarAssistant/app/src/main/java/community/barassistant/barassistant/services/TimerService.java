@@ -4,22 +4,32 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
-/**
- * Created by thomasrasp on 07.06.16.
- */
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+import android.os.Binder;
+
 public class TimerService extends Service {
 
+    public static final long NOTIFY_INTERVAL = 1000; // 1 second
+    private Handler mHandler = new Handler();
+    private Timer mTimer = null;
+    private final IBinder BINDER = new LocalBinder();
+    private long millis = 0;
     private long startTime = 0;
 
-    private final IBinder BINDER = new LocalBinder();
     public class LocalBinder extends Binder {
         public TimerService getService() {
             return TimerService.this;
         }
     }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -27,26 +37,44 @@ public class TimerService extends Service {
     }
 
 
-    public void countdownTimer(long time){
-        new CountDownTimer(time,1000){
-
-            public void onTick(long millisUntilFinished){
-                System.out.println(millisUntilFinished /1000);
-            }
-            public void onFinish(){
-                System.out.println("Ende");
-
-            }
-        }.start();
-
+    public void startTimer(){
+        // cancel if already existed
+        if (mTimer != null) {
+            mTimer.cancel();
+        } else {
+            // recreate new
+            mTimer = new Timer();
+            this.startTime = System.currentTimeMillis();
+        }
+        // schedule task
+        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 0, NOTIFY_INTERVAL);
     }
 
-    public void timer(){
-        // Timer code here
+    @Override
+    public void onDestroy() {
+        if (mTimer != null) {
+            mTimer = null;
+        }
     }
 
-    public void mainTimer(){
+    class TimeDisplayTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            mHandler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    System.out.println(getTime());
+                }
+
+            });
+        }
+
+        public String getTime() {
+            millis = System.currentTimeMillis() - startTime;
+            return (new SimpleDateFormat("mm:ss")).format(new Date(millis));
+        }
 
     }
-
 }

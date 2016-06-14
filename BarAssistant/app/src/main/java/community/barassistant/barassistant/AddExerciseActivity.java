@@ -24,6 +24,7 @@ import java.util.List;
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.dao.ExercisesDAO;
 import community.barassistant.barassistant.services.ImageService;
+import community.barassistant.barassistant.services.CountdownTimerService;
 import community.barassistant.barassistant.services.TimerService;
 
 /**
@@ -45,10 +46,12 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     private EditText exerciseDescription;
     private Bitmap photo;
     private ImageService imageService;
-    private TimerService timerService;
+    private CountdownTimerService CountdownTimerService;
+    private TimerService TimerService;
 
     private boolean bound = false;
-    private boolean boundtimer = false;
+    private boolean boundCountdownTimer = false;
+    private boolean boundTimer = false;
 
     private List<String> imageUrls;
 
@@ -87,7 +90,8 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         if (view.getId() == R.id.fabMain) {
             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
-            timerService.countdownTimer(30000);
+            //CountdownTimerService.countdownTimer(30000);
+            TimerService.startTimer();
         }
     }
 
@@ -134,8 +138,12 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         Intent intent = new Intent(this, ImageService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
 
+        Intent intentCountdownTimer = new Intent(this, CountdownTimerService.class);
+        bindService(intentCountdownTimer, connectionCountdownTimer, Context.BIND_AUTO_CREATE);
+
         Intent intentTimer = new Intent(this, TimerService.class);
-        bindService(intentTimer, connectionTimer, Context.BIND_AUTO_CREATE);
+        bindService(intentTimer,connectionTimer, Context.BIND_AUTO_CREATE);
+
     }
 
     @Override
@@ -146,9 +154,13 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
             unbindService(connection);
             bound = false;
         }
-        if (boundtimer) {
+        if (boundCountdownTimer) {
+            unbindService(connectionCountdownTimer);
+            boundCountdownTimer = false;
+        }
+        if(boundTimer){
             unbindService(connectionTimer);
-            boundtimer = false;
+            boundTimer = false;
         }
     }
 
@@ -161,27 +173,40 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
             bound = true;
         }
 
-
-
         @Override
         public void onServiceDisconnected(ComponentName name) {
             bound = false;
         }
     };
 
-    // Get reference to the ImageService
-    private ServiceConnection connectionTimer = new ServiceConnection() {
+    // Get reference to the CountdownTimerService
+    private ServiceConnection connectionCountdownTimer = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            TimerService.LocalBinder timebinder = (TimerService.LocalBinder) service;
-            timerService = timebinder.getService();
-            boundtimer = true;
+            CountdownTimerService.LocalBinder countdowntimebinder = (CountdownTimerService.LocalBinder) service;
+            CountdownTimerService = countdowntimebinder.getService();
+            boundCountdownTimer = true;
         }
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            boundtimer = false;
+            boundCountdownTimer = false;
         }
     };
+
+    // Get reference to the TimerService
+    private ServiceConnection connectionTimer = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            TimerService.LocalBinder timerbinder = (TimerService.LocalBinder) service;
+            TimerService = timerbinder.getService();
+            boundTimer = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            boundTimer = false;
+        }
+    };
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
