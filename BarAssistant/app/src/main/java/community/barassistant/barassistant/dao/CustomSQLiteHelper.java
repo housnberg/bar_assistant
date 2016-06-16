@@ -73,8 +73,8 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
             + CustomSQLiteHelper.TABLE_IMAGE_PATH
             + "("
             + CustomSQLiteHelper.COLUMN_IMAGE_PATH_ID + " text primary key, "
-            //+ CustomSQLiteHelper.COLUMN_IMAGE_PATH_DESCRIPTION + " text not null, "
-            //+ CustomSQLiteHelper.COLUMN_IMAGE_PATH_ORDER + " integer not null, "
+            + CustomSQLiteHelper.COLUMN_IMAGE_PATH_DESCRIPTION + " text not null, "
+            + CustomSQLiteHelper.COLUMN_IMAGE_PATH_ORDER + " integer not null, "
             + CustomSQLiteHelper.COLUMN_IMAGE_PATH_EXERCISE_ID + " integer not null references " + CustomSQLiteHelper.TABLE_EXERCISE + "(" + CustomSQLiteHelper.COLUMN_EXERCISE_ID + ") on delete cascade on update cascade "
             + ");";
 

@@ -2,6 +2,7 @@ package community.barassistant.barassistant.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,10 @@ public class Exercise implements Parcelable {
     private long id;
     private String name;
     private String description;
-    private List<String> imagePaths;
+    private List<Image> imagePaths;
 
     public Exercise() {
-        imagePaths = new ArrayList<String>();
+        imagePaths = new ArrayList<Image>();
     }
 
     public Exercise(long id, String name, String description) {
@@ -32,7 +33,11 @@ public class Exercise implements Parcelable {
         setId(in.readLong());
         setName(in.readString());
         setDescription(in.readString());
-        setImagePaths(in.createStringArrayList());
+        Parcelable[] items;
+        items = in.readParcelableArray(Image.class.getClassLoader());
+        for (Parcelable item : items) {
+            imagePaths.add((Image) item);
+        }
     }
 
     public String getDescription() {
@@ -59,15 +64,15 @@ public class Exercise implements Parcelable {
         this.id = id;
     }
 
-    public List<String> getImagePaths() {
+    public List<Image> getImagePaths() {
         return imagePaths;
     }
 
-    public void setImagePaths(List<String> imagePaths) {
+    public void setImagePaths(List<Image> imagePaths) {
         this.imagePaths = imagePaths;
     }
 
-    public boolean addImagePath(String imagePath) {
+    public boolean addImage(Image imagePath) {
         boolean isImagePathAdded = false;
         if (imagePath != null) {
             imagePaths.add(imagePath);
@@ -103,7 +108,7 @@ public class Exercise implements Parcelable {
         dest.writeLong(id);
         dest.writeString(name);
         dest.writeString(description);
-        dest.writeStringList(imagePaths);
+        dest.writeParcelableArray(imagePaths.toArray(new Image[imagePaths.size()]), 1);
     }
 
     public static final Parcelable.Creator<Exercise> CREATOR =

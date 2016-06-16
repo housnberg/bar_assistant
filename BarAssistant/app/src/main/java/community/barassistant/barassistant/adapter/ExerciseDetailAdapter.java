@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import community.barassistant.barassistant.R;
@@ -40,7 +41,6 @@ public class ExerciseDetailAdapter extends RecyclerView.Adapter<ExerciseDetailAd
     public void onBindViewHolder(ExerciseImageHolder viewHolder, int position) {
         Bitmap image = images.get(position);
         viewHolder.image.setImageBitmap(image);
-        viewHolder.image.getLayoutParams().height = viewHolder.image.getMeasuredWidth();
         viewHolder.order.setText(String.valueOf(position + 1));
     }
 

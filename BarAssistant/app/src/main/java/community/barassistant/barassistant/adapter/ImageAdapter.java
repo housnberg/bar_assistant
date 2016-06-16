@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Collections;
 import java.util.List;
 
 import community.barassistant.barassistant.ImageLoaderSingleton;
@@ -78,5 +79,24 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return IMAGE_ADD_EXERCISE;
         }
         return -1;
+    }
+
+    public void onItemDismiss(int position) {
+        items.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(items, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(items, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
     }
 }

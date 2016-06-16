@@ -27,6 +27,12 @@ public class DataAccessObject {
             CustomSQLiteHelper.COLUMN_EXERCISE_NAME,
             CustomSQLiteHelper.COLUMN_EXERCISE_DESCRIPTION
     };
+    private String[] allImagePathColumns = {
+            CustomSQLiteHelper.COLUMN_IMAGE_PATH_ID,
+            CustomSQLiteHelper.COLUMN_IMAGE_PATH_EXERCISE_ID,
+            CustomSQLiteHelper.COLUMN_IMAGE_PATH_DESCRIPTION,
+            CustomSQLiteHelper.COLUMN_IMAGE_PATH_ORDER
+    };
     private String[] allColumns = {
             CustomSQLiteHelper.COLUMN_WORKOUT_ID,
             CustomSQLiteHelper.COLUMN_WORKOUT_NAME,
@@ -40,9 +46,9 @@ public class DataAccessObject {
     //TODO: IMPLEMENT A GENERIC SQL STATEMENT GENERATOR
     //TODO: REFACVTOR THIS CLASS -> ExerciseDAO, WorkoutDAO, etc.
     private static final String SELECT_IMAGE_PATH_BY_EXERCISE_ID =
-            "SELECT ip." + CustomSQLiteHelper.COLUMN_IMAGE_PATH_ID + " FROM " + CustomSQLiteHelper.TABLE_IMAGE_PATH + " ip"
-                    + " WHERE ip." + CustomSQLiteHelper.COLUMN_IMAGE_PATH_EXERCISE_ID + " = ?;";
-
+            "SELECT * FROM " + CustomSQLiteHelper.TABLE_IMAGE_PATH + " ip"
+                    + " WHERE ip." + CustomSQLiteHelper.COLUMN_IMAGE_PATH_EXERCISE_ID + " = ?"
+                    + " ORDER BY ip." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_ORDER + ";";
 
     private static final String SELECT_EXERCISE_BY_ID =
             "SELECT e." + CustomSQLiteHelper.COLUMN_EXERCISE_ID + " FROM " + CustomSQLiteHelper.TABLE_EXERCISE + " e"
@@ -80,7 +86,7 @@ public class DataAccessObject {
         dbHelper.close();
     }
 
-    public Exercise createExercise(String name, String description, List<String> imagePaths) {
+    public Exercise createExercise(String name, String description, List<Image> imagePaths) {
         ContentValues values = new ContentValues();
         values.put(CustomSQLiteHelper.COLUMN_EXERCISE_NAME, name);
         values.put(CustomSQLiteHelper.COLUMN_EXERCISE_DESCRIPTION, description);
@@ -89,28 +95,34 @@ public class DataAccessObject {
         cursor.moveToFirst();
         Exercise newExercise = cursorToExercise(cursor);
         newExercise.setImagePaths(imagePaths);
-        for (String imagePath : imagePaths) {
-            createImagePath(imagePath, newExercise.getId());
+        for (Image imagePath : imagePaths) {
+            createImage(imagePath.getImagePath(), imagePath.getDescription(), newExercise.getId(), imagePath.getOrder());
         }
         cursor.close();
         return newExercise;
     }
 
-    public String createImagePath(String imagePath, long exerciseId) {
+    public void createImage(String imagePath, String descritpion, long exerciseId, int order) {
         ContentValues values = new ContentValues();
         values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_ID, imagePath);
+        values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_DESCRIPTION, descritpion);
         values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_EXERCISE_ID, exerciseId);
+        values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_ORDER, order);
         long insertId = database.insert(CustomSQLiteHelper.TABLE_IMAGE_PATH, null, values);
-        return imagePath;
+//        Cursor cursor = database.query(CustomSQLiteHelper.TABLE_IMAGE_PATH, allImagePathColumns, CustomSQLiteHelper.COLUMN_IMAGE_PATH_ID + " = " + imagePath, null, null, null, null);
+//        cursor.moveToFirst();
+//        Image newImage = cursorToImage(cursor);
+//        cursor.close();
+//        return newImage;
     }
 
-    public List<String> getImagePathByExerciseId(long exerciseId) {
-        List<String> imagePaths = new ArrayList<String>();
+    public List<Image> getImagePathByExerciseId(long exerciseId) {
+        List<Image> imagePaths = new ArrayList<Image>();
         try {
             Cursor cursor = database.rawQuery(DataAccessObject.SELECT_IMAGE_PATH_BY_EXERCISE_ID, new String[] {String.valueOf(exerciseId)});
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                imagePaths.add(cursor.getString(0));
+                imagePaths.add(cursorToImage(cursor));
                 cursor.moveToNext();
             }
             cursor.close();
@@ -127,17 +139,16 @@ public class DataAccessObject {
 
     public List<Exercise> getAllExercises() {
         List<Exercise> exercises = new ArrayList<Exercise>();
-        List<String> imagePaths = new ArrayList<String>();
+        List<Image> imagePaths = new ArrayList<Image>();
 
-        Cursor cursor = database.query(CustomSQLiteHelper.TABLE_EXERCISE,
-                allExerciseColumns, null, null, null, null, null);
+        Cursor cursor = database.query(CustomSQLiteHelper.TABLE_EXERCISE, allExerciseColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Exercise exercise = cursorToExercise(cursor);
             imagePaths = getImagePathByExerciseId(exercise.getId()); {
-                for (String imagePath : imagePaths) {
-                    exercise.addImagePath(imagePath);
+                for (Image imagePath : imagePaths) {
+                    exercise.addImage(imagePath);
                 }
             }
             exercises.add(exercise);
@@ -155,7 +166,7 @@ public class DataAccessObject {
 
     public Exercise getExerciseById(long exerciseId) {
         Exercise exercise = null;
-        List<String> imagePaths;
+        List<Image> imagePaths;
         try {
             Cursor cursor = database.rawQuery(DataAccessObject.SELECT_EXERCISE_BY_ID, new String[] {String.valueOf(exerciseId)});
             cursor.moveToFirst();
@@ -184,7 +195,7 @@ public class DataAccessObject {
 
     public List<Exercise> getExercisesByWorkoutId(long wokoutId) {
         List<Exercise> exercises = new ArrayList<Exercise>();
-        List<String> imagePaths;
+        List<Image> imagePaths;
         Cursor cursor = database.rawQuery(DataAccessObject.SELECT_EXERCISE_BY_WORKOUT_ID, new String[] {String.valueOf(wokoutId)});
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -278,7 +289,7 @@ public class DataAccessObject {
     }
 
     private Image cursorToImage(Cursor cursor) {
-        return new Image(cursor.getString(0), cursor.getInt(1), cursor.getString(2));
+        return new Image(cursor.getString(0), cursor.getInt(2), cursor.getString(1));
     }
 
 }

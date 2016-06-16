@@ -45,7 +45,7 @@ public class ExerciseSelectionAdapter extends ArrayAdapter<Exercise> {
         exerciseName.setText(exercise.getName());
         exerciseDescription.setText(exercise.getDescription());
         //Only show the first saved image as title image
-        exerciseTitleImageView.setImageBitmap(ImageLoaderSingleton.getInstance().loadImageFromStorage(exercise.getImagePaths().get(0)));
+        exerciseTitleImageView.setImageBitmap(ImageLoaderSingleton.getInstance().loadImageFromStorage(exercise.getImagePaths().get(0).getImagePath()));
 
         return convertView;
     }

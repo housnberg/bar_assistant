@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -16,9 +17,12 @@ import java.util.List;
 
 import community.barassistant.barassistant.adapter.ComplexExerciseWorkoutPropertyAdapter;
 import community.barassistant.barassistant.adapter.ExerciseDetailAdapter;
+import community.barassistant.barassistant.adapter.ExerciseOverviewAdapter;
+import community.barassistant.barassistant.adapter.ExerciseTouchHelper;
 import community.barassistant.barassistant.adapter.ImageAdapter;
 import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
+import community.barassistant.barassistant.model.Image;
 import community.barassistant.barassistant.model.Workout;
 
 /**
@@ -54,8 +58,8 @@ public class ExerciseActivity extends AppCompatActivity {
         datasource.open();
 
         items = new ArrayList<Bitmap>();
-        for (String imagePath : exercise.getImagePaths()) {
-            items.add(ImageLoaderSingleton.getInstance().loadImageFromStorage(imagePath));
+        for (Image imagePath : exercise.getImagePaths()) {
+            items.add(ImageLoaderSingleton.getInstance().loadImageFromStorage(imagePath.getImagePath()));
         }
 
         initToolbar();

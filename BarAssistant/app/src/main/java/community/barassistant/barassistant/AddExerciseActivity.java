@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,9 +20,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import community.barassistant.barassistant.adapter.ExerciseDetailAdapter;
+import community.barassistant.barassistant.adapter.ExerciseOverviewAdapter;
+import community.barassistant.barassistant.adapter.ExerciseTouchHelper;
 import community.barassistant.barassistant.adapter.ImageAdapter;
+import community.barassistant.barassistant.adapter.ImageTouchHelper;
 import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
+import community.barassistant.barassistant.model.Image;
 
 /**
  * @author Eugen Ljavin
@@ -83,6 +89,10 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     private void setupRecyclerView(final RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new ImageAdapter(this, items, R.layout.list_item_image));
+
+        ItemTouchHelper.Callback callback = new ImageTouchHelper((ImageAdapter) recyclerView.getAdapter());
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -119,7 +129,14 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
                 Toast.makeText(this, R.string.toastInvalidName, Toast.LENGTH_LONG).show();
             } else {
                 Exercise exercise = null;
-                exercise = datasource.createExercise(exerciseName.getText().toString().trim(), exerciseDescription.getText().toString().trim(), imagePaths);
+                ImageLoaderSingleton instance = ImageLoaderSingleton.getInstance();
+                List<Image> images = new ArrayList<Image>();
+                for (int order = 0; order < items.size(); order++) {
+                    String imagePath = instance.saveImageToStorage((Bitmap) items.get(order), new ContextWrapper(getApplicationContext()));
+                    System.out.println("+++++++" + imagePath);
+                    images.add(new Image(imagePath, order, "TEST"));
+                }
+                exercise = datasource.createExercise(exerciseName.getText().toString().trim(), exerciseDescription.getText().toString().trim(), images);
                 finish();
             }
         }
@@ -129,9 +146,7 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            ImageLoaderSingleton instance = ImageLoaderSingleton.getInstance();
             photo = (Bitmap) data.getExtras().get("data");
-            imagePaths.add(instance.saveImageToStorage(photo, new ContextWrapper(getApplicationContext())));
             items.add(photo);
             recyclerView.getAdapter().notifyDataSetChanged();
         }

@@ -68,7 +68,7 @@ public class ComplexExerciseWorkoutPropertyAdapter extends RecyclerView.Adapter<
             Bitmap image = null;
             //Only show the first saved image as title image
             if (exercise.getImagePaths() != null) {
-                image = instance.loadImageFromStorage(exercise.getImagePaths().get(0));
+                image = instance.loadImageFromStorage(exercise.getImagePaths().get(0).getImagePath());
                 exerciseHolder.getExerciseTitleImageView().setImageBitmap(image);
                 viewHolder.itemView.setTag(exercise);
             }

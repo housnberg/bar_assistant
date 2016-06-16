@@ -55,7 +55,7 @@ public class Image implements Parcelable {
         this.exercise = exercise;
     }
 
-    public long getOrder() {
+    public int getOrder() {
         return order;
     }
 
