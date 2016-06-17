@@ -7,13 +7,13 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="388dp"
-        android:id="@+id/imageView2"
+        android:id="@+id/w_e_imageView"
         android:layout_gravity="center_horizontal" />
 
     <Chronometer
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:id="@+id/chronometer"
+        android:id="@+id/chronometerMain"
         android:gravity="center"
         android:textSize="80dp"
         android:textAlignment="center"
@@ -27,6 +27,6 @@
         android:textColor="@color/backgroundListItem"
         style="?android:attr/borderlessButtonStyle"
         android:background="@color/red_A700"
-        android:id="@+id/button"
+        android:id="@+id/borderlessButton"
         android:layout_weight="0.1"/>
 </LinearLayout>
