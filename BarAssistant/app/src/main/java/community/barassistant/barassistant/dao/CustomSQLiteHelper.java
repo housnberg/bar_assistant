@@ -5,6 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 /**
  * @author Eugen Ljavin
  */
@@ -38,6 +42,9 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "barassistant.db";
     private static final int DATABASE_VERSION = 1;
 
+    private Context context;
+    private InputStream in;
+
     // Database creation sql statement
     //TODO: Make a generic SQL Statement Generator
     private static final String CREATE_TABLE_EXERCISE = "create table "
@@ -64,7 +71,7 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
             + "("
             + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID + " integer not null references " + CustomSQLiteHelper.TABLE_EXERCISE + "(" + CustomSQLiteHelper.COLUMN_EXERCISE_ID + ") on delete cascade on update cascade, "
             + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID + " integer not null references " + CustomSQLiteHelper.TABLE_WORKOUT + "(" + CustomSQLiteHelper.COLUMN_WORKOUT_ID + ") on delete cascade on update cascade, "
-            + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_REPETITIONS + " integer not null, "
+            + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_REPETITIONS + " integer not null default 10, "
             + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_ORDER + " integer not null, "
             + "primary key (" + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID + "," + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID + ")"
             + ");";
@@ -82,6 +89,7 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
 
     public CustomSQLiteHelper(Context context) {
         super(context, CustomSQLiteHelper.DATABASE_NAME, null, CustomSQLiteHelper.DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -91,6 +99,20 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
         database.execSQL(CustomSQLiteHelper.CREATE_TABLE_WORKOUT);
         database.execSQL(CustomSQLiteHelper.CREATE_TABLE_WORKOUT_EXERCISE);
         database.execSQL(CustomSQLiteHelper.CREATE_TABLE_IMAGE_PATH);
+
+        try {
+            in = context.getAssets().open("init_database.sql");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String line;
+            do {
+                line = reader.readLine();
+                database.execSQL(line);
+                Log.e("Insert Statement",  line);
+            } while (line != null);
+
+        } catch (Exception e) {
+
+        }
     }
 
     @Override

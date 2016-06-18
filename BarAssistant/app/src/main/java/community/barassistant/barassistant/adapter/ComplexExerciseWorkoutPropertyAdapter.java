@@ -6,13 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import community.barassistant.barassistant.ImageLoaderSingleton;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.adapter.holder.ExerciseHolder;
-import community.barassistant.barassistant.adapter.holder.WorkoutPropertyHolder;
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.Workout;
 
@@ -22,49 +24,53 @@ import community.barassistant.barassistant.model.Workout;
 //TODO: REFACTOR THIS CLASS -> SHOUD EXTEND FROM EXERCISEADAPTER BECAUSE THIS IS A SPECIALIZED EXERCISE ADAPTER
 public class ComplexExerciseWorkoutPropertyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int EXERCISE = 0;
-    private static final int WORKOUT = 1;
-
-    private List<Object> items;
-    private Workout workout;
+    private List<Exercise> exercises;
+    private Workout workout = null;
     private Activity context;
+    private Map<Long, Integer> exerciseRepetitions;
 
-    public ComplexExerciseWorkoutPropertyAdapter(Activity context, List<Object> items, Workout workout) {
+    public ComplexExerciseWorkoutPropertyAdapter(Activity context, List<Exercise> items, Workout workout) {
         super();
-        this.items = items;
+        this.exercises = items;
         this.context = context;
         this.workout = workout;
     }
 
+    public ComplexExerciseWorkoutPropertyAdapter(Activity context, List<Exercise> items, Map<Long, Integer> exerciseRepetitions) {
+        super();
+        this.exercises = items;
+        this.context = context;
+        this.exerciseRepetitions = exerciseRepetitions;
+    }
+
     @Override
     public int getItemCount() {
-        return this.items.size();
+        return this.exercises.size();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-
-        if (EXERCISE == viewType) {
             View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_workout_exercise, viewGroup, false);
             viewHolder = new ExerciseHolder(itemView);
-        } else if (WORKOUT == viewType) {
-            View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_workout_property, viewGroup, false);
-            viewHolder = new WorkoutPropertyHolder(itemView);
-        }
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        if (viewHolder.getItemViewType() == EXERCISE) {
             ExerciseHolder exerciseHolder = (ExerciseHolder) viewHolder;
             ImageLoaderSingleton instance = ImageLoaderSingleton.getInstance();
-            Exercise exercise = (Exercise) items.get(position);
+            Exercise exercise = (Exercise) exercises.get(position);
             exerciseHolder.getExerciseNameTextView().setText(exercise.getName());
             exerciseHolder.getExerciseDescriptionTextView().setText(exercise.getDescription());
-            exerciseHolder.getRepsTextView().setText(String.valueOf(workout.getRepetitionByExerciseId(exercise.getId())));
+            TextView repsTextView = exerciseHolder.getRepsTextView();
+            if (workout == null) {
+                //TODO: THIS IS THE DEFAULT VALUE FOR THE REPS. FIND A BETTER PLACE FOR THIS INFORMATION
+                repsTextView.setText(String.valueOf(exerciseRepetitions.get(exercise.getId())));
+            } else {
+                repsTextView.setText(String.valueOf(workout.getRepetitionByExerciseId(exercise.getId())));
+            }
             Bitmap image = null;
             //Only show the first saved image as title image
             if (exercise.getImagePaths() != null) {
@@ -72,28 +78,24 @@ public class ComplexExerciseWorkoutPropertyAdapter extends RecyclerView.Adapter<
                 exerciseHolder.getExerciseTitleImageView().setImageBitmap(image);
                 viewHolder.itemView.setTag(exercise);
             }
-        } else if (viewHolder.getItemViewType() == WORKOUT) {
-            WorkoutPropertyHolder workoutPropertyHolder = (WorkoutPropertyHolder) viewHolder;
-            Workout workout = (Workout) items.get(position);
-            if (workout.getDescription().trim() != "") {
-                workoutPropertyHolder.getDescriptionTextView().setText(workout.getDescription());
-                workoutPropertyHolder.getDescriptionTextView().clearAnimation();
-                workoutPropertyHolder.getDescriptionTextView().clearFocus();
-                workoutPropertyHolder.getDescriptionTextView().setVisibility(View.VISIBLE);
-            }
-            workoutPropertyHolder.getRoundsTextView().setText(String.valueOf(workout.getRounds()));
-            workoutPropertyHolder.getPauseExercisesTextView().setText(String.valueOf(workout.getPauseExercises()));
-            workoutPropertyHolder.getPauseRoundsTextView().setText(String.valueOf(workout.getPauseRounds()));
-        }
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if (items.get(position) instanceof Exercise) {
-            return EXERCISE;
-        } else if (items.get(position) instanceof Workout) {
-            return WORKOUT;
+    public void onItemDismiss(int position) {
+        exercises.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(exercises, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(exercises, i, i - 1);
+            }
         }
-        return -1;
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
     }
 }

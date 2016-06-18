@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import community.barassistant.barassistant.adapter.ViewPagerAdapter;
 import community.barassistant.barassistant.behavior.Fx;
@@ -136,6 +137,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
         int workoutPauseExercises = addPropertiesToWorkoutFragment.getPauseExercisesWheeler().getSelectedPosition() + 1;
         int workoutPauseRounds = addPropertiesToWorkoutFragment.getPauseRoundsWheeler().getSelectedPosition() + 1;
         List<Exercise> exercises = addExercisesToWorkoutFragment.getSelectedExercises();
+        Map<Long, Integer> exerciseRepetitions = addExercisesToWorkoutFragment.getExerciseRepetitions();
 
         if (item.getItemId() == R.id.actionSave) {
             if (workoutName.length() < 3) {
@@ -147,7 +149,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
                 workout = datasource.createWorkout(workoutName, workoutDescription, null, null, workoutRounds, workoutPauseExercises, workoutPauseRounds);
                 for (int order = 0; order < exercises.size(); order ++) {
                     Exercise exercise = exercises.get(order);
-                    datasource.createWorkoutExercise(workout.getId(), exercise.getId(), 10, order);
+                    datasource.createWorkoutExercise(workout.getId(), exercise.getId(), exerciseRepetitions.get(exercise.getId()), order);
                 }
                 finish();
             }

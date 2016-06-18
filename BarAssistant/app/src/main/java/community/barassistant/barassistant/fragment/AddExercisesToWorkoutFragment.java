@@ -1,11 +1,14 @@
 package community.barassistant.barassistant.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -15,11 +18,16 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.github.fabtransitionactivity.SheetLayout;
+import com.vi.swipenumberpicker.OnValueChangeListener;
+import com.vi.swipenumberpicker.SwipeNumberPicker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import community.barassistant.barassistant.AddExerciseToWorkoutActivity;
+import community.barassistant.barassistant.AddWorkoutActivity;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.adapter.ComplexExerciseWorkoutPropertyAdapter;
 import community.barassistant.barassistant.adapter.ExerciseOverviewAdapter;
@@ -42,6 +50,7 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
     private DataAccessObject datasource;
 
     private List<Exercise> exercises;
+    private Map<Long, Integer> exerciseRepetitions;
 
     public AddExercisesToWorkoutFragment() {
         // Required empty public constructor
@@ -63,6 +72,7 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
             exercises = new ArrayList<Exercise>();
         }
 
+        exerciseRepetitions = new HashMap<Long, Integer>();
         setHasOptionsMenu(true);
         setupRecyclerView(recyclerView);
         return rootView;
@@ -70,16 +80,22 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
 
     private void setupRecyclerView(final RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new ExerciseOverviewAdapter(getActivity(), exercises));
+        recyclerView.setAdapter(new ComplexExerciseWorkoutPropertyAdapter(getActivity(), exercises, exerciseRepetitions));
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Toast.makeText(getActivity(), position + "", Toast.LENGTH_LONG).show();
+                showLocationDialog(exercises.get(position).getId());
             }
         });
-        ItemTouchHelper.Callback callback = new ExerciseTouchHelper((ExerciseOverviewAdapter) recyclerView.getAdapter());
+        ItemTouchHelper.Callback callback = new ExerciseTouchHelper((ComplexExerciseWorkoutPropertyAdapter) recyclerView.getAdapter());
         ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView(recyclerView);
+    }
+
+    private void initExerciseRepetition(List<Exercise> exercises, int defaultValue) {
+        for (Exercise exercise : exercises) {
+            exerciseRepetitions.put(exercise.getId(), defaultValue);
+        }
     }
 
     @Override
@@ -128,6 +144,7 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
             for (Exercise selectedExercise : selectedExercises) {
                 if (!exercises.contains(selectedExercise)) {
                     exercises.add(selectedExercise);
+                    exerciseRepetitions.put(selectedExercise.getId(), 10);
                 }
             }
             recyclerView.getAdapter().notifyDataSetChanged();
@@ -137,6 +154,44 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
 
     public List<Exercise> getSelectedExercises() {
         return exercises;
+    }
+    public Map<Long, Integer> getExerciseRepetitions() {
+        return exerciseRepetitions;
+    }
+
+    private void showLocationDialog(final long exerciseId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Repetitions");
+        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_repetitions, null);
+
+        final SwipeNumberPicker swipeNumberPicker = (SwipeNumberPicker) view.findViewById(R.id.number_picker);
+        swipeNumberPicker.setMinValue(1);
+        swipeNumberPicker.setMaxValue(100);
+
+        builder.setView(view);
+
+        String positiveText = getString(android.R.string.ok);
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        exerciseRepetitions.put(exerciseId, swipeNumberPicker.getValue());
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                });
+
+        String negativeText = getString(android.R.string.cancel);
+        builder.setNegativeButton(negativeText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // negative button logic
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        // display dialog
+        dialog.show();
     }
 
 }

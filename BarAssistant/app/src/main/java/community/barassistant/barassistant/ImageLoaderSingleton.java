@@ -2,12 +2,16 @@ package community.barassistant.barassistant;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
 /**
@@ -51,6 +55,25 @@ public class ImageLoaderSingleton {
             e.printStackTrace();
         }
         return bm;
+    }
+
+    public Bitmap loadImageFromStorage(String path, Context context) {
+        if (context == null) {
+            return loadImageFromStorage(path);
+        } else {
+            if (!path.contains("/")) {
+                try {
+                    AssetManager manager = context.getAssets();
+                    InputStream open = manager.open(path);
+                   return BitmapFactory.decodeStream(open);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                return loadImageFromStorage(path);
+            }
+        }
+        return null;
     }
 
     //10000 possible names should provide a high enough chance for the name to be unique

@@ -42,7 +42,7 @@ public class ExerciseOverviewAdapter extends RecyclerView.Adapter<ExerciseHolder
         viewHolder.getExerciseDescriptionTextView().setText(exercise.getDescription());
         Bitmap image = null;
         //Only show the first saved image as title image
-            image = instance.loadImageFromStorage(exercise.getImagePaths().get(0).getImagePath());
+            image = instance.loadImageFromStorage(exercise.getImagePaths().get(0).getImagePath(), context);
             viewHolder.getExerciseTitleImageView().setImageBitmap(image);
             viewHolder.itemView.setTag(exercise);
     }

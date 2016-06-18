@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/backgroundListItem"
     android:elevation="@dimen/elevation_card"
     android:layout_marginTop="@dimen/margin_card"
     android:layout_marginBottom="@dimen/margin_card">
 
+    <com.github.siyamed.shapeimageview.RoundedImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/test"
+        app:siRadius="0dp"
+        app:siBorderWidth="0dp"
+        app:siSquare="true"/>
+
+    <!--
     <ImageView
         android:id="@+id/image"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter" />
+        -->
 
     <TextView
         android:id="@+id/order"

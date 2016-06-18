@@ -11,9 +11,9 @@ import community.barassistant.barassistant.model.Exercise;
 public class ExerciseTouchHelper extends ItemTouchHelper.SimpleCallback {
 
 
-    private ExerciseOverviewAdapter mMovieAdapter;
+    private ComplexExerciseWorkoutPropertyAdapter mMovieAdapter;
 
-    public ExerciseTouchHelper(ExerciseOverviewAdapter movieAdapter){
+    public ExerciseTouchHelper(ComplexExerciseWorkoutPropertyAdapter movieAdapter){
         super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT);
         this.mMovieAdapter = movieAdapter;
     }

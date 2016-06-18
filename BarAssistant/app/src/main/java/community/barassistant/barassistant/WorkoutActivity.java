@@ -2,8 +2,6 @@ package community.barassistant.barassistant;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +42,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
     private DataAccessObject datasource;
     private Workout workout;
-    private List<Object> items;
+    private List<Exercise> exercises;
     private Map<Long, Integer> repetitionsPerExercise;
 
     @Override
@@ -71,13 +68,13 @@ public class WorkoutActivity extends AppCompatActivity {
         datasource = new DataAccessObject(this);
         datasource.open();
 
-        items = new ArrayList<Object>();
-        //items.add(workout);
-        items.addAll(datasource.getExercisesByWorkoutId(workout.getId()));
+        exercises = new ArrayList<Exercise>();
+        //exercises.add(workout);
+        exercises.addAll(datasource.getExercisesByWorkoutId(workout.getId()));
 
         repetitionsPerExercise = new HashMap<Long, Integer>();
 
-        for (Object exercise : items) {
+        for (Object exercise : exercises) {
             repetitionsPerExercise.put(((Exercise) exercise).getId(), datasource.getRepetitions(workout.getId(), ((Exercise) exercise).getId()));
         }
         workout.setRepetitionsPerExercise(repetitionsPerExercise);
@@ -114,7 +111,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
     private void setupRecyclerView(final RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new ComplexExerciseWorkoutPropertyAdapter(this, items, workout));
+        recyclerView.setAdapter(new ComplexExerciseWorkoutPropertyAdapter(this, exercises, workout));
     }
 
     @Override
