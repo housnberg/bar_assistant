@@ -5,6 +5,8 @@
     <string name="addWorkoutActivity">Add Workout</string>
     <string name="addExercisesToWorkoutActivity">Select Exercises</string>
     <string name="workoutActivity">Workout</string>
+    <string name="workoutExerciseActivity">Started Workout</string>
+    <string name="countdownActivity">Pause</string>
     
     <string name="homeFragment">Home</string>
     <string name="exercisesFragment">Exercises</string>
@@ -25,4 +27,6 @@
     <string name="toastNoExercisesSelected">There are no exercises selected. Please select at least one exercise.</string>
 
     <string name="finishExercise">DONE!</string>
+    <string name="countdownText">TAKE A BREATH!</string>
+    <string name="skipPause">SKIP PAUSE!</string>
 </resources>

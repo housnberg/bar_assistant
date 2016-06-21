@@ -150,4 +150,10 @@ public class WorkoutActivity extends AppCompatActivity {
 //        return true;
 //    }
 
+    public void startWorkout(View view){
+        Intent intent = new Intent(this, WorkoutExerciseActivity.class);
+        intent.putExtra("workout", workout);
+        startActivity(intent);
+    }
+
 }
