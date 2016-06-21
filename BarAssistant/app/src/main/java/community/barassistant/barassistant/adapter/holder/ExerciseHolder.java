@@ -16,6 +16,7 @@ public class ExerciseHolder extends RecyclerView.ViewHolder {
     private TextView exerciseDescriptionTextView;
     private ImageView exerciseTitleImageView;
     private TextView repsTextView;
+    private TextView genericText;
 
     public ExerciseHolder(View itemView) {
         super(itemView);
@@ -23,6 +24,7 @@ public class ExerciseHolder extends RecyclerView.ViewHolder {
         exerciseDescriptionTextView = (TextView) itemView.findViewById(R.id.exerciseDescriptionTextView);
         exerciseTitleImageView = (ImageView) itemView.findViewById(R.id.exerciseTitleImageView);
         repsTextView = (TextView) itemView.findViewById(R.id.repsTextView);
+        genericText = (TextView) itemView.findViewById(R.id.generic_text);
     }
 
     public ImageView getExerciseTitleImageView() {
@@ -39,5 +41,9 @@ public class ExerciseHolder extends RecyclerView.ViewHolder {
 
     public TextView getRepsTextView() {
         return repsTextView;
+    }
+
+    public TextView getGenericTextView() {
+        return genericText;
     }
 }

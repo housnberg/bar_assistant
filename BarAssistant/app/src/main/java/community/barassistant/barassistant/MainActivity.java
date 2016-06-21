@@ -34,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private ExcerciseFragment exercisesFragment;
     private WorkoutFragment workoutFragment;
     private FloatingActionButton mSharedFab;
-
-    private boolean bound = false;
+    private View contentWrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
         mSharedFab.setVisibility(View.INVISIBLE);
+        contentWrapper = findViewById(R.id.content_wrapper);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -118,6 +118,10 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_main, menu);
         return true;
+    }
+
+    public View getContentWrapper() {
+        return contentWrapper;
     }
 
 }

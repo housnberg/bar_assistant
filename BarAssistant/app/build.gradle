@@ -29,4 +29,5 @@ dependencies {
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     compile 'com.lantouzi.wheelview:library:1.1.2'
     compile 'com.github.supervital:swipenumberpicker:1.0.4'
+    compile 'biz.kasual:materialnumberpicker:1.2.1'
 }

@@ -45,6 +45,7 @@
         android:layout_below="@+id/image"
         android:paddingTop="@dimen/padding_card"
         android:paddingRight="@dimen/padding_card"
+        android:layout_alignBaseline="@+id/order"
         android:text="This is a dimple description"/>
 
 </RelativeLayout>

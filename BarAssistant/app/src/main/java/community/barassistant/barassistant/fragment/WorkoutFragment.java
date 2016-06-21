@@ -15,23 +15,24 @@ import android.view.ViewGroup;
 import com.github.fabtransitionactivity.SheetLayout;
 
 import java.util.List;
-import java.util.Map;
 
 import community.barassistant.barassistant.AddWorkoutActivity;
+import community.barassistant.barassistant.MainActivity;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.adapter.ItemClickSupport;
 import community.barassistant.barassistant.adapter.WorkoutAdapter;
 import community.barassistant.barassistant.dao.DataAccessObject;
-import community.barassistant.barassistant.dao.WorkoutDAO;
 import community.barassistant.barassistant.model.Workout;
 import community.barassistant.barassistant.WorkoutActivity;
+import community.barassistant.barassistant.util.Helper;
 
 /**
  * @author Eugen Ljavin
  */
 public class WorkoutFragment extends Fragment implements View.OnClickListener, SheetLayout.OnFabAnimationEndListener {
 
-    private static final int REQUEST_CODE = 1;
+    private static final int REQUEST_CODE_ADD_WORKOUT = 1;
+    private static final int REQUEST_CODE_SHOW_WORKOUT = 2;
 
     private DataAccessObject datasource;
 
@@ -77,7 +78,7 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 Intent intent = new Intent(getActivity(), WorkoutActivity.class);
                 intent.putExtra("data", workouts.get(position));
-                startActivityForResult(intent, REQUEST_CODE);
+                startActivityForResult(intent, REQUEST_CODE_SHOW_WORKOUT);
             }
         });
     }
@@ -106,7 +107,7 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
     @Override
     public void onFabAnimationEnd() {
         Intent intent = new Intent(getActivity(), AddWorkoutActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
+        startActivityForResult(intent, REQUEST_CODE_ADD_WORKOUT);
     }
 
     @Override
@@ -118,7 +119,7 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == REQUEST_CODE_ADD_WORKOUT && getActivity().RESULT_OK == resultCode) {
 
             Workout workout = datasource.getLastAddedWorkout();
             if (!workouts.contains(workout)) {
@@ -126,38 +127,9 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
                 recyclerView.getAdapter().notifyDataSetChanged();
             }
 
-            mSheetLayout.contractFab();
+            Helper.createSnackbar(getActivity(), ((MainActivity) getActivity()).getContentWrapper(), R.string.snackbarWorkoutAddedSuccessfully).show();
         }
+        mSheetLayout.contractFab();
     }
 
-    /*
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.toolbar_main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-        filterItem = (MenuItem) getView().getRootView().findViewById(R.id.actionFilter);
-        sortItem = (MenuItem) getView().getRootView().findViewById(R.id.actionSort);
-        filterItem.setVisible(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
-                return true;
-
-            case R.id.actionFilter:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
-    */
 }

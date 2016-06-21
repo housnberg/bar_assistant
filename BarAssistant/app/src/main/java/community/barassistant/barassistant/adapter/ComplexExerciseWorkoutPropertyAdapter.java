@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import community.barassistant.barassistant.ImageLoaderSingleton;
+import community.barassistant.barassistant.util.ImageLoaderSingleton;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.adapter.holder.ExerciseHolder;
 import community.barassistant.barassistant.model.Exercise;
@@ -28,6 +28,7 @@ public class ComplexExerciseWorkoutPropertyAdapter extends RecyclerView.Adapter<
     private Workout workout = null;
     private Activity context;
     private Map<Long, Integer> exerciseRepetitions;
+    private Map<Long, Boolean> exercisesRepeatable;
 
     public ComplexExerciseWorkoutPropertyAdapter(Activity context, List<Exercise> items, Workout workout) {
         super();
@@ -36,11 +37,12 @@ public class ComplexExerciseWorkoutPropertyAdapter extends RecyclerView.Adapter<
         this.workout = workout;
     }
 
-    public ComplexExerciseWorkoutPropertyAdapter(Activity context, List<Exercise> items, Map<Long, Integer> exerciseRepetitions) {
+    public ComplexExerciseWorkoutPropertyAdapter(Activity context, List<Exercise> items, Map<Long, Integer> exerciseRepetitions, Map<Long, Boolean> exercisesRepeatable) {
         super();
         this.exercises = items;
         this.context = context;
         this.exerciseRepetitions = exerciseRepetitions;
+        this.exercisesRepeatable = exercisesRepeatable;
     }
 
     @Override
@@ -68,16 +70,26 @@ public class ComplexExerciseWorkoutPropertyAdapter extends RecyclerView.Adapter<
             if (workout == null) {
                 //TODO: THIS IS THE DEFAULT VALUE FOR THE REPS. FIND A BETTER PLACE FOR THIS INFORMATION
                 repsTextView.setText(String.valueOf(exerciseRepetitions.get(exercise.getId())));
+                setUnit(exercisesRepeatable.get(exercise.getId()), exerciseHolder);
             } else {
                 repsTextView.setText(String.valueOf(workout.getRepetitionByExerciseId(exercise.getId())));
+                setUnit(workout.getIsExerciseRepeatableByExerciseId(exercise.getId()), exerciseHolder);
             }
             Bitmap image = null;
             //Only show the first saved image as title image
             if (exercise.getImagePaths() != null) {
-                image = instance.loadImageFromStorage(exercise.getImagePaths().get(0).getImagePath());
+                image = instance.loadImageFromStorage(exercise.getImagePaths().get(0).getImagePath(), context);
                 exerciseHolder.getExerciseTitleImageView().setImageBitmap(image);
                 viewHolder.itemView.setTag(exercise);
             }
+    }
+
+    private void setUnit(boolean isRepeatable, ExerciseHolder exerciseHolder) {
+        if (isRepeatable) {
+            exerciseHolder.getGenericTextView().setText(R.string.unitRepetitions);
+        } else {
+            exerciseHolder.getGenericTextView().setText(R.string.unitSeconds);
+        }
     }
 
     public void onItemDismiss(int position) {

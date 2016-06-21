@@ -16,6 +16,7 @@
     </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/content_wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent">
@@ -157,6 +158,8 @@
             android:layout_margin="@dimen/fab_margin"
             app:layout_behavior="community.barassistant.barassistant.behavior.FabScrollBehavior"
             android:onClick="startWorkout"/>
+            app:layout_anchor="@id/content_wrapper"
+            app:layout_anchorGravity="bottom|right|end"/>
 
         <com.github.fabtransitionactivity.SheetLayout
             android:id="@+id/bottom_sheet"

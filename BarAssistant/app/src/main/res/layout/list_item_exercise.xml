@@ -8,13 +8,6 @@
     android:elevation="@dimen/elevation_card">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/wrapper"
         android:layout_height="76dp"
         android:layout_width="match_parent"

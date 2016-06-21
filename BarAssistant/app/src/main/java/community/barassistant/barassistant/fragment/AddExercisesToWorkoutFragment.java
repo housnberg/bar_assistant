@@ -15,6 +15,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.github.fabtransitionactivity.SheetLayout;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 import community.barassistant.barassistant.AddExerciseToWorkoutActivity;
 import community.barassistant.barassistant.AddWorkoutActivity;
 import community.barassistant.barassistant.R;
@@ -35,6 +37,8 @@ import community.barassistant.barassistant.adapter.ExerciseTouchHelper;
 import community.barassistant.barassistant.adapter.ItemClickSupport;
 import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
+import community.barassistant.barassistant.util.Constants;
+import community.barassistant.barassistant.util.Helper;
 
 /**
  * @author Eugen Ljavin
@@ -51,6 +55,7 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
 
     private List<Exercise> exercises;
     private Map<Long, Integer> exerciseRepetitions;
+    private Map<Long, Boolean> exercisesRepeatable;
 
     public AddExercisesToWorkoutFragment() {
         // Required empty public constructor
@@ -73,6 +78,7 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
         }
 
         exerciseRepetitions = new HashMap<Long, Integer>();
+        exercisesRepeatable = new HashMap<Long, Boolean>();
         setHasOptionsMenu(true);
         setupRecyclerView(recyclerView);
         return rootView;
@@ -80,7 +86,7 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
 
     private void setupRecyclerView(final RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new ComplexExerciseWorkoutPropertyAdapter(getActivity(), exercises, exerciseRepetitions));
+        recyclerView.setAdapter(new ComplexExerciseWorkoutPropertyAdapter(getActivity(), exercises, exerciseRepetitions, exercisesRepeatable));
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
@@ -90,12 +96,6 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
         ItemTouchHelper.Callback callback = new ExerciseTouchHelper((ComplexExerciseWorkoutPropertyAdapter) recyclerView.getAdapter());
         ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView(recyclerView);
-    }
-
-    private void initExerciseRepetition(List<Exercise> exercises, int defaultValue) {
-        for (Exercise exercise : exercises) {
-            exerciseRepetitions.put(exercise.getId(), defaultValue);
-        }
     }
 
     @Override
@@ -144,7 +144,9 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
             for (Exercise selectedExercise : selectedExercises) {
                 if (!exercises.contains(selectedExercise)) {
                     exercises.add(selectedExercise);
+                    //TODO: FIND A BETTER PLACE FOR THE DEFAULT VALUES
                     exerciseRepetitions.put(selectedExercise.getId(), 10);
+                    exercisesRepeatable.put(selectedExercise.getId(), true);
                 }
             }
             recyclerView.getAdapter().notifyDataSetChanged();
@@ -155,8 +157,13 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
     public List<Exercise> getSelectedExercises() {
         return exercises;
     }
+
     public Map<Long, Integer> getExerciseRepetitions() {
         return exerciseRepetitions;
+    }
+
+    public Map<Long, Boolean> getExercisesRepeatable() {
+        return exercisesRepeatable;
     }
 
     private void showLocationDialog(final long exerciseId) {
@@ -164,9 +171,11 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
         builder.setTitle("Repetitions");
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_repetitions, null);
 
-        final SwipeNumberPicker swipeNumberPicker = (SwipeNumberPicker) view.findViewById(R.id.number_picker);
-        swipeNumberPicker.setMinValue(1);
-        swipeNumberPicker.setMaxValue(100);
+        final MaterialNumberPicker numberPicker = (MaterialNumberPicker) view.findViewById(R.id.number_picker);
+        final RadioButton radioRepetitions = (RadioButton) view.findViewById(R.id.radio_repetitions);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(100);
+        numberPicker.setValue(exerciseRepetitions.get(exerciseId));
 
         builder.setView(view);
 
@@ -175,8 +184,10 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        exerciseRepetitions.put(exerciseId, swipeNumberPicker.getValue());
+                        exerciseRepetitions.put(exerciseId, numberPicker.getValue());
+                        exercisesRepeatable.put(exerciseId, radioRepetitions.isChecked());
                         recyclerView.getAdapter().notifyDataSetChanged();
+                        Helper.createSnackbar(getActivity(), ((AddWorkoutActivity) getActivity()).getContentWrapper(), R.string.snackbarChangesPerformedSuccessfully, Constants.STATUS_INFO).show();
                     }
                 });
 

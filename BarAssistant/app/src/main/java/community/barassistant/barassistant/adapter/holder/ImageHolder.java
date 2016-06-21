@@ -13,13 +13,19 @@ import community.barassistant.barassistant.R;
 public class ImageHolder extends RecyclerView.ViewHolder {
 
     private ImageView image;
+    private TextView description;
 
     public ImageHolder(View itemView) {
         super(itemView);
         image = (ImageView) itemView.findViewById(R.id.image);
+        description = (TextView) itemView.findViewById(R.id.imageDescription);
     }
 
     public ImageView getImageView() {
         return image;
+    }
+
+    public TextView getDescriptionTextView() {
+        return description;
     }
 }

@@ -44,4 +44,6 @@
     <item name="red_A800" type="color">#C62828</item>
     <item name="red_A900" type="color">#B71C1C</item>
 
+    <item name="green_A400_loud" type="color">#00E676</item>
+    <item name="red_A400_loud" type="color">#FF1744</item>
 </resources>

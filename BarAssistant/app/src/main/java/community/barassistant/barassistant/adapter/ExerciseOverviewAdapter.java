@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import java.util.Collections;
 import java.util.List;
 
-import community.barassistant.barassistant.ImageLoaderSingleton;
+import community.barassistant.barassistant.util.ImageLoaderSingleton;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.adapter.holder.ExerciseHolder;
 import community.barassistant.barassistant.model.Exercise;

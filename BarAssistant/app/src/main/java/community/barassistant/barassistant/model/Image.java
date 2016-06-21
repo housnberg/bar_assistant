@@ -10,10 +10,11 @@ import android.provider.ContactsContract;
  */
 public class Image implements Parcelable {
 
+    private Bitmap bitmap;
     private Exercise exercise;
     private String imagePath;
     private int order;
-    private String description;
+    private String description = "";
 
     public Image() {
 
@@ -69,6 +70,14 @@ public class Image implements Parcelable {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
     @Override

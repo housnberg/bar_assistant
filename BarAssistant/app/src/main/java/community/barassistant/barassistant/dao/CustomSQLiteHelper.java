@@ -31,6 +31,8 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_WORKOUT_EXERCISE_WORKOUT_ID = "id_workout";
     public static final String COLUMN_WORKOUT_EXERCISE_EXERCISE_ID = "id_exercise";
     public static final String COLUMN_WORKOUT_EXERCISE_REPETITIONS = "repetitions";
+    //TODO: DIESE INFO GEHOERT ZUR UEBUNG!!!
+    public static final String COLUMN_WORKOUT_EXERCISE_IS_REPEATABLE = "is_repeatable";
     public static final String COLUMN_WORKOUT_EXERCISE_ORDER = "orders";
 
     public static final String TABLE_IMAGE_PATH = "image_path";
@@ -72,6 +74,7 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
             + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID + " integer not null references " + CustomSQLiteHelper.TABLE_EXERCISE + "(" + CustomSQLiteHelper.COLUMN_EXERCISE_ID + ") on delete cascade on update cascade, "
             + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID + " integer not null references " + CustomSQLiteHelper.TABLE_WORKOUT + "(" + CustomSQLiteHelper.COLUMN_WORKOUT_ID + ") on delete cascade on update cascade, "
             + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_REPETITIONS + " integer not null default 10, "
+            + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_IS_REPEATABLE + " integer not null default 1, "
             + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_ORDER + " integer not null, "
             + "primary key (" + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID + "," + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID + ")"
             + ");";
@@ -99,7 +102,10 @@ public class CustomSQLiteHelper extends SQLiteOpenHelper {
         database.execSQL(CustomSQLiteHelper.CREATE_TABLE_WORKOUT);
         database.execSQL(CustomSQLiteHelper.CREATE_TABLE_WORKOUT_EXERCISE);
         database.execSQL(CustomSQLiteHelper.CREATE_TABLE_IMAGE_PATH);
+        initDatabase(database);
+    }
 
+    private void initDatabase(final SQLiteDatabase database) {
         try {
             in = context.getAssets().open("init_database.sql");
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));

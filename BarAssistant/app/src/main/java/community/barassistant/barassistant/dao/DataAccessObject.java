@@ -70,6 +70,11 @@ public class DataAccessObject {
                     + " WHERE we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID + " = ? "
                     + " AND we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID + " = ?;";
 
+    private static final String SELECT_IS_REPEATABLE_BY_PK =
+            "SELECT we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_IS_REPEATABLE + " FROM " + CustomSQLiteHelper.TABLE_WORKOUT_EXERCISE + " we "
+                    + " WHERE we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID + " = ? "
+                    + " AND we." + CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID + " = ?;";
+
     private static final String SELECT_WORKOUT_BY_ID =
             "SELECT w." + CustomSQLiteHelper.COLUMN_WORKOUT_ID + " FROM " + CustomSQLiteHelper.TABLE_WORKOUT + " w"
                     + " WHERE w." + CustomSQLiteHelper.COLUMN_WORKOUT_ID + " = ?;";
@@ -109,11 +114,6 @@ public class DataAccessObject {
         values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_EXERCISE_ID, exerciseId);
         values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_ORDER, order);
         long insertId = database.insert(CustomSQLiteHelper.TABLE_IMAGE_PATH, null, values);
-//        Cursor cursor = database.query(CustomSQLiteHelper.TABLE_IMAGE_PATH, allImagePathColumns, CustomSQLiteHelper.COLUMN_IMAGE_PATH_ID + " = " + imagePath, null, null, null, null);
-//        cursor.moveToFirst();
-//        Image newImage = cursorToImage(cursor);
-//        cursor.close();
-//        return newImage;
     }
 
     public List<Image> getImagePathByExerciseId(long exerciseId) {
@@ -184,12 +184,20 @@ public class DataAccessObject {
         return new Exercise(cursor.getLong(0), cursor.getString(1), cursor.getString(2));
     }
 
-    public long createWorkoutExercise(long workoutId, long exerciseId, int repetitions, int order) {
+    public long createWorkoutExercise(long workoutId, long exerciseId, int repetitions, boolean isRepeatable, int order) {
         ContentValues values = new ContentValues();
         values.put(CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID, workoutId);
         values.put(CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_EXERCISE_ID, exerciseId);
         values.put(CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_REPETITIONS, repetitions);
+
+        if (isRepeatable) {
+            values.put(CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_IS_REPEATABLE, 1);
+        } else {
+            values.put(CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_IS_REPEATABLE, 0);
+        }
+
         values.put(CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_ORDER, order);
+
         return database.insert(CustomSQLiteHelper.TABLE_WORKOUT_EXERCISE, null, values);
     }
 
@@ -227,6 +235,15 @@ public class DataAccessObject {
         cursor.close();
 
         return repetitions;
+    }
+
+    public boolean getIsRepeatable(long workoutId, long exerciseId) {
+        Cursor cursor = database.rawQuery(DataAccessObject.SELECT_IS_REPEATABLE_BY_PK, new String[] {String.valueOf(workoutId), String.valueOf(exerciseId)});
+        cursor.moveToFirst();
+        int repetitions = cursor.getInt(0);
+        cursor.close();
+
+        return repetitions != 0;
     }
 
     public Workout createWorkout(String exerciseName, String exerciseDescription, List<Exercise> exercises, List<Integer> repetitions, int rounds, int pauseExercises, int pauseRounds) {

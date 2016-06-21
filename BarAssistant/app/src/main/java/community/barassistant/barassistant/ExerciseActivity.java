@@ -1,12 +1,10 @@
 package community.barassistant.barassistant;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -15,15 +13,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import community.barassistant.barassistant.adapter.ComplexExerciseWorkoutPropertyAdapter;
 import community.barassistant.barassistant.adapter.ExerciseDetailAdapter;
-import community.barassistant.barassistant.adapter.ExerciseOverviewAdapter;
-import community.barassistant.barassistant.adapter.ExerciseTouchHelper;
-import community.barassistant.barassistant.adapter.ImageAdapter;
 import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.Image;
-import community.barassistant.barassistant.model.Workout;
+import community.barassistant.barassistant.util.ImageLoaderSingleton;
 
 /**
  * Created by EL on 11.06.2016.
@@ -36,7 +30,7 @@ public class ExerciseActivity extends AppCompatActivity {
 
     private DataAccessObject datasource;
     private Exercise exercise;
-    private List<Bitmap> items;
+    private List<Image> images;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +51,10 @@ public class ExerciseActivity extends AppCompatActivity {
         datasource = new DataAccessObject(this);
         datasource.open();
 
-        items = new ArrayList<Bitmap>();
+        images = new ArrayList<Image>();
         for (Image imagePath : exercise.getImagePaths()) {
-            items.add(ImageLoaderSingleton.getInstance().loadImageFromStorage(imagePath.getImagePath()));
+            imagePath.setBitmap(ImageLoaderSingleton.getInstance().loadImageFromStorage(imagePath.getImagePath()));
+            images.add(imagePath);
         }
 
         initToolbar();
@@ -69,15 +64,21 @@ public class ExerciseActivity extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_navigate_before_white_24dp);
+        toolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
         toolbar.setTitle(exercise.getName());
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void setupRecyclerView(final RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new ExerciseDetailAdapter(this, R.layout.list_item_exercise_detail, items));
+        recyclerView.setAdapter(new ExerciseDetailAdapter(this, R.layout.list_item_exercise_detail, images));
     }
 
     @Override

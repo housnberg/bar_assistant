@@ -23,10 +23,19 @@
     <string name="actionSort">Sort</string>
     <string name="actionSave">Save</string>
 
-    <string name="toastInvalidName">This is not a valid name. Please use at least three characters.</string>
-    <string name="toastNoExercisesSelected">There are no exercises selected. Please select at least one exercise.</string>
+    <string name="snackbarInvalidName">This is not a valid name. Please use at least three characters.</string>
+    <string name="snackbarNoExercisesSelected">There are no exercises selected. Please select at least one exercise.</string>
+    <string name="snackbarExerciseAddedSuccessfully">Exercise added successfully!</string>
+    <string name="snackbarWorkoutAddedSuccessfully">Workout added successfully!</string>
+    <string name="snackbarChangesPerformedSuccessfully">Performed changes</string>
+    <string name="snackbarSuccessfullyAddedImageDescription">Added image description</string>
 
     <string name="finishExercise">DONE!</string>
     <string name="countdownText">TAKE A BREATH!</string>
     <string name="skipPause">SKIP PAUSE!</string>
+    <string name="radioSeconds">Seconds</string>
+
+    <string name="unitRepetitions">Reps</string>
+    <string name="unitSeconds">Sec</string>
+
 </resources>

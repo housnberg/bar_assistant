@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import community.barassistant.barassistant.R;
+import community.barassistant.barassistant.model.Image;
 import community.barassistant.barassistant.model.Workout;
 
 /**
@@ -21,12 +22,12 @@ import community.barassistant.barassistant.model.Workout;
  */
 public class ExerciseDetailAdapter extends RecyclerView.Adapter<ExerciseDetailAdapter.ExerciseImageHolder> {
 
-    private List<Bitmap> images;
+    private List<Image> images;
     private Activity context;
     private int resource;
 
-    public ExerciseDetailAdapter(Activity context, @LayoutRes int resource, List<Bitmap> workouts) {
-        this.images = workouts;
+    public ExerciseDetailAdapter(Activity context, @LayoutRes int resource, List<Image> images) {
+        this.images = images;
         this.context = context;
         this.resource = resource;
     }
@@ -39,9 +40,10 @@ public class ExerciseDetailAdapter extends RecyclerView.Adapter<ExerciseDetailAd
 
     @Override
     public void onBindViewHolder(ExerciseImageHolder viewHolder, int position) {
-        Bitmap image = images.get(position);
+        Bitmap image = images.get(position).getBitmap();
         viewHolder.image.setImageBitmap(image);
         viewHolder.order.setText(String.valueOf(position + 1));
+        viewHolder.description.setText(images.get(position).getDescription());
     }
 
     @Override

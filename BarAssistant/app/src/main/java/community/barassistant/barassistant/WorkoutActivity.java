@@ -2,6 +2,7 @@ package community.barassistant.barassistant;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,13 +28,11 @@ import community.barassistant.barassistant.model.Workout;
 /**
  * Created by EL on 11.06.2016.
  */
-public class WorkoutActivity extends AppCompatActivity {
+public class WorkoutActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private ShareActionProvider shareActionProvider;
     private Intent shareIntent;
-    private RelativeLayout wrapper;
 
     private TextView description;
     private TextView rounds;
@@ -44,6 +43,8 @@ public class WorkoutActivity extends AppCompatActivity {
     private Workout workout;
     private List<Exercise> exercises;
     private Map<Long, Integer> repetitionsPerExercise;
+    private Map<Long, Boolean> exercisesRepeatable;
+    private FloatingActionButton fabMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         description = (TextView) findViewById(R.id.workoutDescription);
+        fabMain = (FloatingActionButton) findViewById(R.id.fabMain);
+        fabMain.setOnClickListener(this);
         rounds = (TextView) findViewById(R.id.rounds);
         pauseExercises = (TextView) findViewById(R.id.pauseExercises);
         pauseRounds = (TextView) findViewById(R.id.pauseRounds);
@@ -69,15 +72,17 @@ public class WorkoutActivity extends AppCompatActivity {
         datasource.open();
 
         exercises = new ArrayList<Exercise>();
-        //exercises.add(workout);
         exercises.addAll(datasource.getExercisesByWorkoutId(workout.getId()));
 
         repetitionsPerExercise = new HashMap<Long, Integer>();
+        exercisesRepeatable = new HashMap<Long, Boolean>();
 
         for (Object exercise : exercises) {
             repetitionsPerExercise.put(((Exercise) exercise).getId(), datasource.getRepetitions(workout.getId(), ((Exercise) exercise).getId()));
+            exercisesRepeatable.put(((Exercise) exercise).getId(), datasource.getIsRepeatable(workout.getId(), ((Exercise) exercise).getId()));
         }
         workout.setRepetitionsPerExercise(repetitionsPerExercise);
+        workout.setExercisesRepeatable(exercisesRepeatable);
 
 
 
@@ -103,10 +108,16 @@ public class WorkoutActivity extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_navigate_before_white_24dp);
+        toolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
         toolbar.setTitle(workout.getName());
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void setupRecyclerView(final RecyclerView recyclerView) {
@@ -118,34 +129,41 @@ public class WorkoutActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolar_share, menu);
-        MenuItem item = menu.findItem(R.id.actionShare);
-
-        // Fetch and store ShareActionProvider
-        //shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-        //setShareIntent(shareIntent);
         return true;
     }
 
-    private void setShareIntent(Intent shareIntent) {
-        if (shareActionProvider != null) {
-            shareActionProvider.setShareIntent(shareIntent);
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == fabMain.getId()) {
+
         }
     }
 
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == R.id.actionSave) {
-//            Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-//            shareIntent.setType("*/*");
-//            // Add data to the intent, the receiving app will decide what to do with it.
-//            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
-//            shareIntent.putExtra(Intent.EXTRA_TEXT, "Text");
-//            startActivity(Intent.createChooser(shareIntent, "How do you want to share?"));
-//
-//        }
-//        return true;
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.actionShare) {
+            Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            // Add data to the intent, the receiving app will decide what to do with it.
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, workout.getName() + " is a hell of a Workout!");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, buildShareMessage());
+            startActivity(Intent.createChooser(shareIntent, "How do you want to share?"));
+
+        }
+        return true;
+    }
+
+    private String buildShareMessage() {
+
+        StringBuilder shareMessage = new StringBuilder("Try this out!\n");
+
+        for (Exercise exercise : exercises) {
+            shareMessage.append(repetitionsPerExercise.get(exercise.getId()) + " Reps of " + exercise.getName() + "\n");
+        }
+        shareMessage.append("\nDo this " + workout.getRounds() + " rounds with " + workout.getPauseExercises() + " sec pause between exercsises and " + workout.getPauseRounds() + " sec pause between rounds!");
+        return shareMessage.toString();
+    }
 
     public void startWorkout(View view){
         Intent intent = new Intent(this, WorkoutExerciseActivity.class);

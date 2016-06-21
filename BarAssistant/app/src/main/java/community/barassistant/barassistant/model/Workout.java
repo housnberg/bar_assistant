@@ -22,10 +22,12 @@ public class Workout implements Parcelable {
 
     private List<Exercise> exercises;
     private Map<Long, Integer> repetitionsPerExercise;
+    private Map<Long, Boolean> exercisesRepeatable;
 
     public Workout() {
         exercises = new ArrayList<Exercise>();
         repetitionsPerExercise = new HashMap<Long, Integer>();
+        exercisesRepeatable = new HashMap<Long, Boolean>();
     }
 
     public Workout(long id, String name, String description, int rounds, int pauseExercises, int pauseRounds) {
@@ -114,6 +116,18 @@ public class Workout implements Parcelable {
 
     public int getRepetitionByExerciseId(long exerciseId) {
         return repetitionsPerExercise.get(exerciseId);
+    }
+
+    public boolean getIsExerciseRepeatableByExerciseId(long exerciseId) {
+        return exercisesRepeatable.get(exerciseId);
+    }
+
+    public Map<Long, Boolean> getExercisesRepeatable() {
+        return exercisesRepeatable;
+    }
+
+    public void setExercisesRepeatable(Map<Long, Boolean> exercisesRepeatable) {
+        this.exercisesRepeatable = exercisesRepeatable;
     }
 
     public boolean addExercise(Exercise exercise) {

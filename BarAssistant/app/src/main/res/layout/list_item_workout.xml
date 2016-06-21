@@ -34,6 +34,7 @@
             android:textSize="12dp"
             android:textColor="@color/colorSecondaryText"
             android:paddingLeft="@dimen/marginInputField"
+            android:paddingRight="@dimen/marginInputField"
             android:gravity="left" />
 
     </RelativeLayout>
