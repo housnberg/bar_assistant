@@ -3,8 +3,10 @@
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/shape_default">
+    android:background="@color/backgroundListItem"
+    android:elevation="@dimen/elevation_card"
+    android:layout_marginBottom="@dimen/margin_card"
+    android:layout_marginTop="@dimen/margin_card">
 
     <RelativeLayout
         android:layout_height="76dp"
@@ -20,21 +22,20 @@
             android:textSize="16dp"
             android:textStyle="bold"
             android:layout_alignParentTop="true"
-            android:paddingLeft="8dp"
-            android:gravity="left|bottom"
-            />
+            android:paddingLeft="@dimen/marginInputField"
+            android:gravity="left|bottom" />
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/workoutDescriptionTextView"
-            android:layout_below="@+id/exerciseNameTextView"
+            android:layout_below="@+id/workoutNameTextView"
             android:layout_height="46dp"
             android:layout_width="match_parent"
             android:layout_weight="5"
             android:textSize="12dp"
             android:textColor="@color/colorSecondaryText"
-            android:paddingLeft="8dp"
-            android:gravity="left"
-            />
+            android:paddingLeft="@dimen/marginInputField"
+            android:paddingRight="@dimen/marginInputField"
+            android:gravity="left" />
 
     </RelativeLayout>
 </LinearLayout>

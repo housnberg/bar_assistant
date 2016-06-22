@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <com.github.siyamed.shapeimageview.RoundedImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/test"
+        app:siRadius="0dp"
+        app:siBorderWidth="0dp"
+        app:siSquare="true"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="REPS"
+        android:gravity="center"
+        android:textSize="60dp"
+        android:id="@+id/textView" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="@string/finishExercise"
+        android:textSize="65dp"
+        android:textColor="@color/backgroundListItem"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@color/red_A700"
+        android:id="@+id/borderlessButton"
+        android:layout_weight="0.1"
+        android:onClick="onClick"/>
+</LinearLayout>

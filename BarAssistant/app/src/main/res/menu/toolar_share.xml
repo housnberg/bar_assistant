@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".AddExerciseActivity">
+    <item
+        android:id="@+id/actionShare"
+        android:icon="@mipmap/ic_share_white_24dp"
+        android:title="@string/actionSave"
+        app:showAsAction="always"
+        android:actionProviderClass="android.widget.ShareActionProvider"/>
+
+    <!-- Settings, should always be in the overflow -->
+    <!--
+    <item android:id="@+id/action_settings"
+        android:title="@string/actionSettings"
+        app:showAsAction="never"/>
+        -->
+
+</menu>

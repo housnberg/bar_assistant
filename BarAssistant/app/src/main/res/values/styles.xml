@@ -8,6 +8,26 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/grey_A100</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="alertDialogTheme">@style/MyDialogTheme</item>
+    </style>
+
+    <style name="ListView" parent="@android:style/Widget.ListView">
+        <item name="android:background">@color/red_A50</item>
+        <item name="android:cacheColorHint">@android:color/transparent</item>
+        <item name="android:divider">@android:color/transparent</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!--buttons color-->
+        <item name="colorAccent">@color/colorPrimary</item>
+        <!--title and message color-->
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <!--dialog background-->
+        <item name="android:windowBackground">@color/backgroundListItem</item>
+
     </style>
 
 </resources>

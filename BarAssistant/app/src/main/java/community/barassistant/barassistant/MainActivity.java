@@ -19,11 +19,12 @@ import community.barassistant.barassistant.adapter.ViewPagerAdapter;
 import community.barassistant.barassistant.fragment.ExcerciseFragment;
 import community.barassistant.barassistant.fragment.HomeFragment;
 import community.barassistant.barassistant.fragment.WorkoutFragment;
-import community.barassistant.barassistant.services.ImageService;
 
 /**
- * @author Eugen Ljain
+ * @author Eugen Ljavin
  */
+
+//TODO: IMPLEMENT MANAGER BEAN TO PREVENT QUERY DATABASE ALL THE TIME
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -33,24 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private ExcerciseFragment exercisesFragment;
     private WorkoutFragment workoutFragment;
     private FloatingActionButton mSharedFab;
-
-    private ImageService imageService;
-    private boolean bound = false;
-
-    // Get reference to the ImageService
-    private ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            ImageService.LocalBinder binder = (ImageService.LocalBinder) service;
-            imageService = binder.getService();
-            bound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            bound = false;
-        }
-    };
+    private View contentWrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
         mSharedFab.setVisibility(View.INVISIBLE);
+        contentWrapper = findViewById(R.id.content_wrapper);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -135,33 +120,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-//    @Override
-//    protected void onStart(){
-//        super.onStart();
-//        // Bind ImageService
-//        Intent intent = new Intent(this, ImageService.class);
-//        bindService(intent, connection, Context.BIND_AUTO_CREATE);
-//    }
-
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        //Unbind Service. Service gets destroyed when not bound by any activity.
-        if(bound){
-            unbindService(connection);
-            bound = false;
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Intent intent = new Intent(this, ImageService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
-    }
-
-    public ImageService getImageService() {
-        return imageService;
+    public View getContentWrapper() {
+        return contentWrapper;
     }
 
 }

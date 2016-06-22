@@ -72,10 +72,15 @@
                 android:paddingLeft="8dp"
                 android:gravity="left" />
 
-            <EditText
+            <com.lantouzi.wheelview.WheelView
+                android:id="@+id/roundsWheeler"
+                android:layout_weight="2.5"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2.5"/>
+                app:lwvHighlightColor="@color/colorPrimary"
+                app:lwvMarkColor="@color/colorDivider"
+                app:lwvIntervalFactor="1.5"
+                app:lwvMarkRatio="0.2" />
 
         </LinearLayout>
 

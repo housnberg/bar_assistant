@@ -1,12 +1,10 @@
 package community.barassistant.barassistant;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -14,35 +12,31 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import community.barassistant.barassistant.adapter.ExerciseSelectionAdapter;
-import community.barassistant.barassistant.adapter.ItemClickSupport;
-import community.barassistant.barassistant.dao.ExercisesDAO;
+import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
 
 /**
  * Created by EL on 05.06.2016.
  */
-public class AddExerciseToWorkoutActivity extends AppCompatActivity {
+public class AddExerciseToWorkoutActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final int REQUEST_CODE = 1;
 
     private Toolbar toolbar;
-    private FloatingActionButton mSharedFab;
-    private EditText exerciseName;
-    private EditText exerciseDescription;
-    private Bitmap photo;
     private ListView exerciseSelectionListView;
-    private CheckBox choice;
+    private FloatingActionButton mSharedFab;
 
-    private ExercisesDAO datasource;
+    private DataAccessObject datasource;
     private List<Exercise> exercises;
-    private List<Exercise> selectedExercises;
+    private List<Exercise> selectableExercises;
+    private ArrayAdapter<Exercise> adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +44,17 @@ public class AddExerciseToWorkoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_exercise_to_workout);
 
         exerciseSelectionListView = (ListView) findViewById(R.id.exerciseSelectionListView);
+        mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
+        mSharedFab.setOnClickListener(this);
 
-        selectedExercises = new ArrayList<Exercise>();
-
-        datasource = new ExercisesDAO(this);
+        datasource = new DataAccessObject(this);
         datasource.open();
         exercises = datasource.getAllExercises();
 
-        ArrayAdapter<Exercise> adapter = new ExerciseSelectionAdapter(this, R.layout.list_select_exercises, R.id.exerciseNameTextView, exercises);
+        selectableExercises = new ArrayList<Exercise>();
+
+        //TODO: ONLY SHOW THE EXERCISES WHICH ARE NOT SELECTED
+        adapter = new ExerciseSelectionAdapter(this, R.layout.list_select_exercises, R.id.exerciseNameTextView, exercises);
         exerciseSelectionListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         exerciseSelectionListView.setAdapter(adapter);
 
@@ -91,10 +88,9 @@ public class AddExerciseToWorkoutActivity extends AppCompatActivity {
 
             for (int i = 0; i < selectedExercisesAmount; i++) {
                 if (sparseBooleanArray.get(i)) {
-                    selectedExercises.add((Exercise) exerciseSelectionListView.getItemAtPosition(i));
+                    selectableExercises.add((Exercise) exerciseSelectionListView.getItemAtPosition(i));
                 }
             }
-
             finish();
         }
         return true;
@@ -103,7 +99,24 @@ public class AddExerciseToWorkoutActivity extends AppCompatActivity {
     @Override
     public void finish() {
         Intent intent = new Intent();
-        //intent.putParcelableArrayListExtra("data", selectedExercises);
+        intent.putParcelableArrayListExtra("data", (ArrayList<Exercise>) selectableExercises);
+        setResult(RESULT_OK, intent);
+        super.finish();
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.fabMain) {
+            Intent intent = new Intent(this, AddExerciseActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (REQUEST_CODE == requestCode && RESULT_OK == resultCode) {
+            selectableExercises.add(datasource.getLastAddedExercise());
+            adapter.notifyDataSetChanged();
+        }
+    }
 }

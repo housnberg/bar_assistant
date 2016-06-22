@@ -1,0 +1,81 @@
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:orientation="vertical"
+    android:background="@color/backgroundListItem"
+    android:elevation="@dimen/elevation_card"
+    android:layout_marginBottom="@dimen/margin_card"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/workoutDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This is a simple description"
+        android:background="@drawable/shape_default"
+        android:padding="@dimen/padding_card"
+        android:visibility="gone"
+        android:textColor="@color/colorSecondaryText" />
+
+    <TextView
+        android:id="@+id/rounds"
+        android:layout_below="@+id/workoutDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:background="@color/backgroundListItem"
+        android:padding="@dimen/padding_card" />
+
+    <TextView
+        android:layout_toRightOf="@+id/rounds"
+        android:layout_below="@+id/workoutDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rounds"
+        android:background="@color/backgroundListItem"
+        android:paddingTop="@dimen/padding_card" />
+
+    <TextView
+        android:id="@+id/pauseExercises"
+        android:layout_below="@+id/rounds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:background="@color/backgroundListItem"
+        android:paddingLeft="@dimen/padding_card"
+        android:paddingRight="@dimen/padding_card"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/pauseExercises"
+        android:layout_below="@+id/rounds"
+        android:text="sec pause between exercises"
+        android:background="@color/backgroundListItem" />
+
+    <TextView
+        android:id="@+id/pauseRounds"
+        android:layout_below="@+id/pauseExercises"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:text="30"
+        android:background="@color/backgroundListItem"
+        android:padding="@dimen/padding_card" />
+
+    <TextView
+        android:layout_toRightOf="@+id/pauseRounds"
+        android:layout_below="@+id/pauseExercises"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="sec pause between rounds"
+        android:background="@color/backgroundListItem"
+        android:paddingTop="@dimen/padding_card"/>
+
+</RelativeLayout>

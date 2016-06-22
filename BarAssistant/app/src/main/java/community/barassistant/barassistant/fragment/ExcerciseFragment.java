@@ -1,34 +1,33 @@
 package community.barassistant.barassistant.fragment;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.github.fabtransitionactivity.SheetLayout;
 
 import java.util.List;
 
 import community.barassistant.barassistant.AddExerciseActivity;
+import community.barassistant.barassistant.ExerciseActivity;
 import community.barassistant.barassistant.MainActivity;
 import community.barassistant.barassistant.R;
-import community.barassistant.barassistant.adapter.ExerciseAdapter;
+import community.barassistant.barassistant.adapter.ExerciseOverviewAdapter;
 import community.barassistant.barassistant.adapter.ItemClickSupport;
+import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
-import community.barassistant.barassistant.dao.ExercisesDAO;
-import community.barassistant.barassistant.services.ImageService;
+import community.barassistant.barassistant.util.Constants;
+import community.barassistant.barassistant.util.Helper;
 
 /**
  * @author Eugen Ljavin
@@ -41,10 +40,8 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
     private FloatingActionButton fabSecondary;
     private SheetLayout mSheetLayout;
     private RecyclerView recyclerView;
-    private MenuItem sortItem;
-    private MenuItem filterItem;
 
-    private ExercisesDAO datasource;
+    private DataAccessObject datasource;
     private List<Exercise> exercises;
 
     private boolean isFabOpen = true;
@@ -59,18 +56,13 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
         View rootView = inflater.inflate(R.layout.fragment_main_recycler_view, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
 
-        datasource = new ExercisesDAO(getActivity());
+        datasource = new DataAccessObject(getActivity());
         datasource.open();
         exercises = datasource.getAllExercises();
 
         setHasOptionsMenu(true);
-        return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         setupRecyclerView();
+        return rootView;
     }
 
     @Override
@@ -82,11 +74,13 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new ExerciseAdapter(getActivity(), exercises, datasource));
+        recyclerView.setAdapter(new ExerciseOverviewAdapter(getActivity(), exercises));
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Toast.makeText(getActivity(), position + "", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), ExerciseActivity.class);
+                intent.putExtra("data", exercises.get(position));
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
     }
@@ -126,45 +120,17 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
 
             Exercise exercise = datasource.getLastAddedExercise();
             if (!exercises.contains(exercise)) {
                 exercises.add(exercise);
                 recyclerView.getAdapter().notifyDataSetChanged();
             }
-            mSheetLayout.contractFab();
+
+            Helper.createSnackbar(getActivity(), ((MainActivity) getActivity()).getContentWrapper(), R.string.snackbarExerciseAddedSuccessfully).show();
         }
+        mSheetLayout.contractFab();
     }
 
-    /*
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.toolbar_main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-        filterItem = (MenuItem) getView().getRootView().findViewById(R.id.actionFilter);
-        sortItem = (MenuItem) getView().getRootView().findViewById(R.id.actionSort);
-        filterItem.setVisible(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
-                return true;
-
-            case R.id.actionFilter:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
-    */
 }

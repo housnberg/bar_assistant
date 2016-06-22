@@ -1,5 +1,6 @@
 package community.barassistant.barassistant;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -10,29 +11,27 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.List;
+import java.util.Map;
 
 import community.barassistant.barassistant.adapter.ViewPagerAdapter;
-import community.barassistant.barassistant.behavior.Fx;
-import community.barassistant.barassistant.dao.WorkoutDAO;
+import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.fragment.AddExercisesToWorkoutFragment;
 import community.barassistant.barassistant.fragment.AddPropertiesToWorkoutFragment;
+import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.Workout;
+import community.barassistant.barassistant.util.Constants;
+import community.barassistant.barassistant.util.Helper;
 
 /**
  * @author Eugen Ljavin
  */
-public class AddWorkoutActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddWorkoutActivity extends AppCompatActivity {
 
-    FloatingActionButton btnUp, btnDown;
-    TextView textViewUp, textViewMid, textViewBottom;
-    TextView txt_help_gest;
+    private DataAccessObject datasource;
 
-    int nStart = 5;
-    int nEnd = 250;
-
-    private WorkoutDAO datasource;
+    private int result = RESULT_CANCELED;
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -40,6 +39,7 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
     private AddExercisesToWorkoutFragment addExercisesToWorkoutFragment;
     private AddPropertiesToWorkoutFragment addPropertiesToWorkoutFragment;
     private FloatingActionButton mSharedFab;
+    private View contentWrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +49,11 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
         mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
         mSharedFab.setVisibility(View.INVISIBLE);
 
-        datasource = new WorkoutDAO(this);
+        datasource = new DataAccessObject(this);
         datasource.open();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+        contentWrapper = findViewById(R.id.content_wrapper);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -64,25 +65,26 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_close_white_24dp);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
     }
 
     private void setupViewPager(final ViewPager viewPager) {
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        addPropertiesToWorkoutFragment = new AddPropertiesToWorkoutFragment();
         addExercisesToWorkoutFragment = new AddExercisesToWorkoutFragment();
-        pagerAdapter.addFragment(addExercisesToWorkoutFragment, getResources().getString(R.string.addExercisesToWorkoutFragment));
+        addPropertiesToWorkoutFragment = new AddPropertiesToWorkoutFragment();
         pagerAdapter.addFragment(addPropertiesToWorkoutFragment, getResources().getString(R.string.addPropertiesToWorkoutFragment));
+        pagerAdapter.addFragment(addExercisesToWorkoutFragment, getResources().getString(R.string.addExercisesToWorkoutFragment));
 
         viewPager.setAdapter(pagerAdapter);
 
-        addExercisesToWorkoutFragment.shareFab(mSharedFab); // To init the FAB
+        addPropertiesToWorkoutFragment.shareFab(mSharedFab); // To init the FAB
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -98,12 +100,12 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
                     case ViewPager.SCROLL_STATE_IDLE:
                         switch (viewPager.getCurrentItem()) {
                             case 0:
-                                addPropertiesToWorkoutFragment.shareFab(null); // Remove FAB from fragment
-                                addExercisesToWorkoutFragment.shareFab(mSharedFab);
-                                break;
-                            case 1:
                                 addExercisesToWorkoutFragment.shareFab(null); // Remove FAB from fragment
                                 addPropertiesToWorkoutFragment.shareFab(mSharedFab);
+                                break;
+                            case 1:
+                                addPropertiesToWorkoutFragment.shareFab(null); // Remove FAB from fragment
+                                addExercisesToWorkoutFragment.shareFab(mSharedFab);
                                 break;
                         }
                         //mSharedFab.show(); // Show animation
@@ -129,18 +131,31 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
         int workoutRounds = addPropertiesToWorkoutFragment.getRoundsWheeler().getSelectedPosition() + 1;
         int workoutPauseExercises = addPropertiesToWorkoutFragment.getPauseExercisesWheeler().getSelectedPosition() + 1;
         int workoutPauseRounds = addPropertiesToWorkoutFragment.getPauseRoundsWheeler().getSelectedPosition() + 1;
+        List<Exercise> exercises = addExercisesToWorkoutFragment.getSelectedExercises();
+        Map<Long, Integer> exerciseRepetitions = addExercisesToWorkoutFragment.getExerciseRepetitions();
+        Map<Long, Boolean> exercisesRepeatable = addExercisesToWorkoutFragment.getExercisesRepeatable();
 
         if (item.getItemId() == R.id.actionSave) {
             if (workoutName.length() < 3) {
-                Toast.makeText(this, R.string.toastInvalidName, Toast.LENGTH_LONG).show();
+                Helper.createSnackbar(this, contentWrapper, R.string.snackbarInvalidName, Constants.STATUS_ERROR).show();
+            } else if (exercises == null || exercises.isEmpty()) {
+                Helper.createSnackbar(this, contentWrapper, R.string.snackbarNoExercisesSelected, Constants.STATUS_ERROR).show();
             } else {
                 Workout workout = null;
-                workout = datasource.createExercise(workoutName, workoutDescription, workoutRounds, workoutPauseExercises, workoutPauseRounds);
-                System.out.println("Workout with the id " + workout.getId() + " set.");
+                workout = datasource.createWorkout(workoutName, workoutDescription, null, null, workoutRounds, workoutPauseExercises, workoutPauseRounds);
+                for (int order = 0; order < exercises.size(); order ++) {
+                    Exercise exercise = exercises.get(order);
+                    datasource.createWorkoutExercise(workout.getId(), exercise.getId(), exerciseRepetitions.get(exercise.getId()), exercisesRepeatable.get(exercise.getId()), order);
+                }
+                result = RESULT_OK;
                 finish();
             }
         }
         return true;
+    }
+
+    public View getContentWrapper() {
+        return contentWrapper;
     }
 
     @Override
@@ -156,35 +171,10 @@ public class AddWorkoutActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public void onClick(View v) {
-//            String getString = String.valueOf(textViewMid.getText());
-//            int curent = Integer.parseInt(getString);
-//            if (v == btnUp) {
-//                if (curent < nEnd) {
-//                    curent++;
-//                    textViewUp.setText(String.valueOf(curent - 1));
-//                    textViewMid.setText(String.valueOf(curent));
-//                    textViewBottom.setText(String.valueOf(curent + 1));
-//                }
-//
-//            }
-//            if (v == btnDown) {
-//                if (curent > nStart) {
-//                    curent--;
-//                    textViewUp.setText(String.valueOf(curent - 1));
-//                    textViewMid.setText(String.valueOf(curent));
-//                    textViewBottom.setText(String.valueOf(curent + 1));
-//                }
-//            }
-
-        if(txt_help_gest.isShown()){
-            Fx.slide_up(this, txt_help_gest);
-            txt_help_gest.setVisibility(View.GONE);
-        }
-        else{
-            txt_help_gest.setVisibility(View.VISIBLE);
-            Fx.slide_down(this, txt_help_gest);
-        }
-
+    public void finish() {
+        Intent intent = new Intent();
+        setResult(result, intent);
+        super.finish();
     }
+
 }
