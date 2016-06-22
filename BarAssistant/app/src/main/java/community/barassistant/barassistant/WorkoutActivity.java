@@ -55,7 +55,7 @@ public class WorkoutActivity extends AppCompatActivity implements View.OnClickLi
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         description = (TextView) findViewById(R.id.workoutDescription);
         fabMain = (FloatingActionButton) findViewById(R.id.fabMain);
-        fabMain.setOnClickListener(this);
+        //fabMain.setOnClickListener(this);
         rounds = (TextView) findViewById(R.id.rounds);
         pauseExercises = (TextView) findViewById(R.id.pauseExercises);
         pauseRounds = (TextView) findViewById(R.id.pauseRounds);
@@ -166,6 +166,7 @@ public class WorkoutActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void startWorkout(View view){
+        System.out.println("startWorkout");
         Intent intent = new Intent(this, WorkoutExerciseActivity.class);
         intent.putExtra("workout", workout);
         startActivity(intent);

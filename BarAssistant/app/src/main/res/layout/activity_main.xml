@@ -81,9 +81,7 @@
         android:visibility="invisible"
         app:backgroundTint="@color/colorPrimary"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_behavior="community.barassistant.barassistant.behavior.FabScrollBehavior"
-        app:layout_anchor="@id/content_wrapper"
-        app:layout_anchorGravity="bottom|right|end"/>
+        app:layout_behavior="community.barassistant.barassistant.behavior.FabScrollBehavior"/>
 
     <com.github.fabtransitionactivity.SheetLayout
         android:id="@+id/bottom_sheet"

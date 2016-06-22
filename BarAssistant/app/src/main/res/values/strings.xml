@@ -34,6 +34,7 @@
     <string name="countdownText">TAKE A BREATH!</string>
     <string name="skipPause">SKIP PAUSE!</string>
     <string name="radioSeconds">Seconds</string>
+    <string name="radioRepititions">Repititions</string>
 
     <string name="unitRepetitions">Reps</string>
     <string name="unitSeconds">Sec</string>

@@ -41,6 +41,14 @@
             android:label="@string/workoutActivity">
 
         </activity>
+        <activity android:name=".WorkoutExerciseActivity"
+            android:label="@string/workoutExerciseActivity">
+
+        </activity>
+        <activity android:name=".CountdownActivity"
+            android:label="@string/countdownActivity">
+
+        </activity>
 
         <service android:name=".services.ImageService"
             android:exported="false"/>

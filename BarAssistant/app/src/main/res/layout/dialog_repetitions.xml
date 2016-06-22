@@ -16,7 +16,7 @@
             android:id="@+id/radio_repetitions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/radioRepetitions"
+            android:text="@string/radioRepititions"
             android:checked="true"
             android:layout_weight="0.5"/>
 
