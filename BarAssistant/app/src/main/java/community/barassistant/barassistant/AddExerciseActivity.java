@@ -3,9 +3,13 @@ package community.barassistant.barassistant;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.IBinder;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -21,7 +25,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +41,8 @@ import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.Image;
 import community.barassistant.barassistant.util.Constants;
-import community.barassistant.barassistant.util.Helper;
-import community.barassistant.barassistant.util.ImageLoaderSingleton;
+import community.barassistant.barassistant.services.CountdownTimerService;
+import community.barassistant.barassistant.services.TimerService;
 
 /**
  * @author Eugen Ljavin
@@ -53,8 +62,12 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
     private EditText exerciseDescription;
     private RecyclerView recyclerView;
     private View contentWrapper;
+    private CountdownTimerService CountdownTimerService;
+    private TimerService TimerService;
 
     private Bitmap photo;
+    private boolean boundCountdownTimer = false;
+    private boolean boundTimer = false;
 
     private List<Image> images;
 
@@ -65,7 +78,6 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
 
         mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
         mSharedFab.setOnClickListener(this);
-
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         contentWrapper = findViewById(R.id.content_wrapper);
 
@@ -115,6 +127,8 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         if (view.getId() == R.id.fabMain) {
             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            //CountdownTimerService.countdownTimer(30000);
+            TimerService.startTimer();
         }
     }
 
@@ -168,6 +182,10 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
             images.add(image);
             recyclerView.getAdapter().notifyDataSetChanged();
         }
+
+        Intent intentTimer = new Intent(this, TimerService.class);
+        bindService(intentTimer,connectionTimer, Context.BIND_AUTO_CREATE);
+
     }
 
     private void showLocationDialog(final int imagePosition) {
@@ -187,6 +205,14 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
                         images.get(imagePosition).setDescription(imageDescritpion.getText().toString());
                         recyclerView.getAdapter().notifyDataSetChanged();
                         Helper.createSnackbar(AddExerciseActivity.this, contentWrapper, R.string.snackbarSuccessfullyAddedImageDescription, Constants.STATUS_INFO).show();
+        if (boundCountdownTimer) {
+            unbindService(connectionCountdownTimer);
+            boundCountdownTimer = false;
+        }
+        if(boundTimer){
+            unbindService(connectionTimer);
+            boundTimer = false;
+        }
                     }
                 });
 
@@ -203,6 +229,35 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
         // display dialog
         dialog.show();
     }
+
+    // Get reference to the CountdownTimerService
+    private ServiceConnection connectionCountdownTimer = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            CountdownTimerService.LocalBinder countdowntimebinder = (CountdownTimerService.LocalBinder) service;
+            CountdownTimerService = countdowntimebinder.getService();
+            boundCountdownTimer = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            boundCountdownTimer = false;
+        }
+    };
+
+    // Get reference to the TimerService
+    private ServiceConnection connectionTimer = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            TimerService.LocalBinder timerbinder = (TimerService.LocalBinder) service;
+            TimerService = timerbinder.getService();
+            boundTimer = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            boundTimer = false;
+        }
+    };
+
 
     @Override
     public void finish() {
