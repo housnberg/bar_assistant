@@ -1,5 +1,7 @@
 package community.barassistant.barassistant;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -43,6 +45,8 @@ import community.barassistant.barassistant.model.Image;
 import community.barassistant.barassistant.util.Constants;
 import community.barassistant.barassistant.services.CountdownTimerService;
 import community.barassistant.barassistant.services.TimerService;
+import community.barassistant.barassistant.util.Helper;
+import community.barassistant.barassistant.util.ImageLoaderSingleton;
 
 /**
  * @author Eugen Ljavin
