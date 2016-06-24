@@ -6,10 +6,16 @@ import android.os.Binder;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 
 public class CountdownTimerService extends Service {
+    public static final String CTS_TICK = "TICK";
+    public static final String CTS_FINISH = "FINISH";
+
+    private CountDownTimer countDownTimer;
 
     private long startTime = 0;
+    private LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
 
     private final IBinder BINDER = new LocalBinder();
     public class LocalBinder extends Binder {
@@ -25,17 +31,24 @@ public class CountdownTimerService extends Service {
     }
 
     public void countdownTimer(long time){
-        new CountDownTimer(time,1000){
+        countDownTimer = new CountDownTimer(time,1000){
 
             public void onTick(long millisUntilFinished){
-                System.out.println(millisUntilFinished /1000);
+                Intent intent = new Intent(CTS_TICK);
+                broadcastManager.sendBroadcast(intent);
             }
             public void onFinish(){
-                System.out.println("Ende");
+                Intent intent = new Intent(CTS_FINISH);
+                broadcastManager.sendBroadcast(intent);
 
             }
         }.start();
 
+    }
+
+    public void cancel(){
+        countDownTimer.cancel();
+        countDownTimer.onFinish();
     }
 
     public void timer(){

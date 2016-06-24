@@ -49,6 +49,10 @@
             android:label="@string/countdownActivity">
 
         </activity>
+        <activity android:name=".FinishActivity"
+            android:label="@string/finishActivity">
+
+        </activity>
 
         <service android:name=".services.ImageService"
             android:exported="false"/>
