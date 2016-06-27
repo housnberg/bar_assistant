@@ -9,12 +9,17 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import community.barassistant.barassistant.util.Constants;
+import community.barassistant.barassistant.util.Helper;
+
 /**
  * Created by ivan on 24.06.2016.
  */
 public class FinishActivity extends AppCompatActivity {
+
     private TextView textView;
     private long time;
+    private View contentWrapper;
 
     @Override
     protected void onCreate(Bundle savedBundleInstance){
@@ -25,6 +30,7 @@ public class FinishActivity extends AppCompatActivity {
         Bundle bundle  = getIntent().getExtras();
         time = bundle.getLong("workoutTime");
 
+        contentWrapper = findViewById(R.id.content_wrapper);
         String timeFormatted = (new SimpleDateFormat("mm:ss")).format(new Date(time));
         textView.append(timeFormatted);
     }
@@ -32,5 +38,10 @@ public class FinishActivity extends AppCompatActivity {
     public void onClick(View view){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Helper.createSnackbar(this, contentWrapper, R.string.snackbarNoBackPressAllowed, Constants.STATUS_INFO).show();
     }
 }

@@ -4,7 +4,18 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:background="@color/backgroundListItem"
+    android:id="@+id/content_wrapper">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:elevation="6dp">
+
+    </android.support.v7.widget.Toolbar>
 
     <com.github.siyamed.shapeimageview.RoundedImageView
         android:id="@+id/image"
@@ -15,24 +26,50 @@
         app:siBorderWidth="0dp"
         app:siSquare="true"/>
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="REPS"
-        android:gravity="center"
-        android:textSize="60dp"
-        android:id="@+id/workoutExerciseTextView" />
+        android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="@string/finishExercise"
-        android:textSize="65dp"
-        android:textColor="@color/backgroundListItem"
-        style="?android:attr/borderlessButtonStyle"
-        android:background="@color/red_A700"
-        android:id="@+id/borderlessButton"
-        android:layout_weight="0.1"
-        android:onClick="onClick"/>
+        <TextView
+            android:id="@+id/workoutExerciseTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/order"
+            android:padding="@dimen/padding_card"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:paddingRight="@dimen/padding_card"
+            android:layout_alignBaseline="@+id/order"
+            android:text="20" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/workoutExerciseTextView"
+            android:padding="@dimen/padding_card"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:paddingRight="@dimen/padding_card"
+            android:layout_alignBaseline="@+id/order"
+            android:text="Reps"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_below="@+id/workoutExerciseTextView"
+            android:layout_height="100dp"
+            android:text="@string/finishExercise"
+            android:textSize="36dp"
+            android:textStyle="bold"
+            android:textColor="@color/backgroundListItem"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="@drawable/material_button"
+            android:id="@+id/borderlessButton"
+            android:layout_weight="0.1"
+            android:onClick="onClick"
+            android:elevation="@dimen/elevation_card"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
 </LinearLayout>

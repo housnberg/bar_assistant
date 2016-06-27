@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import community.barassistant.barassistant.util.ImageLoaderSingleton;
+import community.barassistant.barassistant.util.ImageControllerSingleton;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.adapter.holder.ExerciseHolder;
 import community.barassistant.barassistant.model.Exercise;
@@ -62,7 +62,7 @@ public class ComplexExerciseWorkoutPropertyAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
             ExerciseHolder exerciseHolder = (ExerciseHolder) viewHolder;
-            ImageLoaderSingleton instance = ImageLoaderSingleton.getInstance();
+            ImageControllerSingleton instance = ImageControllerSingleton.getInstance();
             Exercise exercise = (Exercise) exercises.get(position);
             exerciseHolder.getExerciseNameTextView().setText(exercise.getName());
             exerciseHolder.getExerciseDescriptionTextView().setText(exercise.getDescription());

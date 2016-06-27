@@ -42,16 +42,18 @@
 
         </activity>
         <activity android:name=".WorkoutExerciseActivity"
-            android:label="@string/workoutExerciseActivity">
+            android:label="@string/workoutExerciseActivity"
+            android:screenOrientation="portrait">
 
         </activity>
         <activity android:name=".CountdownActivity"
-            android:label="@string/countdownActivity">
+            android:label="@string/countdownActivity"
+            android:screenOrientation="portrait">
 
         </activity>
         <activity android:name=".FinishActivity"
-            android:label="@string/finishActivity">
-
+            android:label="@string/finishActivity"
+            android:screenOrientation="portrait">
         </activity>
 
         <service android:name=".services.ImageService"

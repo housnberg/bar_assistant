@@ -1,19 +1,11 @@
 package community.barassistant.barassistant;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.IBinder;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,13 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,10 +29,8 @@ import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.Image;
 import community.barassistant.barassistant.util.Constants;
-import community.barassistant.barassistant.services.CountdownTimerService;
-import community.barassistant.barassistant.services.TimerService;
 import community.barassistant.barassistant.util.Helper;
-import community.barassistant.barassistant.util.ImageLoaderSingleton;
+import community.barassistant.barassistant.util.ImageControllerSingleton;
 
 /**
  * @author Eugen Ljavin
@@ -156,7 +140,7 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
                 Helper.createSnackbar(this, contentWrapper, R.string.snackbarInvalidName, Constants.STATUS_ERROR).show();
             } else {
                 Exercise exercise = null;
-                ImageLoaderSingleton instance = ImageLoaderSingleton.getInstance();
+                ImageControllerSingleton instance = ImageControllerSingleton.getInstance();
                 List<Image> images = new ArrayList<Image>();
                 for (int order = 0; order < this.images.size(); order++) {
                     String imagePath = instance.saveImageToStorage(this.images.get(order).getBitmap(), new ContextWrapper(getApplicationContext()));

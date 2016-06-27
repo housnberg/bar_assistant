@@ -29,6 +29,9 @@
     <string name="snackbarWorkoutAddedSuccessfully">Workout added successfully!</string>
     <string name="snackbarChangesPerformedSuccessfully">Performed changes</string>
     <string name="snackbarSuccessfullyAddedImageDescription">Added image description</string>
+    <string name="snackbarNoBackPressAllowed">No back press allowed</string>
+    <string name="snkackbarQuit">Quit or pull through!</string>
+    <string name="snackbareNavigate">Navigate to home or start another workout</string>
 
     <string name="finishExercise">DONE!</string>
     <string name="finishWorkout">GREAT JOB!</string>
@@ -43,5 +46,7 @@
 
     <string name="yourTime">Your time: </string>
     <string name="finishActivity">Finished Workout</string>
+    <string name="onyourmarkactivity">Mach dich bereit!</string>
+    <string name="onyourmark">Mach dich bereit!</string>
 
 </resources>

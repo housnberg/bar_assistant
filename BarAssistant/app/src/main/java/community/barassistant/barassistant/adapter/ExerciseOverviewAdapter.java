@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import java.util.Collections;
 import java.util.List;
 
-import community.barassistant.barassistant.util.ImageLoaderSingleton;
+import community.barassistant.barassistant.util.ImageControllerSingleton;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.adapter.holder.ExerciseHolder;
 import community.barassistant.barassistant.model.Exercise;
@@ -36,7 +36,7 @@ public class ExerciseOverviewAdapter extends RecyclerView.Adapter<ExerciseHolder
 
     @Override
     public void onBindViewHolder(ExerciseHolder viewHolder, int position) {
-        ImageLoaderSingleton instance = ImageLoaderSingleton.getInstance();
+        ImageControllerSingleton instance = ImageControllerSingleton.getInstance();
         Exercise exercise = exercises.get(position);
         viewHolder.getExerciseNameTextView().setText(exercise.getName());
         viewHolder.getExerciseDescriptionTextView().setText(exercise.getDescription());

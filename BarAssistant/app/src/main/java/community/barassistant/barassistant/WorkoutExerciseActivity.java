@@ -6,28 +6,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.Workout;
 import community.barassistant.barassistant.services.CountdownTimerService;
-import community.barassistant.barassistant.util.ImageLoaderSingleton;
+import community.barassistant.barassistant.util.Constants;
+import community.barassistant.barassistant.util.Helper;
+import community.barassistant.barassistant.util.ImageControllerSingleton;
 
 /**
  * Created by ivan on 14.06.2016.
@@ -37,6 +34,7 @@ public class WorkoutExerciseActivity extends AppCompatActivity {
     private ImageView imageView;
     private TextView textView;
     private Button button;
+    private View contentWrapper;
 
     private int currExercise = 0;
     private int currRound = 0;
@@ -81,6 +79,7 @@ public class WorkoutExerciseActivity extends AppCompatActivity {
             }
         };
 
+        contentWrapper = findViewById(R.id.content_wrapper);
         textView = (TextView) findViewById(R.id.workoutExerciseTextView);
         imageView = (ImageView) findViewById(R.id.image);
         button = (Button) findViewById(R.id.borderlessButton);
@@ -172,7 +171,7 @@ public class WorkoutExerciseActivity extends AppCompatActivity {
 
     private void setImage(){
         String imagePath = exercises.get(currExercise).getImagePaths().get(0).getImagePath();
-        imageView.setImageBitmap(ImageLoaderSingleton.getInstance().loadImageFromStorage(imagePath));
+        imageView.setImageBitmap(ImageControllerSingleton.getInstance().loadImageFromStorage(imagePath));
     }
 
     private void setReps(){
@@ -187,11 +186,14 @@ public class WorkoutExerciseActivity extends AppCompatActivity {
             if(currExercise < (exercises.size()-1)){
                 currExercise++;
                 intent.putExtra("time", workout.getPauseExercises());
+                intent.putExtra("round", (currRound + 1) + "/" + workout.getRounds());
             }else {
                 currExercise = 0;
                 currRound++;
                 intent.putExtra("time", workout.getPauseRounds());
+                intent.putExtra("round", currRound + "/" + workout.getRounds() + " finished!");
             }
+            intent.putExtra("data", exercises.get(currExercise));
 
             startActivityForResult(intent, 1);
 
@@ -214,6 +216,11 @@ public class WorkoutExerciseActivity extends AppCompatActivity {
             countdownTimerService = null;
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        Helper.createSnackbar(this, contentWrapper, R.string.snackbarNoBackPressAllowed, Constants.STATUS_INFO).show();
+    }
 
 
 }

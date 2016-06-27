@@ -16,15 +16,15 @@ import java.util.Random;
 /**
  * Created by Johann Andrejtschik on 07.06.2016.
  */
-public class ImageLoaderSingleton {
+public class ImageControllerSingleton {
 
-    public static ImageLoaderSingleton instance;
+    public static ImageControllerSingleton instance;
 
-    private ImageLoaderSingleton(){}
+    private ImageControllerSingleton(){}
 
-    public static ImageLoaderSingleton getInstance(){
+    public static ImageControllerSingleton getInstance(){
         if(instance == null){
-            instance = new ImageLoaderSingleton();
+            instance = new ImageControllerSingleton();
         }
         return instance;
     }

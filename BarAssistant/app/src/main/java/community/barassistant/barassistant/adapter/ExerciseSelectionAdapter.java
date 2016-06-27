@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import community.barassistant.barassistant.util.ImageLoaderSingleton;
+import community.barassistant.barassistant.util.ImageControllerSingleton;
 import community.barassistant.barassistant.R;
 import community.barassistant.barassistant.model.Exercise;
 
@@ -43,7 +43,7 @@ public class ExerciseSelectionAdapter extends ArrayAdapter<Exercise> {
         exerciseName.setText(exercise.getName());
         exerciseDescription.setText(exercise.getDescription());
         //Only show the first saved image as title image
-        exerciseTitleImageView.setImageBitmap(ImageLoaderSingleton.getInstance().loadImageFromStorage(exercise.getImagePaths().get(0).getImagePath(), context));
+        exerciseTitleImageView.setImageBitmap(ImageControllerSingleton.getInstance().loadImageFromStorage(exercise.getImagePaths().get(0).getImagePath(), context));
 
         return convertView;
     }

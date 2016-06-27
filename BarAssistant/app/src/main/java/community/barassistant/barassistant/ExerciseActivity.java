@@ -17,7 +17,7 @@ import community.barassistant.barassistant.adapter.ExerciseDetailAdapter;
 import community.barassistant.barassistant.dao.DataAccessObject;
 import community.barassistant.barassistant.model.Exercise;
 import community.barassistant.barassistant.model.Image;
-import community.barassistant.barassistant.util.ImageLoaderSingleton;
+import community.barassistant.barassistant.util.ImageControllerSingleton;
 
 /**
  * Created by EL on 11.06.2016.
@@ -53,7 +53,7 @@ public class ExerciseActivity extends AppCompatActivity {
 
         images = new ArrayList<Image>();
         for (Image imagePath : exercise.getImagePaths()) {
-            imagePath.setBitmap(ImageLoaderSingleton.getInstance().loadImageFromStorage(imagePath.getImagePath()));
+            imagePath.setBitmap(ImageControllerSingleton.getInstance().loadImageFromStorage(imagePath.getImagePath()));
             images.add(imagePath);
         }
 

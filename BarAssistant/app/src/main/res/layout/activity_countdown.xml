@@ -1,48 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/backgroundListItem"
+    android:id="@+id/content_wrapper">
 
-    <TextView
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/countdownText"
-        android:textSize="65dp"
-        android:gravity="center"
-        android:id="@+id/textView2"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:elevation="6dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text=""
-        android:textSize="100dp"
-        android:gravity="center"
-        android:id="@+id/countdownTextView"
-        android:layout_gravity="center_horizontal" />
-
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:gravity="center|bottom"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_default"
+            android:padding="@dimen/padding_card">
+
+            <TextView
+                android:id="@+id/round"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Round"
+                android:textStyle="bold"
+                android:textSize="26dp"
+                android:layout_marginRight="8dp"/>
+
+            <TextView
+                android:id="@+id/current_round"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/round"
+                android:textStyle="bold"
+                android:textSize="26dp"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Next exercise"
+            android:padding="@dimen/padding_card"
+            android:textStyle="bold"/>
+
+        <RelativeLayout
+            android:id="@+id/wrapper"
+            android:layout_height="100dp"
+            android:layout_width="match_parent"
+            android:background="@drawable/shape_default">
+
+            <ImageView
+                android:id="@+id/exercise_title_image"
+                android:layout_width="86dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/test"/>
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/exercise_name"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/exercise_title_image"
+                android:layout_weight="5"
+                android:gravity="left|bottom"
+                android:paddingLeft="@dimen/padding_card"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/exercise_description"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_below="@+id/exercise_name"
+                android:layout_toRightOf="@+id/exercise_title_image"
+                android:layout_weight="5"
+                android:gravity="left"
+                android:paddingLeft="@dimen/padding_card"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="12dp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="75dp"
+            android:textStyle="bold"
+            android:textColor="@color/red_A600"
+            android:gravity="center|bottom"
+            android:id="@+id/countdownTextView"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="sec"
+            android:textSize="50dp"
+            android:layout_marginTop="-15dp"
+            android:textStyle="bold"
+            android:gravity="center|top"
+            android:layout_below="@+id/countdownTextView"
+            android:textColor="@color/red_A600"/>
+
+
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:text="@string/skipPause"
-            android:textSize="65dp"
+            android:layout_alignParentBottom="true"
+            android:textSize="36dp"
+            android:textStyle="bold"
+            android:layout_margin="8dp"
             android:textColor="@color/backgroundListItem"
-            style="?android:attr/borderlessButtonStyle"
-            android:background="@color/red_A700"
+            android:background="@drawable/material_button"
             android:id="@+id/borderlessButton"
             android:onClick="onClick"
-            android:layout_gravity="bottom" />
+            android:elevation="@dimen/elevation_card" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>
