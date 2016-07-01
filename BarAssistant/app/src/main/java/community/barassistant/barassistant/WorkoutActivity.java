@@ -30,6 +30,8 @@ import community.barassistant.barassistant.model.Workout;
  */
 public class WorkoutActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int INTENT_REQUEST_CODE = 1111;
+
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private Intent shareIntent;
@@ -91,16 +93,6 @@ public class WorkoutActivity extends AppCompatActivity implements View.OnClickLi
         // Add data to the intent, the receiving app will decide what to do with it.
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject");
         shareIntent.putExtra(Intent.EXTRA_TEXT, "Text");
-//        startActivity(Intent.createChooser(shareIntent, "How do you want to share?"));
-//        mSharedFab = (FloatingActionButton) findViewById(R.id.fabMain);
-//        mSharedFab.setVisibility(View.INVISIBLE);
-//
-//        viewPager = (ViewPager) findViewById(R.id.viewpager);
-//        setupViewPager(viewPager);
-//
-//        tabLayout = (TabLayout) findViewById(R.id.tabs);
-//        tabLayout.setupWithViewPager(viewPager);
-//
         initToolbar();
 
         setupRecyclerView(recyclerView);
@@ -167,9 +159,20 @@ public class WorkoutActivity extends AppCompatActivity implements View.OnClickLi
 
     public void startWorkout(View view){
         System.out.println("startWorkout");
-        Intent intent = new Intent(this, WorkoutExerciseActivity.class);
-        intent.putExtra("workout", workout);
-        startActivity(intent);
+        Intent intent = new Intent(this, CountdownActivity.class);
+        intent.putExtra("time", 5);
+        intent.putExtra("round", "Get Ready!");
+        intent.putExtra("workout_name", workout.getName());
+        intent.putExtra("amount_exercises", exercises.size());
+        intent.putExtra("data", exercises.get(0));
+        startActivityForResult(intent, WorkoutActivity.INTENT_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
+        Intent startWorkout = new Intent(this, WorkoutExerciseActivity.class);
+        startWorkout.putExtra("workout", workout);
+        startActivity(startWorkout);
     }
 
 }

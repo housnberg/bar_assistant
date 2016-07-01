@@ -91,6 +91,13 @@ public class DataAccessObject {
         dbHelper.close();
     }
 
+    /**
+     * Create an Exercise object and persist it in the database.
+     * @param name Name of the exercise.
+     * @param description Description of the exercise.
+     * @param imagePaths List of images which describes the exercise.
+     * @return The persisted exercise object.
+     */
     public Exercise createExercise(String name, String description, List<Image> imagePaths) {
         ContentValues values = new ContentValues();
         values.put(CustomSQLiteHelper.COLUMN_EXERCISE_NAME, name);
@@ -107,15 +114,27 @@ public class DataAccessObject {
         return newExercise;
     }
 
-    public void createImage(String imagePath, String descritpion, long exerciseId, int order) {
+    /**
+     * Create an Image object and persist it in the database.
+     * @param imagePath The path to the image in the filesystem.
+     * @param description The description of the image (can be null).
+     * @param exerciseId The exercise to which the image belongs.
+     * @param order The order of the image.
+     */
+    public void createImage(String imagePath, String description, long exerciseId, int order) {
         ContentValues values = new ContentValues();
         values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_ID, imagePath);
-        values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_DESCRIPTION, descritpion);
+        values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_DESCRIPTION, description);
         values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_EXERCISE_ID, exerciseId);
         values.put(CustomSQLiteHelper.COLUMN_IMAGE_PATH_ORDER, order);
         long insertId = database.insert(CustomSQLiteHelper.TABLE_IMAGE_PATH, null, values);
     }
 
+    /**
+     * Returns the List of images for an exercise.
+     * @param exerciseId The id of the exercise.
+     * @return List of images.
+     */
     public List<Image> getImagePathByExerciseId(long exerciseId) {
         List<Image> imagePaths = new ArrayList<Image>();
         try {
@@ -132,11 +151,19 @@ public class DataAccessObject {
         return imagePaths;
     }
 
+    /**
+     * Delete an exercise from the database.
+     * @param exercise The exercise to delete.
+     */
     public void deleteExercise(Exercise exercise) {
         long id = exercise.getId();
         database.delete(CustomSQLiteHelper.TABLE_EXERCISE, CustomSQLiteHelper.COLUMN_EXERCISE_ID + " = " + id, null);
     }
 
+    /**
+     * Returns a List of all persistet exercises.
+     * @return All persisted exercises.
+     */
     public List<Exercise> getAllExercises() {
         List<Exercise> exercises = new ArrayList<Exercise>();
         List<Image> imagePaths = new ArrayList<Image>();
@@ -164,6 +191,11 @@ public class DataAccessObject {
         return getAllExercises().get(getAllExercises().size() - 1);
     }
 
+    /**
+     * Returns an exercise by the id.
+     * @param exerciseId The id of the exercise.
+     * @return Exercise by id.
+     */
     public Exercise getExerciseById(long exerciseId) {
         Exercise exercise = null;
         List<Image> imagePaths;
@@ -180,10 +212,15 @@ public class DataAccessObject {
         return exercise;
     }
 
-    private Exercise cursorToExercise(Cursor cursor) {
-        return new Exercise(cursor.getLong(0), cursor.getString(1), cursor.getString(2));
-    }
-
+    /**
+     * Presist workout/exercise data to the database (workout - exercise mapping).
+     * @param workoutId The id of the workout.
+     * @param exerciseId The id of the exercise.
+     * @param repetitions Amount of repetitions.
+     * @param isRepeatable 1 if exercise is repeatable 0 if not.
+     * @param order Order of the exercise.
+     * @return id of the persistet object.
+     */
     public long createWorkoutExercise(long workoutId, long exerciseId, int repetitions, boolean isRepeatable, int order) {
         ContentValues values = new ContentValues();
         values.put(CustomSQLiteHelper.COLUMN_WORKOUT_EXERCISE_WORKOUT_ID, workoutId);
@@ -201,6 +238,11 @@ public class DataAccessObject {
         return database.insert(CustomSQLiteHelper.TABLE_WORKOUT_EXERCISE, null, values);
     }
 
+    /**
+     * Returns an exercise by workout id.
+     * @param wokoutId The id of the workout.
+     * @return The exercise object.
+     */
     public List<Exercise> getExercisesByWorkoutId(long wokoutId) {
         List<Exercise> exercises = new ArrayList<Exercise>();
         List<Image> imagePaths;
@@ -228,6 +270,12 @@ public class DataAccessObject {
         return workouts;
     }
 
+    /**
+     * Returns the amount of repetions for a exercise in a workout.
+     * @param workoutId The id of the workout.
+     * @param exerciseId The id of the exercise.
+     * @return Amount of repetitions.
+     */
     public int getRepetitions(long workoutId, long exerciseId) {
         Cursor cursor = database.rawQuery(DataAccessObject.SELECT_REPETITION_BY_PK, new String[] {String.valueOf(workoutId), String.valueOf(exerciseId)});
         cursor.moveToFirst();
@@ -237,6 +285,12 @@ public class DataAccessObject {
         return repetitions;
     }
 
+    /**
+     * Returns if an exercise is repeatable or not in a workout.
+     * @param workoutId The id of the workout.
+     * @param exerciseId The id of the exercise.
+     * @return True if the exercise is repeatable, false if not.
+     */
     public boolean getIsRepeatable(long workoutId, long exerciseId) {
         Cursor cursor = database.rawQuery(DataAccessObject.SELECT_IS_REPEATABLE_BY_PK, new String[] {String.valueOf(workoutId), String.valueOf(exerciseId)});
         cursor.moveToFirst();
@@ -246,6 +300,17 @@ public class DataAccessObject {
         return repetitions != 0;
     }
 
+    /**
+     *
+     * @param exerciseName
+     * @param exerciseDescription
+     * @param exercises
+     * @param repetitions
+     * @param rounds
+     * @param pauseExercises
+     * @param pauseRounds
+     * @return
+     */
     public Workout createWorkout(String exerciseName, String exerciseDescription, List<Exercise> exercises, List<Integer> repetitions, int rounds, int pauseExercises, int pauseRounds) {
         ContentValues values = new ContentValues();
         values.put(CustomSQLiteHelper.COLUMN_WORKOUT_NAME, exerciseName);
@@ -261,11 +326,19 @@ public class DataAccessObject {
         return newWorkout;
     }
 
+    /**
+     * Delets a workout from the database.
+     * @param workout The id of the workout.
+     */
     public void deleteWorkout(Workout workout) {
         long id = workout.getId();
         database.delete(CustomSQLiteHelper.TABLE_WORKOUT, CustomSQLiteHelper.COLUMN_WORKOUT_ID + " = " + id, null);
     }
 
+    /**
+     * Returns a List of all persisted workout.
+     * @return The list of all persistet workouts.
+     */
     public List<Workout> getAllWorkouts() {
         List<Workout> workouts = new ArrayList<Workout>();
 
@@ -283,6 +356,11 @@ public class DataAccessObject {
         return workouts;
     }
 
+    /**
+     * Retus
+     * @param workoutId
+     * @return
+     */
     public Workout getWorkoutById(long workoutId) {
         Workout workout = null;
         try {
@@ -301,10 +379,29 @@ public class DataAccessObject {
         return getAllWorkouts().get(getAllWorkouts().size() - 1);
     }
 
+    /**
+     * Converts a cursor object to an exercise.
+     * @param cursor The cursor to convert to.
+     * @return The converted cursor object as exercise.
+     */
+    private Exercise cursorToExercise(Cursor cursor) {
+        return new Exercise(cursor.getLong(0), cursor.getString(1), cursor.getString(2));
+    }
+
+    /**
+     * Converts a cursor object to an workout.
+     * @param cursor The cursor to convert to.
+     * @return The converted cursor object as workout.
+     */
     private Workout cursorToWorkout(Cursor cursor) {
         return new Workout(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5));
     }
 
+    /**
+     * Converts a cursor object to an image.
+     * @param cursor The cursor to convert to.
+     * @return The converted cursor object as image.
+     */
     private Image cursorToImage(Cursor cursor) {
         return new Image(cursor.getString(0), cursor.getInt(2), cursor.getString(1));
     }

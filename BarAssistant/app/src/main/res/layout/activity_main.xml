@@ -78,17 +78,8 @@
         app:elevation="6dp"
         app:rippleColor="@color/colorPrimaryLight"
         android:tint="@android:color/white"
-        android:visibility="invisible"
         app:backgroundTint="@color/colorPrimary"
         android:layout_margin="@dimen/fab_margin"
         app:layout_behavior="community.barassistant.barassistant.behavior.FabScrollBehavior"/>
-
-    <com.github.fabtransitionactivity.SheetLayout
-        android:id="@+id/bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        app:ft_container_gravity="center"
-        app:ft_color="@color/colorPrimary"/>
 
 </android.support.design.widget.CoordinatorLayout>

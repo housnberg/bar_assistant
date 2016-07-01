@@ -43,12 +43,4 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@mipmap/ic_add_white_24dp" />
 
-    <com.github.fabtransitionactivity.SheetLayout
-        android:id="@+id/bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        app:ft_container_gravity="center"
-        app:ft_color="@color/colorPrimary"/>
-
 </android.support.design.widget.CoordinatorLayout>

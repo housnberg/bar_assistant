@@ -5,12 +5,15 @@ import android.content.ContextWrapper;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -29,18 +32,29 @@ public class ImageControllerSingleton {
         return instance;
     }
 
+    /**
+     * Save image to storage.
+     * @param bm Image as Bitmap.
+     * @param cw Context wrapper.
+     * @return Path to the image.
+     */
     public String saveImageToStorage(Bitmap bm, ContextWrapper cw){
         String path = null;
         File dir = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        File mypath = new File(dir, genRandomName());
+        File mypath = new File(dir, generateRandomName());
         FileOutputStream fos = null;
         try{
             fos = new FileOutputStream(mypath);
             bm.compress(Bitmap.CompressFormat.JPEG, 85, fos);
-            fos.close();
             path = mypath.getAbsolutePath();
-        }catch(Exception e){
+        } catch(Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException ioException) {
+                Log.e("Sreamclosure", ioException.getMessage());
+            }
         }
         return path;
     }
@@ -56,6 +70,12 @@ public class ImageControllerSingleton {
         return bm;
     }
 
+    /**
+     * Load image From storage.
+     * @param path Imagepath.
+     * @param context Activitycontext.
+     * @return Image as Bitmap.
+     */
     public Bitmap loadImageFromStorage(String path, Context context) {
         if (context == null) {
             return loadImageFromStorage(path);
@@ -75,8 +95,9 @@ public class ImageControllerSingleton {
         return null;
     }
 
-    //10000 possible names should provide a high enough chance for the name to be unique
-    private String genRandomName(){
-        return "bar"+new Random().nextInt(10000) + ".jpg";
+    private String generateRandomName(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String currentDateAndTime = sdf.format(new Date());
+        return "bar" + currentDateAndTime + "_" + new Random().nextInt(10000) + ".jpg"; //Just to be sure ...
     }
 }

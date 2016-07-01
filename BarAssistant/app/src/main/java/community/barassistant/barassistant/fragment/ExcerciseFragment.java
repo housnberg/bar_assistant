@@ -1,20 +1,15 @@
 package community.barassistant.barassistant.fragment;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.github.fabtransitionactivity.SheetLayout;
 
 import java.util.List;
 
@@ -32,13 +27,12 @@ import community.barassistant.barassistant.util.Helper;
 /**
  * @author Eugen Ljavin
  */
-public class ExcerciseFragment extends Fragment implements View.OnClickListener, SheetLayout.OnFabAnimationEndListener {
+public class ExcerciseFragment extends Fragment implements View.OnClickListener {
 
     private static final int REQUEST_CODE = 1;
 
     private FloatingActionButton mSharedFab;
     private FloatingActionButton fabSecondary;
-    private SheetLayout mSheetLayout;
     private RecyclerView recyclerView;
 
     private DataAccessObject datasource;
@@ -68,7 +62,6 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mSheetLayout = (SheetLayout) getView().getRootView().findViewById(R.id.bottom_sheet);
         fabSecondary = (FloatingActionButton) getView().getRootView().findViewById(R.id.fabSecondary);
     }
 
@@ -95,19 +88,12 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
         else {
             mSharedFab = fab;
             mSharedFab.setOnClickListener(this);
-            mSheetLayout.setFab(mSharedFab);
-            mSheetLayout.setFabAnimationEndListener(this);
             fab.setImageResource(R.mipmap.ic_add_white_24dp);
         }
     }
 
     @Override
     public void onClick(View view) {
-            mSheetLayout.expandFab();
-    }
-
-    @Override
-    public void onFabAnimationEnd() {
         Intent intent = new Intent(getActivity(), AddExerciseActivity.class);
         startActivityForResult(intent, REQUEST_CODE);
     }
@@ -130,7 +116,6 @@ public class ExcerciseFragment extends Fragment implements View.OnClickListener,
 
             Helper.createSnackbar(getActivity(), ((MainActivity) getActivity()).getContentWrapper(), R.string.snackbarExerciseAddedSuccessfully).show();
         }
-        mSheetLayout.contractFab();
     }
 
 }

@@ -53,7 +53,7 @@ public class ExerciseActivity extends AppCompatActivity {
 
         images = new ArrayList<Image>();
         for (Image imagePath : exercise.getImagePaths()) {
-            imagePath.setBitmap(ImageControllerSingleton.getInstance().loadImageFromStorage(imagePath.getImagePath()));
+            imagePath.setBitmap(ImageControllerSingleton.getInstance().loadImageFromStorage(imagePath.getImagePath(), this));
             images.add(imagePath);
         }
 

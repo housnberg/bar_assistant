@@ -10,7 +10,7 @@
     
     <string name="homeFragment">Home</string>
     <string name="exercisesFragment">Exercises</string>
-    <string name="workoutFragment">Workout</string>
+    <string name="workoutFragment">Workouts</string>
     <string name="addExercisesToWorkoutFragment">Exercises</string>
     <string name="addPropertiesToWorkoutFragment">Properties</string>
 
@@ -30,7 +30,7 @@
     <string name="snackbarChangesPerformedSuccessfully">Performed changes</string>
     <string name="snackbarSuccessfullyAddedImageDescription">Added image description</string>
     <string name="snackbarNoBackPressAllowed">No back press allowed</string>
-    <string name="snkackbarQuit">Quit or pull through!</string>
+    <string name="snkackbarQuit">Go hard or go home!</string>
     <string name="snackbareNavigate">Navigate to home or start another workout</string>
 
     <string name="finishExercise">DONE!</string>
@@ -43,10 +43,22 @@
 
     <string name="unitRepetitions">Reps</string>
     <string name="unitSeconds">Sec</string>
+    <string name="unitMinutes">minutes</string>
 
-    <string name="yourTime">Your time: </string>
+    <string name="yourTime">total time</string>
     <string name="finishActivity">Finished Workout</string>
     <string name="onyourmarkactivity">Mach dich bereit!</string>
     <string name="onyourmark">Mach dich bereit!</string>
 
+    <string name="round">Round</string>
+    <string name="getReady">Get Ready!</string>
+
+    <string name="quit">Quit</string>
+    <string name="areYouSure">Are you sure you want to quit?</string>
+
+    <string name="imageDescription">Image Description</string>
+    <string name="finished">finished!</string>
+    <string name="nextExercise">Next exercise</string>
+
+    <string name="anotherWorkout">another workout</string>
 </resources>

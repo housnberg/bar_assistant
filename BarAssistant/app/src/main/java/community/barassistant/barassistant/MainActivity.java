@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private HomeFragment homeFragment;
     private ExcerciseFragment exercisesFragment;
     private WorkoutFragment workoutFragment;
     private FloatingActionButton mSharedFab;
@@ -63,16 +62,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(final ViewPager viewPager) {
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        homeFragment = new HomeFragment();
         exercisesFragment = new ExcerciseFragment();
         workoutFragment = new WorkoutFragment();
-        pagerAdapter.addFragment(homeFragment, getResources().getString(R.string.homeFragment));
         pagerAdapter.addFragment(exercisesFragment, getResources().getString(R.string.exercisesFragment));
         pagerAdapter.addFragment(workoutFragment, getResources().getString(R.string.workoutFragment));
 
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(1);
+        workoutFragment.shareFab(mSharedFab); // To init the FAB
 
-        homeFragment.shareFab(mSharedFab); // To init the FAB
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -88,19 +86,12 @@ public class MainActivity extends AppCompatActivity {
                     case ViewPager.SCROLL_STATE_IDLE:
                         switch (viewPager.getCurrentItem()) {
                             case 0:
-                                exercisesFragment.shareFab(null); // Remove FAB from fragment
-                                workoutFragment.shareFab(null);
-                                homeFragment.shareFab(mSharedFab);
-                                break;
-                            case 1:
-                                homeFragment.shareFab(null); // Remove FAB from fragment
                                 workoutFragment.shareFab(null);
                                 exercisesFragment.shareFab(mSharedFab);
                                 mSharedFab.show();
                                 break;
-                            case 2:
+                            case 1:
                             default:
-                                homeFragment.shareFab(null); // Remove FAB from fragment
                                 exercisesFragment.shareFab(null);
                                 workoutFragment.shareFab(mSharedFab); // Share FAB to new displayed fragment
                                 mSharedFab.show();

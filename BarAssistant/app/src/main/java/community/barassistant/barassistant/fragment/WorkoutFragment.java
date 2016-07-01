@@ -12,8 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.fabtransitionactivity.SheetLayout;
-
 import java.util.List;
 
 import community.barassistant.barassistant.AddWorkoutActivity;
@@ -29,7 +27,7 @@ import community.barassistant.barassistant.util.Helper;
 /**
  * @author Eugen Ljavin
  */
-public class WorkoutFragment extends Fragment implements View.OnClickListener, SheetLayout.OnFabAnimationEndListener {
+public class WorkoutFragment extends Fragment implements View.OnClickListener {
 
     private static final int REQUEST_CODE_ADD_WORKOUT = 1;
     private static final int REQUEST_CODE_SHOW_WORKOUT = 2;
@@ -38,7 +36,6 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
 
     private FloatingActionButton mSharedFab;
     private FloatingActionButton fabSecondary;
-    private SheetLayout mSheetLayout;
     private RecyclerView recyclerView;
     private MenuItem sortItem;
     private MenuItem filterItem;
@@ -66,7 +63,6 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mSheetLayout = (SheetLayout) getView().getRootView().findViewById(R.id.bottom_sheet);
         fabSecondary = (FloatingActionButton) getView().getRootView().findViewById(R.id.fabSecondary);
     }
 
@@ -93,19 +89,12 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
         else {
             mSharedFab = fab;
             mSharedFab.setOnClickListener(this);
-            mSheetLayout.setFab(mSharedFab);
-            mSheetLayout.setFabAnimationEndListener(this);
             fab.setImageResource(R.mipmap.ic_add_white_24dp);
         }
     }
 
     @Override
     public void onClick(View view) {
-        mSheetLayout.expandFab();
-    }
-
-    @Override
-    public void onFabAnimationEnd() {
         Intent intent = new Intent(getActivity(), AddWorkoutActivity.class);
         startActivityForResult(intent, REQUEST_CODE_ADD_WORKOUT);
     }
@@ -129,7 +118,6 @@ public class WorkoutFragment extends Fragment implements View.OnClickListener, S
 
             Helper.createSnackbar(getActivity(), ((MainActivity) getActivity()).getContentWrapper(), R.string.snackbarWorkoutAddedSuccessfully).show();
         }
-        mSheetLayout.contractFab();
     }
 
 }

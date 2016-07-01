@@ -39,12 +39,10 @@ import community.barassistant.barassistant.util.ImageControllerSingleton;
 public class AddExerciseActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int CAMERA_REQUEST = 1888;
-
     private int result = RESULT_CANCELED;
 
     private Toolbar toolbar;
     private FloatingActionButton mSharedFab;
-    //private FloatingActionButton mSecondaryFab;
     private DataAccessObject datasource;
     private EditText exerciseName;
     private EditText exerciseDescription;
@@ -169,7 +167,7 @@ public class AddExerciseActivity extends AppCompatActivity implements View.OnCli
 
     private void showLocationDialog(final int imagePosition) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Image Description");
+        builder.setTitle(R.string.imageDescription);
         final View view = LayoutInflater.from(this).inflate(R.layout.dialog_description, null);
 
         final EditText imageDescritpion = (EditText) view.findViewById(R.id.imageDescription);

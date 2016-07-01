@@ -29,28 +29,20 @@
             android:padding="@dimen/padding_card">
 
             <TextView
-                android:id="@+id/round"
+                android:id="@+id/current_round"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Round"
                 android:textStyle="bold"
                 android:textSize="26dp"
                 android:layout_marginRight="8dp"/>
 
-            <TextView
-                android:id="@+id/current_round"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/round"
-                android:textStyle="bold"
-                android:textSize="26dp"/>
 
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/next_exercise"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Next exercise"
             android:padding="@dimen/padding_card"
             android:textStyle="bold"/>
 
@@ -60,6 +52,20 @@
             android:layout_width="match_parent"
             android:background="@drawable/shape_default">
 
+            <com.github.siyamed.shapeimageview.CircularImageView
+                android:id="@+id/exercise_title_image"
+                android:layout_width="86dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="16dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/test"
+                app:siBorderColor="@color/colorDivider"
+                app:siBorderWidth="0.25dp" />
+
+            <!--
             <ImageView
                 android:id="@+id/exercise_title_image"
                 android:layout_width="86dp"
@@ -70,6 +76,8 @@
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/test"/>
+
+            -->
 
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/exercise_name"
@@ -128,6 +136,7 @@
 
 
         <Button
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:text="@string/skipPause"
@@ -137,9 +146,10 @@
             android:layout_margin="8dp"
             android:textColor="@color/backgroundListItem"
             android:background="@drawable/material_button"
-            android:id="@+id/borderlessButton"
+            android:id="@+id/skip_pause"
             android:onClick="onClick"
-            android:elevation="@dimen/elevation_card" />
+            android:elevation="@dimen/elevation_card"
+            android:clickable="true"/>
 
     </RelativeLayout>
 

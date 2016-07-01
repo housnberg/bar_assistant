@@ -31,31 +31,42 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/workoutExerciseTextView"
+            android:id="@+id/reps_sec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/order"
+            android:layout_alignParentRight="true"
             android:padding="@dimen/padding_card"
             android:textStyle="bold"
-            android:textSize="25dp"
+            android:textColor="@color/red_A600"
+            android:textSize="26dp"
             android:paddingRight="@dimen/padding_card"
             android:layout_alignBaseline="@+id/order"
-            android:text="20" />
+            android:text="sec" />
 
         <TextView
+            android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/workoutExerciseTextView"
+            android:layout_toLeftOf="@+id/reps_sec"
+            android:paddingTop="@dimen/padding_card"
+            android:textStyle="bold"
+            android:textColor="@color/red_A600"
+            android:textSize="26dp"/>
+
+        <TextView
+            android:id="@+id/exercise_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:padding="@dimen/padding_card"
             android:textStyle="bold"
-            android:textSize="25dp"
+            android:textSize="16dp"
             android:paddingRight="@dimen/padding_card"
-            android:layout_alignBaseline="@+id/order"
-            android:text="Reps"/>
+            android:layout_alignBaseline="@+id/reps_sec"
+            android:text="Pushups" />
 
         <Button
             android:layout_width="match_parent"
-            android:layout_below="@+id/workoutExerciseTextView"
+            android:layout_below="@+id/reps_sec"
             android:layout_height="100dp"
             android:text="@string/finishExercise"
             android:textSize="36dp"

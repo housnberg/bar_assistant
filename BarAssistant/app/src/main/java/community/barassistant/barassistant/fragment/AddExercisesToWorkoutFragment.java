@@ -7,7 +7,6 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.media.MediaMetadataCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,11 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
-import android.widget.Toast;
-
-import com.github.fabtransitionactivity.SheetLayout;
-import com.vi.swipenumberpicker.OnValueChangeListener;
-import com.vi.swipenumberpicker.SwipeNumberPicker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,12 +37,11 @@ import community.barassistant.barassistant.util.Helper;
 /**
  * @author Eugen Ljavin
  */
-public class AddExercisesToWorkoutFragment extends Fragment implements View.OnClickListener, SheetLayout.OnFabAnimationEndListener {
+public class AddExercisesToWorkoutFragment extends Fragment implements View.OnClickListener {
 
     private static final int REQUEST_CODE = 1;
 
     private FloatingActionButton mSharedFab;
-    private SheetLayout mSheetLayout;
     private RecyclerView recyclerView;
 
     private DataAccessObject datasource;
@@ -101,7 +94,6 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mSheetLayout = (SheetLayout) getView().getRootView().findViewById(R.id.bottom_sheet);
     }
 
     public void shareFab(FloatingActionButton fab) {
@@ -126,13 +118,6 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
         Intent intent = new Intent(getActivity(), AddExerciseToWorkoutActivity.class);
         intent.putParcelableArrayListExtra("data", (ArrayList<Exercise>) exercises);
         startActivityForResult(intent, REQUEST_CODE);
-        //mSheetLayout.expandFab();
-    }
-
-    @Override
-    public void onFabAnimationEnd() {
-        Intent intent = new Intent(getActivity(), AddExerciseToWorkoutActivity.class);
-        startActivityForResult(intent,REQUEST_CODE);
     }
 
     @Override
@@ -150,7 +135,6 @@ public class AddExercisesToWorkoutFragment extends Fragment implements View.OnCl
                 }
             }
             recyclerView.getAdapter().notifyDataSetChanged();
-            mSheetLayout.contractFab();
         }
     }
 
